@@ -1,13 +1,35 @@
-
+import React, { useState, useEffect } from 'react';
+import AuthContainer from './Auth/AuthContainer';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Home from './pages/Home';
 import './App.css';
 
 function App() {
+  const [theme, setTheme] = useState(localStorage.getItem('theme') || 'dark');
+
+  useEffect(() => {
+    document.body.className = theme === 'light' ? 'light-theme' : '';
+    localStorage.setItem('theme', theme);
+  }, [theme]);
+
+  const toggleTheme = () => {
+    setTheme((prevTheme) => (prevTheme === 'light' ? 'dark' : 'light'));
+  };
+
   return (
+    <Router>
     <div className="App">
-      <header className="App-header">
-          <h1>Welcome to app</h1>
-      </header>
+      <button className="theme-toggle" onClick={toggleTheme}>
+      <i class="fas fa-adjust"></i>
+
+      </button>
+  
+      <Routes>
+        <Route path="/login" element={<AuthContainer />} />
+        <Route path="/" element={<Home />} />
+      </Routes>
     </div>
+  </Router>
   );
 }
 

@@ -1,0 +1,44 @@
+:root {
+    --dark-bg: #0a0a0a;
+    --light-bg: #fffbfb;
+    --neon-yellow: #FFE600;
+    --neon-shadow: 0 0 15px var(--neon-yellow);
+    --transition: all 0.3s ease;
+  }
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'El Messiri', sans-serif;
+  }
+  
+  body {
+    background: var(--dark-bg);
+    color: var(--neon-yellow);
+    min-height: 100vh;
+    overflow: auto;
+    transition: var(--transition);
+  }
+  
+  body.light-theme {
+    background: var(--light-bg) var(--dark-bg-image) no-repeat fixed;
+    color: #2a2a2a;
+  }
+  
+  .theme-toggle {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: none;
+    color: var(--neon-yellow);
+    padding: 10px 15px;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: var(--transition);
+    z-index: 1;
+  }
+  
+  .theme-toggle:hover {
+    transform: scale(1.1);
+    box-shadow: var(--neon-shadow);
+  }

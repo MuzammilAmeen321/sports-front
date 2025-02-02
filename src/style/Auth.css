@@ -1,0 +1,106 @@
+  .login-box{
+    height: 100vh;
+  }
+  .auth-container {
+    background: rgba(10, 10, 10, 0.9);
+    padding: 2rem;
+    border-radius: 20px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+    width: 400px;
+    text-align: center;
+    transition: var(--transition);
+  }
+  
+  body.light-theme .auth-container {
+    background: rgba(240, 240, 240, 0.9);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1);
+  }
+  
+  .auth-title {
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+    text-shadow: var(--neon-shadow);
+    animation: glow 1.5s infinite alternate;
+  }
+  
+  @keyframes glow {
+    0% { text-shadow: 0 0 5px var(--neon-yellow); }
+    100% { text-shadow: var(--neon-shadow); }
+  }
+  
+  .input-group {
+    display: flex;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid currentColor;
+    border-radius: 8px;
+    padding: 12px;
+    margin-bottom: 1rem;
+  }
+  
+  .input-group input {
+    border: none;
+    background: none;
+    color: inherit;
+    font-size: 1rem;
+    flex: 1;
+    outline: none;
+    padding-left: 10px;
+  }
+  
+  .auth-button {
+    padding: 12px;
+    background: var(--neon-yellow);
+    color: var(--dark-bg);
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: var(--transition);
+    width: 100%;
+  }
+  
+  .auth-button:hover {
+    transform: scale(1.05);
+    box-shadow: var(--neon-shadow);
+  }
+  
+  .social-auth {
+    margin-top: 10px;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+  }
+  
+  .social-button {
+    padding: 7px;
+    border-radius: 12px;
+    color: white;
+    cursor: pointer;
+    border: none;
+  }
+  
+  .facebook { background: #3b5998; }
+  .facebook:hover { background: #2d4373; }
+  
+  .google { background: #db4437; }
+  .google:hover { background: #c1351d; }
+  
+  .switch-form {
+    margin-top: 1rem;
+    background: none;
+    border: none;
+    color: inherit;
+    cursor: pointer;
+    text-decoration: underline;
+    transition: var(--transition);
+  }
+  
+  .switch-form:hover {
+    text-shadow: var(--neon-shadow);
+  }
+  
+  .hidden {
+    display: none;
+  }
+  
