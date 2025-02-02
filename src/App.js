@@ -3,7 +3,7 @@ import AuthContainer from './Auth/AuthContainer';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Home from './pages/Home';
 import './App.css';
-
+import Profiles from './pages/MyTeam';
 function App() {
   const [theme, setTheme] = useState(localStorage.getItem('theme') || 'dark');
 
@@ -27,6 +27,7 @@ function App() {
       <Routes>
         <Route path="/login" element={<AuthContainer />} />
         <Route path="/" element={<Home />} />
+        <Route path="/team" element={<Profiles />} />
       </Routes>
     </div>
   </Router>
