@@ -5,11 +5,14 @@ import Home from './pages/Home';
 import './App.css';
 import VerticalNavbar from './components/verticleNav';
 import Profiles from './pages/MyTeam';
+import ProfileUpdateModal from './components/Edit_profile';
+
 function App() {
   const [theme, setTheme] = useState(localStorage.getItem('theme') || 'dark');
 
+  // Set the theme on body and store in localStorage
   useEffect(() => {
-    document.body.className = theme === 'light' ? 'light-theme' : '';
+    document.body.className = theme === 'light' ? 'light-theme' : 'dark-theme';
     localStorage.setItem('theme', theme);
   }, [theme]);
 
@@ -19,21 +22,22 @@ function App() {
 
   return (
     <Router>
-    <div className="App">
-      <button className="theme-toggle" onClick={toggleTheme}>
-      <i class="fas fa-adjust"></i>
+      <div className="App">
+        {/* Theme Toggle Button */}
+        <button className="theme-toggle" onClick={toggleTheme}>
+          <i className="fas fa-adjust"></i>
+        </button>
 
-      </button>
-  
-      <Routes>
-        <Route path="/login" element={<AuthContainer />} />
-        <Route path="/" element={<Home />} />
-        <Route path="/team" element={<Profiles />} />
-      </Routes>
-      <VerticalNavbar />
-    </div>
-
-  </Router>
+        <Routes>
+          <Route path="/login" element={<AuthContainer />} />
+          <Route path="/" element={<Home />} />
+          <Route path="/team" element={<Profiles />} />
+          <Route path="/edit-profile" element={<ProfileUpdateModal />} />
+        </Routes>
+        
+        <VerticalNavbar />
+      </div>
+    </Router>
   );
 }
 

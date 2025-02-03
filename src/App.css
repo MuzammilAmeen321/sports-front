@@ -10,7 +10,6 @@
     padding: 0;
     box-sizing: border-box;
     font-family: 'El Messiri', sans-serif;
-    color: var(--neon-yellow);
   }
   .navbar-brand{
     color: var(--neon-yellow);
@@ -44,3 +43,14 @@
     transform: scale(1.1);
     box-shadow: var(--neon-shadow);
   }
+
+ 
+  .theme-toggle {
+    font-size: 24px;
+    color: var(--neon-yellow);
+    cursor: pointer;
+  }
+  .theme-toggle:hover {
+    color: var(--neon-shadow);
+  }
+  

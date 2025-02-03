@@ -4,14 +4,12 @@
     transition: var(--transition);
     padding: 0;
 }
-
 body.light-theme .home-page{
 background-color: var(--light-bg);
 }
 /* verticle nav  */
 .vertical-nav {
     width: 100px;
-    background: var(--dark-bg);
     position: fixed;
     top: 100px;
     left: 0;
@@ -24,14 +22,28 @@ background-color: var(--light-bg);
     clear: both;
 }
 
-body.light-theme .vertical-nav{
-    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1);
-    background-color: var(--light-bg);
-    color: black;
+body.light-theme {
+    .vertical-nav{
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1);
+        background-color: var(--light-bg);
+        color: black;
+    }
+    /* modal theme */
+  .modal-content {
+    background-color: var(--dark-bg);
+    color: var(--neon-yellow);
+    border: 1px solid var(--neon-yellow);
   }
-  body.light-theme .navbar{
-    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1);
-    color: black;
+
+    .navbar{
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1);
+        color: black;
+        border-bottom:1px solid #1a1a1a ;
+      }
+    .navbar-brand{
+        color: black;
+    }
+   
   }
 .vertical-nav a {
     color: var(--color-light);
@@ -165,3 +177,10 @@ h2:after {
     width: 100%;
 }
 }
+
+ /* modal theme */
+ .modal-content {
+    background-color: var(--dark-bg);
+    color: var(--neon-yellow);
+    border: 1px solid var(--neon-yellow);
+  }
