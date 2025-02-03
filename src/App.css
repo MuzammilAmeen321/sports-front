@@ -10,12 +10,14 @@
     padding: 0;
     box-sizing: border-box;
     font-family: 'El Messiri', sans-serif;
+    color: var(--neon-yellow);
   }
-  
+  .navbar-brand{
+    color: var(--neon-yellow);
+}
   body {
     background: var(--dark-bg);
     color: var(--neon-yellow);
-    min-height: 100vh;
     overflow: auto;
     transition: var(--transition);
   }

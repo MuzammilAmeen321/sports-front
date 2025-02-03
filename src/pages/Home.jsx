@@ -1,6 +1,6 @@
 import React from 'react';
 import Header from '../components/header';
-import VerticalNavbar from '../components/verticleNav';
+
 import Slider from '../components/slider';
 import GamesNewsPage from '../components/ShoppingCards';
 import Tabs from '../components/MatchsTab';
@@ -24,7 +24,7 @@ const Home = () => {
      
       
      
-     <VerticalNavbar />
+     
       </div>
       
     </div>

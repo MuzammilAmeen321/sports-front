@@ -1,88 +1,116 @@
-import React, { useState } from 'react';
-import '../style/matchTabs.css';
-const Tabs = () => {
-  const [activeTab, setActiveTab] = useState('tab1');
+import { useState } from "react";
 
-  const handleTabChange = (event) => {
-    setActiveTab(event.target.id);
-  };
-
-  return (
-    <div className="container-fluid p-0 m-3">
-     <h2><strong>All Matches bets</strong></h2>
-          <div className="tabs-block">
-            <div className="tabs">
-              <input
-                type="radio"
-                name="tabs"
-                id="tab1"
-                checked={activeTab === 'tab1'}
-                onChange={handleTabChange}
-              />
-              <label htmlFor="tab1">
-                Available Matches
-              </label>
-              {activeTab === 'tab1' && (
-                <div className="tab">
-                  <h2>Fixed Matches</h2>
-                  <p>
-                    One of the most powerful, efficient, and open-source JavaScript frameworks is{' '}
-                    <a href="https://angularjs.org/">Angular</a>. Google operates this framework and is
-                    implemented to use for developing a Single Page Application (SPA). It extends the HTML
-                    into the application and interprets the attributes to perform data binding.
-                  </p>
-                </div>
-              )}
-
-              <input
-                type="radio"
-                name="tabs"
-                id="tab2"
-                checked={activeTab === 'tab2'}
-                onChange={handleTabChange}
-              />
-              <label htmlFor="tab2">
-                Live Matchs
-              </label>
-              {activeTab === 'tab2' && (
-                <div className="tab">
-                  <h2>React</h2>
-                  <p>
-                    Created by Facebook, the <a href="https://reactjs.org/">React framework</a> has earned
-                    popularity within a short period. It is used to develop and operate the dynamic User
-                    Interface of the web pages with high incoming traffic. It makes the use of a virtual DOM,
-                    and hence, the integration of the same with any application is more straightforward.
-                  </p>
-                </div>
-              )}
-
-              <input
-                type="radio"
-                name="tabs"
-                id="tab3"
-                checked={activeTab === 'tab3'}
-                onChange={handleTabChange}
-              />
-              <label htmlFor="tab3">
-                Upcomming Matches
-              </label>
-              {activeTab === 'tab3' && (
-                <div className="tab">
-                  <h2>Vue</h2>
-                  <p>
-                    Though developed in the year 2016, this <a href="https://vuejs.org/">JavaScript framework</a>{' '}
-                    has already made its way into the market and has proven its worth by offering various features.
-                    Its dual integration mode is one of the most attractive features for creating high-end SPA or
-                    Single Page Application.It is a much reliable platform for developing cross-platform.
-                  </p>
-                </div>
-              )}
-
-            </div>
-          </div>
-        
-    </div>
-  );
+const matches = {
+  live: [
+    {
+      id: 1,
+      type: "Cricket",
+      startTime: "07 Jun 2025 - 05:00 PM",
+      teams: "KKR vs RGB",
+      league: "PSL",
+      bid: 5000,
+      securityVenue: "Yes",
+      imgSrc: "./images/pakistan-super-league-psl-logo.png",
+    },
+  ],
+  upcoming: [
+    {
+      id: 2,
+      type: "Cricket",
+      startTime: "10 Jun 2025 - 06:00 PM",
+      teams: "MI vs CSK",
+      league: "IPL",
+      bid: 7000,
+      securityVenue: "No",
+      imgSrc: "./images/ipl-logo.png",
+    },
+  ],
+  available: [
+    {
+      id: 3,
+      type: "Cricket",
+      teams: "CSK", // Only one team name displayed (match creator)
+      imgSrc: "./images/ipl-logo.png",
+    },
+  ],
 };
 
-export default Tabs;
+export default function MatchTabs() {
+  const [activeTab, setActiveTab] = useState("live");
+
+  return (
+    <div className="container mt-3">
+      <ul className="nav nav-tabs">
+        <li className="nav-item">
+          <button className={`nav-link ${activeTab === "live" ? "active" : ""}`} onClick={() => setActiveTab("live")}>
+            Live Matches
+          </button>
+        </li>
+        <li className="nav-item">
+          <button className={`nav-link ${activeTab === "upcoming" ? "active" : ""}`} onClick={() => setActiveTab("upcoming")}>
+            Upcoming
+          </button>
+        </li>
+        <li className="nav-item">
+          <button className={`nav-link ${activeTab === "available" ? "active" : ""}`} onClick={() => setActiveTab("available")}>
+            Available Matches
+          </button>
+        </li>
+      </ul>
+      <div className="tab-content mt-3">
+        <div className={`tab-pane fade ${activeTab === "live" ? "show active" : ""}`}>
+          <MatchList matches={matches.live} showRequest={false} />
+        </div>
+        <div className={`tab-pane fade ${activeTab === "upcoming" ? "show active" : ""}`}>
+          <MatchList matches={matches.upcoming} showRequest={false} />
+        </div>
+        <div className={`tab-pane fade ${activeTab === "available" ? "show active" : ""}`}>
+          <MatchList matches={matches.available} showRequest={true} />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function MatchList({ matches, showRequest }) {
+  return (
+    <div className="row">
+      {matches.map((match) => (
+        <div className="col-md-6 mb-3" key={match.id}>
+          <div className="card bg-white text-black p-1 px-2 text-center">
+            <div className="d-flex align-items-center justify-content-center mb-2">
+              <i className="fas fa-baseball-bat-ball fa-1x text-warning me-2"></i>
+              <p className="mb-0 fw-bold">{match.type}</p>
+            </div>
+            <div className="row">
+              <div className="col">
+                <img src={match.imgSrc} alt="League Logo" className="img-fluid" style={{ maxWidth: "80px", height: "auto" }} />
+              </div>
+              <div className="col">
+                <h6 className="mb-1">{match.teams}</h6>
+                {match.league && <span className="badge bg-warning text-dark">{match.league}</span>}
+              </div>
+              {match.bid && (
+                <div className="col">
+                  <p className="mb-0" style={{ color: "red", fontWeight: "bold" }}>
+                    Bid <span style={{ color: "black" }}>{match.bid}</span>
+                  </p>
+                </div>
+              )}
+              {match.securityVenue && (
+                <div className="col">
+                  <p className="mb-0" style={{ color: "black", fontWeight: "bold" }}>
+                    Security Venue <span style={{ color: match.securityVenue === "Yes" ? "green" : "red" }}>{match.securityVenue}</span>
+                  </p>
+                </div>
+              )}
+            </div>
+            {showRequest && (
+              <button className="btn btn-primary mt-2">Request Match</button>
+            )}
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}

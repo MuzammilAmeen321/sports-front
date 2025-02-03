@@ -5,23 +5,23 @@ const VerticleNav = () => {
   return (
       <nav className="vertical-nav">
         <a href="#home" className='d-flex flex-column justify-content-center'>
-          <i className="fas fa-home"></i>
+          <i className="fas fa-home nav_icon"></i>
           Home
         </a>
         <a href="#matches" className='d-flex flex-column justify-content-center'>
-          <i className="fas fa-futbol"></i>
+          <i className="fas fa-futbol nav_icon"></i>
           Matches
         </a>
         <a href="#shop" className='d-flex flex-column justify-content-center'>
-          <i className="fas fa-shopping-cart"></i>
+          <i className="fas fa-shopping-cart nav_icon"></i>
           Shopping
         </a>
         <a href="#contact" className='d-flex flex-column justify-content-center'>
-          <i className="fas fa-envelope"></i>
+          <i className="fas fa-envelope nav_icon"></i>
           Contact
         </a>
         <a href="/team" className='d-flex flex-column justify-content-center'>
-        <i class="fas fa-users"></i>
+        <i class="fas fa-users nav_icon"></i>
 
           Team
         </a>

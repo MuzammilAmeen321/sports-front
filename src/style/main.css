@@ -4,6 +4,7 @@
     transition: var(--transition);
     padding: 0;
 }
+
 body.light-theme .home-page{
 background-color: var(--light-bg);
 }
@@ -20,7 +21,7 @@ background-color: var(--light-bg);
     padding: 10px;
     box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.5);
     border-radius: 10px;
-    z-index: 999;
+    clear: both;
 }
 
 body.light-theme .vertical-nav{
@@ -35,9 +36,9 @@ body.light-theme .vertical-nav{
 .vertical-nav a {
     color: var(--color-light);
     text-decoration: none;
-    padding: 15px;
     width: 100%;
     text-align: center;
+    padding: 10px;
     font-weight: bold;
     border-radius: 10px;
     background: linear-gradient(145deg, var(--color-accent), #2a2a2a);
@@ -64,26 +65,20 @@ body.light-theme .vertical-nav{
 .navbar{
     border-bottom: 1px groove var(--neon-yellow);
     margin-bottom: 20px;
+    color: var(--neon-yellow);
 }
-.image--cover {
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    margin: 20px;
+
   
-    object-fit: cover;
-    object-position: center right;
-  }
 @media (max-width: 950px) {
     .vertical-nav {
-        height: 70px;
+        height: 50px;
         width: 100%;
         position: fixed;
-        bottom: 45px;
+        bottom: 0;
         top: auto;
         flex-direction: row;
         justify-content: space-around;
-        background: transparent;
+        background: var(--dark-bg);
         padding: 0;
         box-shadow: 0 -5px 10px rgba(0, 0, 0, 0.3);
     }
@@ -129,12 +124,12 @@ h2:after {
     right: 0;
     background: #343a40;
 }
-.cards {
+.shoppingCards {
     display: flex;
     flex-wrap: wrap;
     
 }
-.card {
+.shoppingCard {
     width: 180px;
     height: 270px;
     position: relative;
@@ -145,12 +140,12 @@ h2:after {
     
 }
 
-.card img{
+.shoppingCard img{
     width: 100%;
     height: 100%;
     object-fit: cover;
 }
-.card figcaption {
+.shoppingCard figcaption {
     position: absolute;
     bottom: 0;
     left: 0;
@@ -162,11 +157,11 @@ h2:after {
     transform: translateY(100%);
     transition: .3s;
 }
-.card:hover figcaption {
+.shoppingCard:hover figcaption {
     transform: translateY(0);
 }
 @media (max-width: 450px){
-.card{
+.shoppingCard{
     width: 100%;
 }
 }

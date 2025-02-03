@@ -12,7 +12,7 @@ const games = [
 
 
 const GameCard = ({ game }) => (
-    <figure className="card">
+    <figure className="shoppingCard">
         <img src={game.img} alt={game.title} />
         <figcaption>{game.title}</figcaption>
     </figure>
@@ -24,7 +24,7 @@ const GamesNewsPage = () => {
     return (
         <div className="shopping">
             <h2><strong>Top Sports<span>({games.length})</span></strong></h2>
-            <div className="cards">
+            <div className="shoppingCards">
                 {games.map((game, index) => (
                     <GameCard key={index} game={game} />
                 ))}
