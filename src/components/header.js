@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import ProfileUpdateModal from "./Edit_profile";
-
 export default function Navbar() {
   const [modalView, setModalView] = useState(null); // "profile" or "password"
 

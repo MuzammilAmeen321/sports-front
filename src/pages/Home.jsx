@@ -1,25 +1,19 @@
 import React from 'react';
-import Header from '../components/header';
 
 import Slider from '../components/slider';
 import GamesNewsPage from '../components/ShoppingCards';
-import Tabs from '../components/MatchsTab';
+import ModernTabs from '../components/MatchTabs/MatchsTab';
 import '../style/main.css';
 const Home = () => {
     
   return (
     <div className="container-fluid">
       <div className="row">
-        <div className="col-12">
-        <Header />
-        </div>
-        
-     
-    
      <div className="container home-page">
      <Slider />
-     <GamesNewsPage />
-     <Tabs />
+     <div className="row mt-5">
+     <ModernTabs page="home" /> 
+     </div>
      </div>
      
       

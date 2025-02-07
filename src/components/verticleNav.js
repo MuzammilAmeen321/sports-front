@@ -4,11 +4,11 @@ const VerticleNav = () => {
 
   return (
       <nav className="vertical-nav">
-        <a href="#home" className='d-flex flex-column justify-content-center'>
+        <a href="/" className='d-flex flex-column justify-content-center'>
           <i className="fas fa-home nav_icon"></i>
           Home
         </a>
-        <a href="#matches" className='d-flex flex-column justify-content-center'>
+        <a href="/matches" className='d-flex flex-column justify-content-center'>
           <i className="fas fa-futbol nav_icon"></i>
           Matches
         </a>

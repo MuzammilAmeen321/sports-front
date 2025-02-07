@@ -3,6 +3,8 @@
     color: var(--neon-yellow);
     transition: var(--transition);
     padding: 0;
+    overflow:auto;
+    padding: 25px;
 }
 body.light-theme .home-page{
 background-color: var(--light-bg);
@@ -86,7 +88,7 @@ body.light-theme {
         height: 50px;
         width: 100%;
         position: fixed;
-        bottom: 0;
+        bottom: 80px;
         top: auto;
         flex-direction: row;
         justify-content: space-around;
@@ -102,7 +104,15 @@ body.light-theme {
     .theme-toggle {
     margin: 130px 0;
     }
+    .shoppingCard{
+      width: 100%;
+    }
    
+}
+/* header */
+.header{
+    width: 50%;
+    margin: auto;
 }
 
 /* Shopping cards  */
@@ -148,7 +158,7 @@ h2:after {
     margin: 10px;
     overflow: hidden;
     transition: .3s;
-    border-radius: 20px 25% 50% 12px;
+    border-radius: 10%;
     
 }
 
@@ -172,7 +182,7 @@ h2:after {
 .shoppingCard:hover figcaption {
     transform: translateY(0);
 }
-@media (max-width: 450px){
+@media (max-width: 759px){
 .shoppingCard{
     width: 100%;
 }
@@ -184,3 +194,5 @@ h2:after {
     color: var(--neon-yellow);
     border: 1px solid var(--neon-yellow);
   }
+
+  
