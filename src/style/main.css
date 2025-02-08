@@ -1,5 +1,9 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 .home-page{
-    width: 80%; background: var(--dark-bg);
+    width: 90%; background: var(--dark-bg);
     color: var(--neon-yellow);
     transition: var(--transition);
     padding: 0;
