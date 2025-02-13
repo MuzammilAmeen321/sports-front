@@ -4,8 +4,6 @@ import AuthContainer from './Auth/AuthContainer';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Home from './pages/Home';
 import './App.css';
-import VerticalNavbar from './components/verticleNav';
-import Navbar from './components/header';
 import Profiles from './pages/MyTeam';
 import ProfileUpdateModal from './components/Edit_profile';
 import MatchesManagement from './pages/Matches';
@@ -25,24 +23,25 @@ function App() {
   return (
     <Router>
       <div className="App">
-      <Navbar />
         {/* Theme Toggle Button */}
         <button className="theme-toggle" onClick={toggleTheme}>
           <i className="fas fa-adjust"></i>
         </button>
 
         <Routes>
-          <Route path="/login" element={<AuthContainer />} />
-          <Route path="/" element={<Home />} />
+          {/* <Route path="/login" element={<AuthContainer />} /> */}
+          <Route path="/" /* element={<ProtectedRoute><Home /></ProtectedRoute>}  */ element={<Home />}/>
           <Route path="/team" element={<Profiles />} />
           <Route path="/edit-profile" element={<ProfileUpdateModal />} />
           <Route path="/matches" element={<MatchesManagement />} />
         </Routes>
         
-        <VerticalNavbar />
       </div>
     </Router>
   );
 }
-
+/* const ProtectedRoute = ({ children }) => {
+  const token = localStorage.getItem("authToken");
+  return token ? children : <Navigate to="/login" />;
+}; */
 export default App;
