@@ -2,112 +2,70 @@ import React from "react";
 
 const MatchCard = ({ match }) => {
   return (
-    <div className="col-md-6 mb-4">
-      <div className="card text-black  shadow-sm">
-        <div className="card-header  d-flex justify-content-between align-items-center p-3">
+    <div className={`col-lg-4 col-md-6 col-12 mb-3`} data-status={match.status}>
+      <div className="card bg-white text-black p-2 text-center shadow-sm">
+        <div className="d-flex justify-content-between align-items-center mb-1">
           <div className="d-flex align-items-center">
-            <i className="fas fa-baseball fa-1x text-warning me-2"></i>
+            <i className="fas fa-baseball-bat-ball fa-1x text-warning me-1"></i>
             <p className="mb-0 fw-bold">{match.sport}</p>
           </div>
-          <div>
-            <p className="text-muted small mb-0">
-              Starts: {match.startDate} - {match.startTime}
-            </p>
+          <p className="text-muted small mb-0">Starts: {match.startDate} - {match.startTime}</p>
+        </div>
+
+        <div className="row align-items-center">
+          <div className="col-4 text-center">
+            <img src={match.imageUrl} alt="League Logo" className="img-fluid" style={{ maxWidth: "70px" }} />
+          </div>
+          <div className="col-4 text-center">
+            <p className="fw-bold mb-1">{match.teams}</p>
+            <span className={`badge ${
+              match.status === "available" ? "bg-success text-black" :
+              match.status === "booked" ? "bg-danger text-black" :
+              match.status === "live" ? "bg-danger text-black" :
+              "bg-warning text-black"}`}>
+              {match.status === "available" ? "Available" :
+              match.status === "booked" ? "Booked" :
+              match.status === "live" ? "Live" :
+              "Pending"}
+            </span>
+          </div>
+          <div className="col-4 text-center">
+            <p className="mb-0 text-danger fw-bold">Bid <br /><span className="text-black">${match.bidAmount}</span></p>
           </div>
         </div>
 
-        <div className="card-body p-3">
-          <div className="row align-items-center">
-            <div className="col-md-3 text-center">
-              <img
-                src={match.imageUrl}
-                alt="League Logo"
-                className="img-fluid rounded-circle"
-                style={{ maxHeight: "80px" }}
-              />
-            </div>
-
-            <div className="col-md-5">
-              <h5 className="mb-2 fw-bold">{match.teams}</h5>
-              <span className="badge bg-warning text-dark fs-6">{match.league}</span>
-            </div>
-
-            <div className="col-md-4">
-              <div className="d-flex flex-column">
-                <p className="mb-2">
-                  <span className="fw-bold">Bid:</span> ${match.bidAmount}
-                </p>
-                <p className="mb-0">
-                  <span className="fw-bold">Security:</span>{" "}
-                  {match.securityVenue ? (
-                    <span className="text-success">Yes</span>
-                  ) : (
-                    <span className="text-danger">No</span>
-                  )}
-                </p>
-              </div>
-            </div>
+        {match.status === "available" && (
+          <div className="card-footer bg-light mt-1">
+            <button className="btn btn-warning w-50" onClick={() => alert("Request Sent!")}>Send Request</button>
           </div>
-        </div>
+        )}
 
-        <div className="card-footer bg-light p-3">
-          <div className="d-flex justify-content-between align-items-center">
-            <div>
-              <span className="text-muted small">Match Status:</span>
-              <span className="ms-2 fw-bold">{match.status.toUpperCase()}</span>
-            </div>
-            <button className="btn btn-primary btn-sm">
-              <i className="fas fa-ticket-alt me-2"></i>Book Now
+        {match.status === "live" && (
+          <div className="mt-2 text-end">
+            <button className="btn px-4 btn-warning">
+              <a href="/scoreboard" className="text-dark text-decoration-none">Score</a>
             </button>
           </div>
-        </div>
+        )}
       </div>
     </div>
   );
 };
 
-// Example Usage
-const MatchList = () => {
+const MatchList = ({ matchType }) => {
   const matches = [
-    {
-      sport: "Cricket",
-      startDate: "07 Jun 2025",
-      startTime: "05:00 PM",
-      imageUrl: "./images/pakistan-super-league-psl-logo.png",
-      teams: "KKR vs RGB",
-      league: "PSL",
-      bidAmount: 5000,
-      security: true,
-      status: "available", // Change to "booked" or "pending" for different states
-    },
-    {
-      sport: "Cricket",
-      startDate: "10 Jun 2025",
-      startTime: "07:00 PM",
-      imageUrl: "./images/pakistan-super-league-psl-logo.png",
-      teams: "MI vs CSK",
-      league: "IPL",
-      bidAmount: 7000,
-      security: false,
-      status: "booked",
-    },
-    {
-      sport: "Cricket",
-      startDate: "15 Jun 2025",
-      startTime: "06:30 PM",
-      imageUrl: "./images/pakistan-super-league-psl-logo.png",
-      teams: "RCB vs DC",
-      league: "IPL",
-      bidAmount: 6000,
-      security: true,
-      status: "pending",
-    },
+    { id: 1, sport: "Cricket", startDate: "07 Jun 2025", startTime: "05:00 PM", imageUrl: "https://seeklogo.com/images/P/pakistan-super-league-psl-logo-7CA605C19A-seeklogo.com.png", league: "PSL", bidAmount: 5000, security: true, status: "available" },
+    { id: 2, sport: "Cricket", startDate: "10 Jun 2025", startTime: "07:00 PM", imageUrl: "https://seeklogo.com/images/P/pakistan-super-league-psl-logo-7CA605C19A-seeklogo.com.png", teams: "Pak vs Ind", league: "PSL", bidAmount: 5000, security: true, status: "booked" },
+    { id: 3, sport: "Cricket", startDate: "15 Jun 2025", startTime: "06:30 PM", imageUrl: "https://seeklogo.com/images/P/pakistan-super-league-psl-logo-7CA605C19A-seeklogo.com.png", league: "IPL", bidAmount: 6000, security: false, status: "pending" },
+    { id: 4, sport: "Cricket", startDate: "07 Jun 2025", startTime: "05:00 PM", imageUrl: "https://seeklogo.com/images/P/pakistan-super-league-psl-logo-7CA605C19A-seeklogo.com.png", teams: "Pak vs Ind", league: "PSL", bidAmount: 5000, security: true, status: "live" },
   ];
 
+  const filteredMatches = matchType === "all" ? matches : matches.filter(match => match.status === matchType);
+
   return (
-    <div className="row p-3">
-      {matches.map((match, index) => (
-        <MatchCard key={index} match={match} />
+    <div className="row p-2">
+      {filteredMatches.map((match) => (
+        <MatchCard key={match.id} match={match} />
       ))}
     </div>
   );

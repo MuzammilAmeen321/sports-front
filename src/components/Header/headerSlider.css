@@ -4,7 +4,7 @@
   justify-content: space-around;
   background: #ffcb05;
   padding: 20px;
-  border-radius: 10px;
+  border-radius: 5px;
   color: black;
 }
 
@@ -97,4 +97,18 @@
   object-fit: cover;
   border-radius: 50%;
   margin-bottom: 5px;
+}
+@media (max-width: 768px) {
+  .match-container {
+    flex-direction: column;
+  }
+
+  .teams {
+    flex-direction: row;
+    margin-bottom: 40px;
+  }
+
+  .match-time {
+    margin-top: 20px;
+  }
 }

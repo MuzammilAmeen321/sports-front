@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-const Header = () => {
+const SearchBarTab = () => {
   const [selectedCategory, setSelectedCategory] = useState({
     name: "Select Category",
     icon: "fa-bars",
@@ -55,17 +55,20 @@ const Header = () => {
   };
 
   return (
-    <header className="header d-flex justify-content-center  align-items-center p-3">
+    <header className="header d-flex justify-content-center  align-items-center p-4">
       {/* Left Side - Search Box */}
-      <div className="d-flex align-items-center">
-        <div className={`search-box d-flex align-items-center me-3 ${searchExpanded ? "expanded" : ""}`}>
-          <input
-            type="search"
-            className="form-control"
-            placeholder="Search..."
-            style={{ display: searchExpanded ? "block" : "none" }}
-          />
-          <button className="btn btn-outline-dark bg-light mx-1" onClick={toggleSearch}>
+      <div className="d-flex  align-items-center">
+        <div className={`search-box  d-flex align-items-center me-1 ${searchExpanded ? "expanded" : ""}`}>
+        <input
+  type="search"
+  className="form-control"
+  placeholder="Search..."
+  style={{
+    display: searchExpanded ? "block" : "none",
+    width: searchExpanded ? (window.innerWidth < 768 ? "160px" : "auto") : "auto",
+  }}
+/>
+          <button className="btn btn-outline-dark  bg-light mx-1" onClick={toggleSearch}>
             <i className="fas fa-search"></i>
           </button>
         </div>
@@ -89,7 +92,7 @@ const Header = () => {
       </div>
 
       {/* Right Side - Location Button */}
-      <button id="cust_btn" className="btn btn-light  ms-3" data-bs-toggle="modal" data-bs-target="#locationModal">
+      <button id="cust_btn" className="btn btn-light  ms-2" data-bs-toggle="modal" data-bs-target="#locationModal">
         <i className="fas fa-map-marker-alt p-1"></i>
       </button>
 
@@ -161,4 +164,4 @@ const Header = () => {
   );
 };
 
-export default Header;
+export default SearchBarTab;

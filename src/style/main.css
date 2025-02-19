@@ -198,5 +198,7 @@ h2:after {
     color: var(--neon-yellow);
     border: 1px solid var(--neon-yellow);
   }
-
+.match-table tr td,.match-table th{
+    background-color: #FFE600;
+}
   

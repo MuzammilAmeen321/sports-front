@@ -1,4 +1,7 @@
 
+
+
+
 import React, { useState, useEffect } from 'react';
 import AuthContainer from './Auth/AuthContainer';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
@@ -7,6 +10,7 @@ import './App.css';
 import Profiles from './pages/MyTeam';
 import ProfileUpdateModal from './components/Edit_profile';
 import MatchesManagement from './pages/Matches';
+import Scoreboard from './components/scoreboard/ScoreBoard';
 function App() {
   const [theme, setTheme] = useState(localStorage.getItem('theme') || 'dark');
 
@@ -34,6 +38,7 @@ function App() {
           <Route path="/team" element={<Profiles />} />
           <Route path="/edit-profile" element={<ProfileUpdateModal />} />
           <Route path="/matches" element={<MatchesManagement />} />
+          <Route path="/scoreboard" element={<Scoreboard />} />
         </Routes>
         
       </div>
