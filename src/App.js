@@ -11,6 +11,10 @@ import Profiles from './pages/MyTeam';
 import ProfileUpdateModal from './components/Edit_profile';
 import MatchesManagement from './pages/Matches';
 import Scoreboard from './components/scoreboard/ScoreBoard';
+import Homee from './components/Header/navbar component/Homee';
+import Live from './components/Header/navbar component/Live';
+import Upcoming from './components/Header/navbar component/Upcoming';
+import Result from './components/Header/navbar component/Result';
 function App() {
   const [theme, setTheme] = useState(localStorage.getItem('theme') || 'dark');
 
@@ -39,6 +43,10 @@ function App() {
           <Route path="/edit-profile" element={<ProfileUpdateModal />} />
           <Route path="/matches" element={<MatchesManagement />} />
           <Route path="/scoreboard" element={<Scoreboard />} />
+          <Route path="/home" element={<Homee />} />
+          <Route path="/live" element={<Live />} />
+          <Route path="/upcoming" element={<Upcoming />} />
+          <Route path="/result" element={<Result />} />
         </Routes>
         
       </div>

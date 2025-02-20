@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import ProfileUpdateModal from "../Edit_profile";
+
+
 export default function Navbar() {
   const [modalView, setModalView] = useState(null); // "profile" or "password"
 
@@ -10,6 +12,25 @@ export default function Navbar() {
           <a className="navbar-brand" href="#">
             Game Portal
           </a>
+
+          {/* Center Menu Items */}
+          <div className="mx-auto">
+            <ul className="navbar-nav d-flex flex-row gap-3">
+              <li className="nav-item">
+                <a className="nav-link text-warning" href="/">Home</a>
+              </li>
+              <li className="nav-item">
+                <a className="nav-link text-warning" href="/live">Live</a>
+              </li>
+              <li className="nav-item">
+                <a className="nav-link text-warning" href="/upcoming">Upcoming</a>
+              </li>
+              <li className="nav-item">
+                <a className="nav-link text-warning" href="/result">Result</a>
+              </li>
+            </ul>
+          </div>
+
           <div className="ms-auto">
             <div className="dropdown">
               <button
