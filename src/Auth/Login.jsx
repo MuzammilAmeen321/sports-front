@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom"; // Import for redirection
+import { useNavigate } from "react-router-dom";
 
 const Login = ({ toggleForms }) => {
   const [formData, setFormData] = useState({ username: "", password: "" });
   const [error, setError] = useState(null);
-  const navigate = useNavigate(); // React Router navigation
+  const navigate = useNavigate();
 
   // Handle input changes
   const handleChange = (e) => {
@@ -18,12 +18,16 @@ const Login = ({ toggleForms }) => {
 
     try {
       const response = await axios.post("http://localhost:8000/api/login", formData);
+      
+      const { token, user } = response.data; // Assuming API returns user data
+      console.log("Token:", localStorage.getItem("token"));
 
-      // Save token to localStorage
-      localStorage.setItem("authToken", response.data.token);
+      // Store token and user details in localStorage
+      localStorage.setItem("authToken", token);
+      localStorage.setItem("user", JSON.stringify(user));
 
-      // Redirect to home page after successful login
-      navigate("/home"); 
+      // Redirect to home page
+      navigate("/");
     } catch (error) {
       setError("Invalid credentials. Please try again.");
     }
@@ -63,16 +67,6 @@ const Login = ({ toggleForms }) => {
         Create Account
       </button>
       <a href="#" className="switch-form mx-2">Forget your Password?</a>
-      <div className="social-auth">
-        <button type="button" className="social-button facebook">
-          Login with <i className="fab fa-facebook-f"></i>acebook
-        </button>
-        <button type="button" className="social-button google">
-          Login with <i className="fab fa-google"></i>oogle
-        </button>
-      </div>
-
-
     </form>
   );
 };

@@ -1,93 +1,110 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import ProfileUpdateModal from "../Edit_profile";
 
-
 export default function Navbar() {
-  const [modalView, setModalView] = useState(null); // "profile" or "password"
+  const navigate = useNavigate();
+  const [modalView, setModalView] = useState(null);
+  const [user, setUser] = useState(null);
+  const defaultImage = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM8LrGjiUDcvYjUMk7jUJJZo0kK4Y4NzKxmQ&s";
+  const [profile, setProfile] = useState(defaultImage);
+
+  // Fetch user from localStorage on component mount
+  useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+
+    if (storedUser) {
+      try {
+        const parsedUser = JSON.parse(storedUser);
+        setUser(parsedUser);
+
+        if (parsedUser.profile_picture) {
+          setProfile(parsedUser.profile_picture);
+        } else {
+          setProfile(defaultImage);
+        }
+      } catch (error) {
+        console.error("Error parsing user data:", error);
+        setProfile(defaultImage);
+      }
+    } else {
+      setProfile(defaultImage);
+    }
+  }, [modalView]); // Re-run effect when modal is opened/closed
+
+  console.log("User Profile:", profile);
+
+  // Logout function
+  const handleLogout = () => {
+    localStorage.removeItem("authToken");
+    localStorage.removeItem("user");
+    setUser(null);
+    setProfile(defaultImage);
+    navigate("/login"); // Redirect to login page
+  };
 
   return (
     <>
-      <nav className="navbar navbar-expand-lg ">
+      <nav className="navbar navbar-expand-lg">
         <div className="container-fluid">
-          <a className="navbar-brand" href="#">
-            Game Portal
-          </a>
+          <a className="navbar-brand" href="#">Game Portal</a>
 
-          {/* Center Menu Items */}
           <div className="mx-auto">
             <ul className="navbar-nav d-flex flex-row gap-3">
-              <li className="nav-item">
-                <a className="nav-link text-warning" href="/">Home</a>
-              </li>
-              <li className="nav-item">
-                <a className="nav-link text-warning" href="/live">Live</a>
-              </li>
-              <li className="nav-item">
-                <a className="nav-link text-warning" href="/upcoming">Upcoming</a>
-              </li>
-              <li className="nav-item">
-                <a className="nav-link text-warning" href="/result">Result</a>
-              </li>
+              <li className="nav-item"><a className="nav-link text-warning" href="/">Home</a></li>
+              <li className="nav-item"><a className="nav-link text-warning" href="/live">Live</a></li>
+              <li className="nav-item"><a className="nav-link text-warning" href="/upcoming">Upcoming</a></li>
+              <li className="nav-item"><a className="nav-link text-warning" href="/result">Result</a></li>
             </ul>
           </div>
 
           <div className="ms-auto">
-            <div className="dropdown">
-              <button
-                className="btn"
-                id="navbarDropdown"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
-              >
-                <img
-                  src="https://e7.pngegg.com/pngimages/799/987/png-clipart-computer-icons-avatar-icon-design-avatar-heroes-computer-wallpaper-thumbnail.png"
-                  className="rounded-circle"
-                  alt="User Avatar"
-                  width="40"
-                  height="40"
-                />
-              </button>
-              <ul className="dropdown-menu dropdown-menu-end bg-dark border border-warning">
-                <li>
-                  <a
-                    className="dropdown-item text-warning d-flex align-items-center"
-                    href="#"
-                    onClick={() => setModalView("profile")}
-                  >
-                    <i className="fas fa-user me-2"></i> Profile
-                  </a>
-                </li>
-                <li>
-                  <a className="dropdown-item text-warning d-flex align-items-center" href="#">
-                    <i className="fas fa-tachometer-alt me-2"></i> Dashboard
-                  </a>
-                </li>
-                <li>
-                  <a
-                    className="dropdown-item text-warning d-flex align-items-center"
-                    href="#"
-                    onClick={() => setModalView("password")}
-                  >
-                    <i className="fas fa-key me-2"></i> Change Password
-                  </a>
-                </li>
-                <li>
-                  <a className="dropdown-item text-warning d-flex align-items-center" href="#">
-                    <i className="fas fa-users me-2"></i> My Team
-                  </a>
-                </li>
-                <li>
-                  <a className="dropdown-item text-warning bg-danger d-flex align-items-center" href="#">
-                    <i className="fas fa-sign-out-alt me-2"></i> Log Out
-                  </a>
-                </li>
-              </ul>
-            </div>
+            {user ? (
+              <div className="dropdown">
+                <button className="btn" id="navbarDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                  <img
+                    src={profile}
+                    className="rounded-circle border border-secondary"
+                    alt="User Avatar"
+                    width="40"
+                    height="40"
+                    style={{ objectFit: "cover", cursor: "pointer" }}
+                    onError={(e) => {
+                      e.target.src = defaultImage; // Reset to default if broken
+                      setProfile(defaultImage);
+                    }}
+                  />
+                </button>
+                <ul className="dropdown-menu dropdown-menu-end bg-dark border border-warning">
+                  <li>
+                    <a className="dropdown-item text-warning d-flex align-items-center" href="#" onClick={() => setModalView("profile")}>
+                      <i className="fas fa-user me-2"></i> Profile
+                    </a>
+                  </li>
+                  <li>
+                    <a className="dropdown-item text-warning d-flex align-items-center" href="#" onClick={() => setModalView("password")}>
+                      <i className="fas fa-key me-2"></i> Change Password
+                    </a>
+                  </li>
+                  <li>
+                    <a className="dropdown-item text-warning d-flex align-items-center" href="/my-teams">
+                      <i className="fas fa-users me-2"></i> Manage Team
+                    </a>
+                  </li>
+                  <li>
+                    <button className="dropdown-item text-warning bg-danger d-flex align-items-center" onClick={handleLogout}>
+                      <i className="fas fa-sign-out-alt me-2"></i> Log Out
+                    </button>
+                  </li>
+                </ul>
+              </div>
+            ) : (
+              <a href="/login" className="btn btn-warning">Login</a>
+            )}
           </div>
         </div>
       </nav>
 
-      {/* Profile Update Modal (Dynamic View) */}
       {modalView && <ProfileUpdateModal view={modalView} onClose={() => setModalView(null)} />}
     </>
   );

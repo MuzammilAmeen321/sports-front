@@ -22,7 +22,11 @@ class User extends Authenticatable
         'email',
         'phone',
         'password',
+        'profile_picture', // Add this
+        'club_name',       // Add this
+        'sponsor_name',    // Add this
     ];
+    
 
     /**
      * The attributes that should be hidden for serialization.
@@ -44,3 +48,4 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 }
+

@@ -3,6 +3,8 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\TeamController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -19,4 +21,12 @@ Route::post('/login', [AuthController::class, 'login']);
 // Protected routes (Require authentication)
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
+    Route::post('/update-profile', [UserController::class, 'updateProfile']);
+    Route::post('/update-password', [UserController::class, 'updatePassword']);
+    Route::get('/teams', [TeamController::class, 'index']);
+Route::post('/teams', [TeamController::class, 'store']);
+Route::delete('/teams/{id}', [TeamController::class, 'destroy']);
+});
+Route::middleware('auth:sanctum')->get('/user-profile', function (Request $request) {
+    return response()->json($request->user());
 });

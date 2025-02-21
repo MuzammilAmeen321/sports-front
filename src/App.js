@@ -11,10 +11,10 @@ import Profiles from './pages/MyTeam';
 import ProfileUpdateModal from './components/Edit_profile';
 import MatchesManagement from './pages/Matches';
 import Scoreboard from './components/scoreboard/ScoreBoard';
-import Homee from './components/Header/navbar component/Homee';
 import Live from './components/Header/navbar component/Live';
 import Upcoming from './components/Header/navbar component/Upcoming';
 import Result from './components/Header/navbar component/Result';
+import TeamManagement from './components/TeamManagement/TeamCrud';
 function App() {
   const [theme, setTheme] = useState(localStorage.getItem('theme') || 'dark');
 
@@ -37,24 +37,24 @@ function App() {
         </button>
 
         <Routes>
-          {/* <Route path="/login" element={<AuthContainer />} /> */}
-          <Route path="/" /* element={<ProtectedRoute><Home /></ProtectedRoute>}  */ element={<Home />}/>
+        <Route path="/login" element={<AuthContainer />} /> 
+          <Route path="/" element={<ProtectedRoute><Home /></ProtectedRoute>}  />
           <Route path="/team" element={<Profiles />} />
           <Route path="/edit-profile" element={<ProfileUpdateModal />} />
           <Route path="/matches" element={<MatchesManagement />} />
           <Route path="/scoreboard" element={<Scoreboard />} />
-          <Route path="/home" element={<Homee />} />
           <Route path="/live" element={<Live />} />
           <Route path="/upcoming" element={<Upcoming />} />
           <Route path="/result" element={<Result />} />
+          <Route path="/my-teams" element={<TeamManagement />} />
         </Routes>
         
       </div>
     </Router>
   );
 }
-/* const ProtectedRoute = ({ children }) => {
+const ProtectedRoute = ({ children }) => {
   const token = localStorage.getItem("authToken");
   return token ? children : <Navigate to="/login" />;
-}; */
+};
 export default App;
