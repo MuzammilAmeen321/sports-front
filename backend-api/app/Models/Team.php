@@ -8,5 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class Team extends Model
 {
     use HasFactory;
-    protected $fillable = ['name', 'address', 'city', 'pin', 'logo'];
+    protected $fillable = [ 'user_id','name', 'address', 'city', 'pin', 'logo'];
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

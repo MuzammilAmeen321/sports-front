@@ -7,26 +7,20 @@ const Login = ({ toggleForms }) => {
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
-  // Handle input changes
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
       const response = await axios.post("http://localhost:8000/api/login", formData);
-      
-      const { token, user } = response.data; // Assuming API returns user data
-      console.log("Token:", localStorage.getItem("token"));
+      const { token, user } = response.data;
 
-      // Store token and user details in localStorage
       localStorage.setItem("authToken", token);
       localStorage.setItem("user", JSON.stringify(user));
-
-      // Redirect to home page
+      
       navigate("/");
     } catch (error) {
       setError("Invalid credentials. Please try again.");
@@ -36,36 +30,43 @@ const Login = ({ toggleForms }) => {
   return (
     <form id="loginForm" className="auth-form" onSubmit={handleSubmit}>
       {error && <p className="error-message">{error}</p>}
-
+      
       <div className="input-group">
         <i className="fas fa-user"></i>
         <input
-          type="text"
-          name="username"
-          placeholder="Username"
-          value={formData.username}
-          onChange={handleChange}
-          required
-        />
+  type="text"
+  name="username"
+  className="styled-input"
+  placeholder="Enter your username"
+  value={formData.username}
+  onChange={handleChange}
+  required
+  autoComplete="off"
+  autoCapitalize="none"
+  spellCheck="false"
+/>
       </div>
-
+      
       <div className="input-group">
         <i className="fas fa-lock"></i>
         <input
-          type="password"
-          name="password"
-          placeholder="Password"
-          value={formData.password}
-          onChange={handleChange}
-          required
-        />
+  type="password"
+  name="password"
+  className="styled-input"
+  placeholder="Enter your password"
+  value={formData.password}
+  onChange={handleChange}
+  required
+  autoComplete="new-password"
+/>
       </div>
-
+      
       <button type="submit" className="auth-button">LOGIN</button>
-
+      
       <button type="button" className="switch-form" onClick={toggleForms}>
         Create Account
       </button>
+      
       <a href="#" className="switch-form mx-2">Forget your Password?</a>
     </form>
   );

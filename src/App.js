@@ -11,9 +11,9 @@ import Profiles from './pages/MyTeam';
 import ProfileUpdateModal from './components/Edit_profile';
 import MatchesManagement from './pages/Matches';
 import Scoreboard from './components/scoreboard/ScoreBoard';
-import Live from './components/Header/navbar component/Live';
-import Upcoming from './components/Header/navbar component/Upcoming';
-import Result from './components/Header/navbar component/Result';
+import Live from './components/Header/navbarComponent/Live';
+import Upcoming from './components/Header/navbarComponent/Upcoming';
+import Result from './components/Header/navbarComponent/Result';
 import TeamManagement from './components/TeamManagement/TeamCrud';
 function App() {
   const [theme, setTheme] = useState(localStorage.getItem('theme') || 'dark');

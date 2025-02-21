@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\TeamController;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -15,18 +16,28 @@ use App\Http\Controllers\TeamController;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
+
+// Public routes (No authentication required)
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
 // Protected routes (Require authentication)
 Route::middleware('auth:sanctum')->group(function () {
+    // Auth routes
     Route::post('/logout', [AuthController::class, 'logout']);
+    Route::get('/user-profile', function (Request $request) {
+        return response()->json($request->user());
+    });
+
+    // User routes
     Route::post('/update-profile', [UserController::class, 'updateProfile']);
     Route::post('/update-password', [UserController::class, 'updatePassword']);
-    Route::get('/teams', [TeamController::class, 'index']);
-Route::post('/teams', [TeamController::class, 'store']);
-Route::delete('/teams/{id}', [TeamController::class, 'destroy']);
-});
-Route::middleware('auth:sanctum')->get('/user-profile', function (Request $request) {
-    return response()->json($request->user());
+
+    // Team routes
+    Route::prefix('teams')->group(function () {
+        Route::get('/', [TeamController::class, 'index']); // Get all teams
+        Route::post('/', [TeamController::class, 'store']); // Store a new team
+        Route::post('/{id}', [TeamController::class, 'update']); // Update an existing team
+        Route::delete('/{id}', [TeamController::class, 'destroy']); // Delete a team
+    });
 });
