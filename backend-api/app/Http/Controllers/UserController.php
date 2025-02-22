@@ -101,4 +101,20 @@ public function updatePassword(Request $request)
     return response()->json(['message' => 'Password updated successfully']);
 }
 
+public function getCaptain($user_id)
+{
+    $captain = User::find($user_id);
+
+    if (!$captain) {
+        return response()->json(['error' => 'Captain not found'], 404);
+    }
+
+    return response()->json([
+        'name' => $captain->username,
+        'totalMatches' => $captain->total_matches,
+        'won' => $captain->matches_won,
+        'loss' => $captain->matches_loss,
+        'imageUrl' => $captain->profile_picture,
+    ]);
+}
 }

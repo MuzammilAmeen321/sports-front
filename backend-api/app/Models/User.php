@@ -22,9 +22,12 @@ class User extends Authenticatable
         'email',
         'phone',
         'password',
-        'profile_picture', // Add this
-        'club_name',       // Add this
-        'sponsor_name',    // Add this
+        'profile_picture',
+        'club_name',
+        'sponsor_name',
+        'total_matches',
+        'matches_won',
+        'matches_loss',
     ];
     
 

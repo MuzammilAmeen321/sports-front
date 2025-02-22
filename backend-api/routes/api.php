@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\TeamController;
-
+use App\Http\Controllers\PlayerController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -32,7 +32,7 @@ Route::middleware('auth:sanctum')->group(function () {
     // User routes
     Route::post('/update-profile', [UserController::class, 'updateProfile']);
     Route::post('/update-password', [UserController::class, 'updatePassword']);
-
+    Route::get('/captain/{id}', [UserController::class, 'getCaptain']);
     // Team routes
     Route::prefix('teams')->group(function () {
         Route::get('/', [TeamController::class, 'index']); // Get all teams
@@ -40,4 +40,6 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/{id}', [TeamController::class, 'update']); // Update an existing team
         Route::delete('/{id}', [TeamController::class, 'destroy']); // Delete a team
     });
+
+    Route::get('/players/{team_id}', [PlayerController::class, 'getPlayers']);
 });

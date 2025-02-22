@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import ProfileUpdateModal from "../Edit_profile";
 
-export default function Navbar() {
+const Navbar=()=> {
   const navigate = useNavigate();
   const [modalView, setModalView] = useState(null);
   const [user, setUser] = useState(null);
@@ -32,7 +32,6 @@ export default function Navbar() {
     }
   }, [modalView]); // Re-run effect when modal is opened/closed
 
-  console.log("User Profile:", profile);
 
   // Logout function
   const handleLogout = () => {
@@ -109,3 +108,5 @@ export default function Navbar() {
     </>
   );
 }
+
+export default Navbar;

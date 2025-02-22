@@ -20,8 +20,8 @@ const VerticleNav = () => {
           <i className="fas fa-envelope nav_icon"></i>
           Contact
         </a>
-        <a href="/team" className='d-flex flex-column justify-content-center'>
-        <i class="fas fa-users nav_icon"></i>
+        <a href="/my-teams" className='d-flex flex-column justify-content-center'>
+        <i className="fas fa-users nav_icon"></i>
 
           Team
         </a>

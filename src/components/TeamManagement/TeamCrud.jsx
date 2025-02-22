@@ -1,14 +1,20 @@
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import axios from "axios";
 import Navbar from "../Header/header";
+import VerticleNav from "../verticleNav";
 import "./teamManagement.css";
 
 const TeamManagement = () => {
-    const [search, setSearch] = useState("");
     const [teams, setTeams] = useState([]);
+    const [filteredTeams, setFilteredTeams] = useState([]); // Teams created by the logged-in user
     const [selectedTeam, setSelectedTeam] = useState(null);
     const [isEditMode, setIsEditMode] = useState(false);
     const [teamForm, setTeamForm] = useState({ name: "", address: "", city: "", pin: "", logo: null });
+
+    // Get the logged-in user's ID from localStorage
+    const loggedInUser = JSON.parse(localStorage.getItem("user"));
+    const loggedInUserId = loggedInUser?.id;
 
     // Fetch teams from the API
     const fetchTeams = async () => {
@@ -18,20 +24,21 @@ const TeamManagement = () => {
                 console.error("No auth token found.");
                 return;
             }
-    
+
             const response = await axios.get("http://127.0.0.1:8000/api/teams", {
                 headers: {
                     Authorization: `Bearer ${token}`,
                     "Content-Type": "application/json",
                 },
             });
-    
-            // Log the response for debugging
-            console.log("API Response:", response.data);
-    
+
             // Check if the response contains a `teams` key or is the array directly
             const teamsData = Array.isArray(response.data) ? response.data : response.data.teams || [];
-            setTeams(teamsData);
+
+            // Filter teams to show only those created by the logged-in user
+            const userTeams = teamsData.filter(team => team.user_id === loggedInUserId);
+            setTeams(teamsData); // Store all teams (optional, if needed elsewhere)
+            setFilteredTeams(userTeams); // Store filtered teams for display
         } catch (error) {
             console.error("Error fetching teams:", error);
             if (error.response) {
@@ -42,6 +49,7 @@ const TeamManagement = () => {
                 console.error("Error setting up the request:", error.message);
             }
             setTeams([]);
+            setFilteredTeams([]);
         }
     };
 
@@ -77,7 +85,7 @@ const TeamManagement = () => {
     // Handle form submission (create or update)
     const handleSubmit = async (e) => {
         e.preventDefault();
-    
+
         const formData = new FormData();
         formData.append("name", teamForm.name);
         formData.append("address", teamForm.address);
@@ -86,13 +94,13 @@ const TeamManagement = () => {
         if (teamForm.logo) {
             formData.append("logo", teamForm.logo);
         }
-    
+
         try {
             const token = localStorage.getItem("authToken");
             const url = isEditMode
                 ? `http://127.0.0.1:8000/api/teams/${selectedTeam.id}`
                 : "http://127.0.0.1:8000/api/teams";
-    
+
             const method = isEditMode ? "post" : "post";
             await axios[method](url, formData, {
                 headers: {
@@ -100,7 +108,7 @@ const TeamManagement = () => {
                     "Content-Type": "multipart/form-data",
                 },
             });
-    
+
             alert(`Team ${isEditMode ? "updated" : "added"} successfully!`);
             fetchTeams(); // Refresh the teams list
             resetForm();
@@ -110,6 +118,7 @@ const TeamManagement = () => {
             alert(`Failed to ${isEditMode ? "update" : "add"} team.`);
         }
     };
+
     // Handle team deletion
     const handleDelete = async (teamId) => {
         if (!window.confirm("Are you sure you want to delete this team?")) return;
@@ -118,7 +127,7 @@ const TeamManagement = () => {
             await axios.delete(`http://127.0.0.1:8000/api/teams/${teamId}`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
-            setTeams(teams.filter(team => team.id !== teamId));
+            setFilteredTeams(filteredTeams.filter(team => team.id !== teamId));
         } catch (error) {
             console.error("Error deleting team:", error);
             alert("Failed to delete team.");
@@ -145,28 +154,28 @@ const TeamManagement = () => {
         setTeamForm({ name: "", address: "", city: "", pin: "", logo: null });
     };
 
-   // Open the modal
-const openModal = () => {
-    const modalElement = document.getElementById("teamModal");
-    if (modalElement) {
-        const modal = bootstrap.Modal.getInstance(modalElement) || new bootstrap.Modal(modalElement);
-        modal.show();
-    }
-};
+    // Open the modal
+    const openModal = () => {
+        const modalElement = document.getElementById("teamModal");
+        if (modalElement) {
+            const modal = bootstrap.Modal.getInstance(modalElement) || new bootstrap.Modal(modalElement);
+            modal.show();
+        }
+    };
 
-// Close the modal
-const closeModal = () => {
-    const modalElement = document.getElementById("teamModal");
-    if (modalElement) {
-        const modal = bootstrap.Modal.getInstance(modalElement);
-        modal.hide();
-    }
-};
+    // Close the modal
+    const closeModal = () => {
+        const modalElement = document.getElementById("teamModal");
+        if (modalElement) {
+            const modal = bootstrap.Modal.getInstance(modalElement);
+            modal.hide();
+        }
+    };
 
     return (
-        <div className="container-xl">
+        <div className="container-fluid">
             <Navbar />
-            <div className="table-responsive">
+            <div className="table-responsive container m-auto">
                 <div className="table-wrapper">
                     <div className="table-title">
                         <div className="row">
@@ -177,7 +186,6 @@ const closeModal = () => {
                                 <button className="text-dark bg-warning p-2 rounded-md min-w-[140px]" onClick={openCreateModal}>
                                     Add New Team
                                 </button>
-                                
                             </div>
                         </div>
                     </div>
@@ -194,8 +202,8 @@ const closeModal = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {teams.length > 0 ? (
-                                teams.map((team, index) => (
+                            {filteredTeams.length > 0 ? (
+                                filteredTeams.map((team, index) => (
                                     <tr key={team.id}>
                                         <td>{index + 1}</td>
                                         <td>
@@ -210,7 +218,9 @@ const closeModal = () => {
                                         <td>{team.city}</td>
                                         <td>{team.pin}</td>
                                         <td>
-                                            <a href="#" className="view" title="team-members"><i className="fas fa-users me-2"></i></a>
+                                            <Link to={`/team-members/${team.user_id}`} className="view users" title="team-members">
+                                                <i className="fas fa-users me-2"></i>
+                                            </Link>
                                             <a href="#" className="edit" title="Edit" onClick={() => openEditModal(team)}><i className="fas fa-edit"></i></a>
                                             <a href="#" className="delete" title="Delete" onClick={() => handleDelete(team.id)}><i className="fas fa-trash"></i></a>
                                         </td>
@@ -282,6 +292,7 @@ const closeModal = () => {
                     </div>
                 </div>
             </div>
+            <VerticleNav />
         </div>
     );
 };

@@ -7,7 +7,7 @@ import AuthContainer from './Auth/AuthContainer';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Home from './pages/Home';
 import './App.css';
-import Profiles from './pages/MyTeam';
+import MyTeamMembers from './pages/MyTeamMembers';
 import ProfileUpdateModal from './components/Edit_profile';
 import MatchesManagement from './pages/Matches';
 import Scoreboard from './components/scoreboard/ScoreBoard';
@@ -15,6 +15,8 @@ import Live from './components/Header/navbarComponent/Live';
 import Upcoming from './components/Header/navbarComponent/Upcoming';
 import Result from './components/Header/navbarComponent/Result';
 import TeamManagement from './components/TeamManagement/TeamCrud';
+
+
 function App() {
   const [theme, setTheme] = useState(localStorage.getItem('theme') || 'dark');
 
@@ -39,13 +41,13 @@ function App() {
         <Routes>
         <Route path="/login" element={<AuthContainer />} /> 
           <Route path="/" element={<ProtectedRoute><Home /></ProtectedRoute>}  />
-          <Route path="/team" element={<Profiles />} />
           <Route path="/edit-profile" element={<ProfileUpdateModal />} />
           <Route path="/matches" element={<MatchesManagement />} />
           <Route path="/scoreboard" element={<Scoreboard />} />
           <Route path="/live" element={<Live />} />
           <Route path="/upcoming" element={<Upcoming />} />
           <Route path="/result" element={<Result />} />
+          <Route path="/team-members/:id" element={<MyTeamMembers />} />
           <Route path="/my-teams" element={<TeamManagement />} />
         </Routes>
         
