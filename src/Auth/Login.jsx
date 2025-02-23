@@ -4,11 +4,28 @@ import { useNavigate } from "react-router-dom";
 
 const Login = ({ toggleForms }) => {
   const [formData, setFormData] = useState({ username: "", password: "" });
-  const [error, setError] = useState(null);
+  const [toast, setToast] = useState({ show: false, message: "", type: "" });
   const navigate = useNavigate();
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  // Clear input field on focus
+  const handleFocus = (e) => {
+    const { name } = e.target;
+    if (formData[name] === "") {
+      return; // Do nothing if the field is already empty
+    }
+    setFormData((prevData) => ({ ...prevData, [name]: "" }));
+  };
+
+  const showToast = (message, type) => {
+    setToast({ show: true, message, type });
+
+    setTimeout(() => {
+      setToast({ show: false, message: "", type: "" });
+    }, 3000);
   };
 
   const handleSubmit = async (e) => {
@@ -20,55 +37,78 @@ const Login = ({ toggleForms }) => {
 
       localStorage.setItem("authToken", token);
       localStorage.setItem("user", JSON.stringify(user));
-      
-      navigate("/");
+
+      showToast("Login successful! Redirecting to home...", "success");
+
+      // Redirect to home page after 3 seconds
+      setTimeout(() => {
+        navigate("/");
+      }, 3000);
     } catch (error) {
-      setError("Invalid credentials. Please try again.");
+      showToast("Invalid credentials. Please try again.", "danger");
     }
   };
 
   return (
-    <form id="loginForm" className="auth-form" onSubmit={handleSubmit}>
-      {error && <p className="error-message">{error}</p>}
-      
-      <div className="input-group">
-        <i className="fas fa-user"></i>
-        <input
-  type="text"
-  name="username"
-  className="styled-input"
-  placeholder="Enter your username"
-  value={formData.username}
-  onChange={handleChange}
-  required
-  autoComplete="off"
-  autoCapitalize="none"
-  spellCheck="false"
-/>
+    <>
+      {/* Toast Notification */}
+      <div
+        className={`toast position-fixed top-0 end-0 m-3 ${
+          toast.show ? "show" : "hide"
+        }`}
+        style={{ zIndex: 1050 }}
+      >
+        <div className={`toast-header bg-${toast.type} text-white`}>
+          <strong className="me-auto">
+            {toast.type === "success" ? "Success" : "Error"}
+          </strong>
+          <button
+            type="button"
+            className="btn-close"
+            onClick={() => setToast({ show: false, message: "", type: "" })}
+          ></button>
+        </div>
+        <div className="toast-body">{toast.message}</div>
       </div>
-      
-      <div className="input-group">
-        <i className="fas fa-lock"></i>
-        <input
-  type="password"
-  name="password"
-  className="styled-input"
-  placeholder="Enter your password"
-  value={formData.password}
-  onChange={handleChange}
-  required
-  autoComplete="new-password"
-/>
-      </div>
-      
-      <button type="submit" className="auth-button">LOGIN</button>
-      
-      <button type="button" className="switch-form" onClick={toggleForms}>
-        Create Account
-      </button>
-      
-      <a href="#" className="switch-form mx-2">Forget your Password?</a>
-    </form>
+
+      {/* Login Form */}
+      <form id="loginForm" className="auth-form" onSubmit={handleSubmit}>
+        <div className="input-group">
+          <i className="fas fa-user"></i>
+          <input
+            type="text"
+            name="username"
+            placeholder="Username"
+            value={formData.username}
+            onChange={handleChange}
+            onFocus={handleFocus} // Clear field on focus
+            autoComplete="username" // Enable suggestions for username
+            required
+          />
+        </div>
+
+        <div className="input-group">
+          <i className="fas fa-lock"></i>
+          <input
+            type="password"
+            name="password"
+            placeholder="Password"
+            value={formData.password}
+            onChange={handleChange}
+            onFocus={handleFocus} // Clear field on focus
+            autoComplete="current-password" // Enable suggestions for password
+            required
+          />
+        </div>
+
+        <button type="submit" className="auth-button">
+          LOGIN
+        </button>
+        <button type="button" className="switch-form" onClick={toggleForms}>
+          Create Account
+        </button>
+      </form>
+    </>
   );
 };
 

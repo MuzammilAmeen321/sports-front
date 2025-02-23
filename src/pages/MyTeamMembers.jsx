@@ -8,209 +8,171 @@ import axios from 'axios';
 const MyTeamMembers = () => {
   const { id } = useParams();
   const [loading, setLoading] = useState(true);
+  const [modalLoading, setModalLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [captainData, setCaptainData] = useState({
-    name: "",
-    totalMatches: 0,
-    won: 0,
-    loss: 0,
-    imageUrl: "",
-  });
-  const [isModalOpen, setIsModalOpen] = useState(false); // State to control modal visibility
-  const [topUsers, setTopUsers] = useState([]); // State to store top 10 users
-  const [searchQuery, setSearchQuery] = useState(""); // State for search bar
-  const [filteredUsers, setFilteredUsers] = useState([]); // State for filtered users
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [topUsers, setTopUsers] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [players, setPlayers] = useState([]);
+  const [popup, setPopup] = useState({ show: false, message: "", type: "" });
+  const showPopup = (message, type) => {
+    setPopup({ show: true, message, type });
+    setTimeout(() => setPopup({ show: false, message: "", type: "" }), 3000);
+  };
 
-  // Fetch captain data
   useEffect(() => {
     const fetchPlayers = async () => {
       try {
         const token = localStorage.getItem("authToken");
-        const response = await axios.get(`http://127.0.0.1:8000/api/captain/${id}`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-
-        setCaptainData({
-          name: response.data.name || "Captain Name",
-          totalMatches: response.data.totalMatches || 0,
-          won: response.data.won || 0,
-          loss: response.data.loss || 0,
-          imageUrl: response.data.imageUrl
-            ? `http://127.0.0.1:8000/storage/${response.data.imageUrl}`
-            : "https://via.placeholder.com/150",
-        });
+        const response = await axios.get(`http://127.0.0.1:8000/api/teams/${id}/players`, { headers: { Authorization: `Bearer ${token}` } });
+        setPlayers(response.data);
       } catch (err) {
-        setError(err.message);
+        console.error("Failed to fetch players:", err);
+        showPopup(`Error: Failed to fetch players`, "error");
       } finally {
         setLoading(false);
       }
     };
-
     fetchPlayers();
   }, [id]);
 
-  // Fetch top 10 users when modal is opened
   useEffect(() => {
     if (isModalOpen) {
       const fetchTopUsers = async () => {
+        setModalLoading(true);
         try {
           const token = localStorage.getItem("authToken");
-          const response = await axios.get(`http://127.0.0.1:8000/api/top-users`, {
-            headers: { Authorization: `Bearer ${token}` },
-          });
+          const response = await axios.get(`http://127.0.0.1:8000/api/all-users`, { headers: { Authorization: `Bearer ${token}` }, params: { search: searchQuery } });
           setTopUsers(response.data);
-          setFilteredUsers(response.data); // Initialize filtered users with top users
         } catch (err) {
-          console.error("Failed to fetch top users:", err);
+          console.error("Failed to fetch All players:", err);
+          showPopup(`Error: Failed to fetch users`, "error");
+        } finally {
+          setModalLoading(false);
         }
       };
-
       fetchTopUsers();
     }
-  }, [isModalOpen]);
+  }, [isModalOpen, searchQuery]);
 
-  // Handle search
-  useEffect(() => {
-    if (searchQuery) {
-      const filtered = topUsers.filter(user =>
-        user.name.toLowerCase().includes(searchQuery.toLowerCase())
-      );
-      setFilteredUsers(filtered);
-    } else {
-      setFilteredUsers(topUsers); // Reset to top users if search query is empty
-    }
-  }, [searchQuery, topUsers]);
+  const filteredUsers = searchQuery ? topUsers.filter(user => 
+    user?.username?.toLowerCase().includes(searchQuery.toLowerCase()) || 
+    user?.player_code?.toLowerCase().includes(searchQuery.toLowerCase()) || 
+    user?.email?.toLowerCase().includes(searchQuery.toLowerCase())
+  ) : topUsers;
 
-  // Open modal
-  const openModal = () => {
-    setIsModalOpen(true);
-  };
-
-  // Close modal
-  const closeModal = () => {
-    setIsModalOpen(false);
-    setSearchQuery(""); // Reset search query when modal is closed
-  };
-
-  // Handle "View More" button click
-  const handleViewMore = async () => {
+  const handleAddUser = async (user) => {
     try {
       const token = localStorage.getItem("authToken");
-      const response = await axios.get(`http://127.0.0.1:8000/api/more-users`, {
+      const response = await axios.post(
+        `http://127.0.0.1:8000/api/add-user-to-team`,
+        { userId: user.id, teamId: id }, // Ensure the payload matches the API expectation
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      showPopup(response.data.message, "success");
+      setIsModalOpen(false);
+      
+      // Refresh the players list
+      const updatedPlayers = await axios.get(`http://127.0.0.1:8000/api/teams/${id}/players`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      setTopUsers([...topUsers, ...response.data]); // Append more users to the list
-      setFilteredUsers([...topUsers, ...response.data]); // Update filtered users
+      setPlayers(updatedPlayers.data);
     } catch (err) {
-      console.error("Failed to fetch more users:", err);
+      if (err.response && err.response.data.error) {
+        showPopup(err.response.data.error, "error");
+      } else {
+        showPopup("Failed to add user to team. Please try again.", "error");
+      }
+    }
+  };
+  const handleDeletePlayer = async (playerId) => {
+    try {
+      const token = localStorage.getItem("authToken");
+      const response = await axios.delete(`http://127.0.0.1:8000/api/teams/${id}/players/${playerId}`, { headers: { Authorization: `Bearer ${token}` } });
+      showPopup(response.data.message, "success");
+      setPlayers(players.filter(player => player.id !== playerId)); // Remove player from the list
+    } catch (err) {
+      showPopup("Failed to delete player. Please try again.", "error");
     }
   };
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
-  if (error) {
-    return <div>Error: {error}</div>;
-  }
-
-  const captain = {
-    name: captainData.name,
-    role: "Captain",
-    totalMatches: captainData.totalMatches,
-    won: captainData.won,
-    loss: captainData.loss,
-    imageUrl: captainData.imageUrl,
-  };
-
-  const players = [
-    captain,
-    {
-      name: "Virat Kohli",
-      role: "Batsman",
-      totalMatches: 250,
-      won: 180,
-      loss: 70,
-      imageUrl: "https://example.com/virat-kohli.jpg",
-    },
-    {
-      name: "MS Dhoni",
-      role: "Wicketkeeper-Batsman",
-      totalMatches: 350,
-      won: 250,
-      loss: 100,
-      imageUrl: "https://example.com/ms-dhoni.jpg",
-    },
-    {
-      name: "Jasprit Bumrah",
-      role: "Bowler",
-      totalMatches: 150,
-      won: 100,
-      loss: 50,
-      imageUrl: "https://example.com/jasprit-bumrah.jpg",
-    },
-  ];
+  if (loading) return <LoaderContainer><div className="spinner-border text-warning" role="status"><span className="visually-hidden">Loading...</span></div></LoaderContainer>;
+  if (error) return <div>Error: {error}</div>;
 
   return (
     <StyledWrapper>
       <Navbar />
       <div className="container m-auto p-3">
-        <div className="row">
-          <div className="col-12 m-2 d-flex justify-content-end">
-            <button className="text-dark bg-warning p-2 rounded-md min-w-[140px]" onClick={openModal}>
-              Add New member
-            </button>
-          </div>
-          {players.map((player, index) => (
-            <div className="col-12 col-md-6 col-lg-4" key={index}>
-              <div className="book">
-                <div className="cover">
-                  <img src={player.imageUrl} alt={player.name} />
-                  <div className="details">
-                    <h3>{player.name}</h3>
-                    <p><strong>Role:</strong> {player.role}</p>
-                    <p><strong>Total Matches:</strong> {player.totalMatches}</p>
-                    <p><strong>Won:</strong> {player.won}</p>
-                    <p><strong>Loss:</strong> {player.loss}</p>
-                    <button className="view-profile-btn">View Profile</button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          ))}
+        <div className="d-flex justify-content-end mb-3">
+          <button className="btn btn-warning me-2" onClick={() => setIsModalOpen(true)}>Add New Member</button>
         </div>
+        <TableContainer>
+          <Table>
+            <thead>
+              <tr>
+                <th>Image</th>
+                <th>Name</th>
+                <th>Role</th>
+                <th>Player Code</th>
+                <th>Total Matches</th>
+                <th>Won</th>
+                <th>Loss</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {players.map((player, index) => (
+                <tr key={index}>
+                  <td><ProfileImage src={player.profile_picture ? `http://127.0.0.1:8000/storage/${player.profile_picture}` : "https://via.placeholder.com/150"} alt={player.username} /></td>
+                  <td>{player.username}</td>
+                  <td>{player.role}</td>
+                  <td>{player.player_code}</td>
+                  <td>{player.total_matches}</td>
+                  <td>{player.matches_won}</td>
+                  <td>{player.matches_loss}</td>
+                  <td>
+                    <button className="btn btn-primary btn-sm me-2">profile</button>
+                    <button className="btn btn-danger btn-sm" onClick={() => handleDeletePlayer(player.id)}>Delete</button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
+        </TableContainer>
       </div>
       <VerticleNav />
 
-      {/* Modal for adding new members */}
       {isModalOpen && (
         <ModalOverlay>
           <ModalContent>
             <ModalHeader>
               <h3>Add New Member</h3>
-              <button onClick={closeModal}>&times;</button>
+              <button onClick={() => setIsModalOpen(false)}>&times;</button>
             </ModalHeader>
-            <SearchBar
-              type="text"
-              placeholder="Search users by name or player code..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
-            <UserList>
-              {filteredUsers.map((user, index) => (
-                <UserItem key={index}>
-                  <img src={user.imageUrl || "https://via.placeholder.com/50"} alt={user.name} />
-                  <div>
-                    <h4>{user.name}</h4>
-                    <p>{user.role}</p>
-                  </div>
-                  <button onClick={() => alert(`Add ${user.name} to team`)}>Add</button>
-                </UserItem>
-              ))}
-            </UserList>
-            <ViewMoreButton onClick={handleViewMore}>View More</ViewMoreButton>
+            <SearchBar type="text" placeholder="Search users by name, player code, or email..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} />
+            {modalLoading ? <LoaderContainer><div className="spinner-border text-warning" role="status"><span className="visually-hidden">Loading...</span></div></LoaderContainer> : (
+              <UserList>
+                {filteredUsers.map((user) => (
+                  <UserItem key={user.id} onClick={() => handleAddUser(user)}>
+                    <img src={`http://127.0.0.1:8000/storage/${user.profile_picture}`} alt={user.username} />
+                    <div>
+                      <h4>{user.username}</h4>
+                      <p><strong>Player Code:</strong> {user.player_code}</p>
+                      <p><strong>Email:</strong> {user.email}</p>
+                      <p><strong>Role:</strong> {user.role}</p>
+                    </div>
+                  </UserItem>
+                ))}
+              </UserList>
+            )}
           </ModalContent>
         </ModalOverlay>
+      )}
+
+      {popup.show && (
+        <Popup type={popup.type}>
+          {popup.message}
+        </Popup>
       )}
     </StyledWrapper>
   );
@@ -218,137 +180,39 @@ const MyTeamMembers = () => {
 
 // Styled Components
 const StyledWrapper = styled.div`
-  .book {
-    position: relative;
-    border-radius: 10px;
-    width: 100%;
-    height: 400px;
-    background-color: #333;
-    box-shadow: 1px 1px 12px #000;
-    transform: preserve-3d;
-    perspective: 2000px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #fff;
-    padding: 10px;
-    overflow: hidden;
-    margin-bottom: 20px;
+  .btn-warning {
+    background-color: #ffc107;
+    border-color: #ffc107;
+    color: #000;
   }
+`;
 
-  .cover {
-    top: 0;
-    position: absolute;
-    background-color: #222;
-    width: 100%;
-    height: 100%;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: all 0.5s;
-    transform-origin: 0;
-    box-shadow: 1px 1px 12px #000;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
+const TableContainer = styled.div`
+  overflow-x: auto;
+`;
+
+const Table = styled.table`
+  width: 100%;
+  border-collapse: collapse;
+  th, td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
   }
-
-  .cover img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: opacity 0.5s;
+  th {
+    background-color: #f8f9fa;
+    font-weight: bold;
   }
-
-  .details {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.8);
-    color: #fff;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    opacity: 0;
-    transition: opacity 0.5s;
-    padding: 20px;
-    text-align: center;
+  tr:hover {
+    background-color: #f1f1f1;
   }
+`;
 
-  .details h3 {
-    margin-bottom: 10px;
-    font-size: 1.5rem;
-  }
-
-  .details p {
-    margin: 5px 0;
-    font-size: 1rem;
-  }
-
-  .view-profile-btn {
-    margin-top: 20px;
-    padding: 10px 20px;
-    background-color: #ff5722;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-    font-size: 1rem;
-  }
-
-  .view-profile-btn:hover {
-    background-color: #e64a19;
-  }
-
-  .book:hover .cover img {
-    opacity: 0;
-  }
-
-  .book:hover .details {
-    opacity: 1;
-  }
-
-  @media (max-width: 768px) {
-    .book {
-      height: 300px;
-    }
-
-    .details h3 {
-      font-size: 1.2rem;
-    }
-
-    .details p {
-      font-size: 0.9rem;
-    }
-
-    .view-profile-btn {
-      padding: 8px 16px;
-      font-size: 0.9rem;
-    }
-  }
-
-  @media (max-width: 576px) {
-    .book {
-      height: 250px;
-    }
-
-    .details h3 {
-      font-size: 1rem;
-    }
-
-    .details p {
-      font-size: 0.8rem;
-    }
-
-    .view-profile-btn {
-      padding: 6px 12px;
-      font-size: 0.8rem;
-    }
-  }
+const ProfileImage = styled.img`
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
 `;
 
 const ModalOverlay = styled.div`
@@ -379,11 +243,9 @@ const ModalHeader = styled.div`
   justify-content: space-between;
   align-items: center;
   margin-bottom: 20px;
-
   h3 {
     margin: 0;
   }
-
   button {
     background: none;
     border: none;
@@ -413,52 +275,46 @@ const UserItem = styled.div`
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 5px;
-
+  cursor: pointer;
   img {
     width: 50px;
     height: 50px;
     border-radius: 50%;
     object-fit: cover;
   }
-
   h4 {
     margin: 0;
     font-size: 1rem;
   }
-
   p {
     margin: 0;
     font-size: 0.9rem;
     color: #666;
   }
-
-  button {
-    margin-left: auto;
-    padding: 5px 10px;
-    background: #007bff;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-
-  button:hover {
-    background: #0056b3;
-  }
 `;
 
-const ViewMoreButton = styled.button`
-  width: 100%;
-  padding: 10px;
-  background: #007bff;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  margin-top: 20px;
+const LoaderContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+`;
 
-  &:hover {
-    background: #0056b3;
+const Popup = styled.div`
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  padding: 15px 20px;
+  border-radius: 5px;
+  background-color: ${({ type }) => (type === "success" ? "#4CAF50" : "#F44336")};
+  color: white;
+  font-size: 1rem;
+  z-index: 1000;
+  animation: slideIn 0.5s ease-out;
+
+  @keyframes slideIn {
+    from { transform: translateX(100%); }
+    to { transform: translateX(0); }
   }
 `;
 

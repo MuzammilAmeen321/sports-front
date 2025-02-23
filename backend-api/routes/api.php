@@ -20,7 +20,7 @@ use App\Http\Controllers\PlayerController;
 // Public routes (No authentication required)
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
-
+Route::get('/check-player-code', [AuthController::class, 'checkPlayerCode']);
 // Protected routes (Require authentication)
 Route::middleware('auth:sanctum')->group(function () {
     // Auth routes
@@ -33,13 +33,21 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/update-profile', [UserController::class, 'updateProfile']);
     Route::post('/update-password', [UserController::class, 'updatePassword']);
     Route::get('/captain/{id}', [UserController::class, 'getCaptain']);
-    // Team routes
+    // Fetch users based on search query
+Route::get('/all-users', [UserController::class, 'fetchPlayerToAddInTeam']);
+// Fetch more users for pagination
+Route::get('/more-users', [UserController::class, 'fetchMorePlayersToAdd']);
+
+    // Teams routes
     Route::prefix('teams')->group(function () {
         Route::get('/', [TeamController::class, 'index']); // Get all teams
         Route::post('/', [TeamController::class, 'store']); // Store a new team
         Route::post('/{id}', [TeamController::class, 'update']); // Update an existing team
         Route::delete('/{id}', [TeamController::class, 'destroy']); // Delete a team
+        Route::get('/{id}/players', [PlayerController::class, 'getPlayers']);
+        Route::delete('/{team}/players/{player}', [PlayerController::class, 'removePlayer']);
+        Route::put('/teams/{id}/change-captain', [TeamController::class, 'changeCaptain']);
     });
 
-    Route::get('/players/{team_id}', [PlayerController::class, 'getPlayers']);
+    Route::post('/add-user-to-team', [PlayerController::class, 'addUserToTeam']);
 });

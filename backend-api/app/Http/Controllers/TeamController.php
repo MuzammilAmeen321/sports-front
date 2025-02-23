@@ -5,42 +5,39 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Team;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Gate;
 
 class TeamController extends Controller
 {
     public function index()
-{
-    // Fetch teams with the associated user information
-    $teams = Team::with('user')->get();
-    return response()->json($teams);
-}
-    
+    {
+        $teams = Team::with('user')->get();
+        return response()->json($teams);
+    }
+
     public function store(Request $request)
     {
-        // Validate the request
         $request->validate([
             'name' => 'required|string|max:255',
             'address' => 'required|string|max:255',
             'city' => 'required|string|max:255',
             'pin' => 'required|string|unique:teams,pin',
-            'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Max 2MB
+            'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
     
-        // Handle file upload
         $logoPath = null;
         if ($request->hasFile('logo')) {
-            $logoPath = $request->file('logo')->store('team_logos', 'public'); // Store in public/team_logos
+            $logoPath = $request->file('logo')->store('team_logos', 'public');
         }
     
-        // Create the team with the authenticated user's ID
         $team = Team::create([
             'name' => $request->name,
             'address' => $request->address,
             'city' => $request->city,
             'pin' => $request->pin,
             'logo' => $logoPath,
-            'user_id' => $request->user()->id, // Automatically assign the authenticated user's ID
+            'user_id' => $request->user()->id, // Set the user_id
+            'created_by' => $request->user()->id, // Set the created_by field
         ]);
     
         return response()->json([
@@ -48,38 +45,26 @@ class TeamController extends Controller
             'team' => $team,
         ], 201);
     }
-    
+
     public function update(Request $request, $id)
     {
-        // Find the team
         $team = Team::findOrFail($id);
-    
-        // Validate the request
+
+        // Authorize the action using a policy
+        if (Gate::denies('update', $team)) {
+            return response()->json(['message' => 'You are not authorized to update this team.'], 403);
+        }
+
         $request->validate([
             'name' => 'sometimes|string|max:255',
             'address' => 'sometimes|string|max:255',
             'city' => 'sometimes|string|max:255',
             'pin' => 'sometimes|string|unique:teams,pin,' . $team->id,
-            'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Max 2MB
+            'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
-    
-        // Check if the authenticated user is the creator of the team
-        if ($team->user_id !== $request->user()->id) {
-            return response()->json(['message' => 'You are not authorized to update this team.'], 403);
-        }
-    
-        // Handle file upload
-        $logoPath = $team->logo;
-        if ($request->hasFile('logo')) {
-            // Delete the old logo if it exists
-            if ($logoPath && Storage::disk('public')->exists($logoPath)) {
-                Storage::disk('public')->delete($logoPath);
-            }
-            // Store the new logo
-            $logoPath = $request->file('logo')->store('team_logos', 'public');
-        }
-    
-        // Update the team (excluding user_id)
+
+        $logoPath = $this->handleLogoUpload($request, $team->logo);
+
         $team->update([
             'name' => $request->name ?? $team->name,
             'address' => $request->address ?? $team->address,
@@ -87,30 +72,48 @@ class TeamController extends Controller
             'pin' => $request->pin ?? $team->pin,
             'logo' => $logoPath,
         ]);
-    
+
         return response()->json([
             'message' => 'Team updated successfully!',
             'team' => $team,
         ], 200);
     }
 
-public function destroy(Request $request, $id)
-{
-    $team = Team::findOrFail($id);
+    public function destroy(Request $request, $id)
+    {
+        $team = Team::findOrFail($id);
 
-    // Check if the authenticated user is the creator of the team
-    if ($team->user_id !== $request->user()->id) {
-        return response()->json(['message' => 'You are not authorized to delete this team.'], 403);
+       
+
+        try {
+            if ($team->logo) {
+                Storage::disk('public')->delete($team->logo);
+            }
+
+            $team->delete();
+
+            return response()->json(['message' => 'Team deleted successfully']);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'An error occurred while deleting the team.'], 500);
+        }
     }
 
-    // Delete the team logo if it exists
-    if ($team->logo) {
-        Storage::disk('public')->delete($team->logo);
+    /**
+     * Handle logo upload.
+     *
+     * @param Request $request
+     * @param string|null $oldLogoPath
+     * @return string|null
+     */
+    private function handleLogoUpload(Request $request, $oldLogoPath = null)
+    {
+        if ($request->hasFile('logo')) {
+            if ($oldLogoPath && Storage::disk('public')->exists($oldLogoPath)) {
+                Storage::disk('public')->delete($oldLogoPath);
+            }
+            return $request->file('logo')->store('team_logos', 'public');
+        }
+
+        return $oldLogoPath;
     }
-
-    // Delete the team
-    $team->delete();
-
-    return response()->json(['message' => 'Team deleted successfully']);
-}
 }

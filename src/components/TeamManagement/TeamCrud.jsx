@@ -11,17 +11,18 @@ const TeamManagement = () => {
     const [selectedTeam, setSelectedTeam] = useState(null);
     const [isEditMode, setIsEditMode] = useState(false);
     const [teamForm, setTeamForm] = useState({ name: "", address: "", city: "", pin: "", logo: null });
+    const [loading, setLoading] = useState(false);
 
-    // Get the logged-in user's ID from localStorage
     const loggedInUser = JSON.parse(localStorage.getItem("user"));
     const loggedInUserId = loggedInUser?.id;
 
-    // Fetch teams from the API
     const fetchTeams = async () => {
+        setLoading(true);
         try {
             const token = localStorage.getItem("authToken");
             if (!token) {
                 console.error("No auth token found.");
+                setLoading(false);
                 return;
             }
 
@@ -32,24 +33,17 @@ const TeamManagement = () => {
                 },
             });
 
-            // Check if the response contains a `teams` key or is the array directly
             const teamsData = Array.isArray(response.data) ? response.data : response.data.teams || [];
-
-            // Filter teams to show only those created by the logged-in user
             const userTeams = teamsData.filter(team => team.user_id === loggedInUserId);
-            setTeams(teamsData); // Store all teams (optional, if needed elsewhere)
-            setFilteredTeams(userTeams); // Store filtered teams for display
+            setTeams(teamsData);
+            setFilteredTeams(userTeams);
+            console.log(loggedInUserId);
         } catch (error) {
             console.error("Error fetching teams:", error);
-            if (error.response) {
-                console.error("Server responded with:", error.response.data);
-            } else if (error.request) {
-                console.error("No response received:", error.request);
-            } else {
-                console.error("Error setting up the request:", error.message);
-            }
             setTeams([]);
             setFilteredTeams([]);
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -57,7 +51,6 @@ const TeamManagement = () => {
         fetchTeams();
     }, []);
 
-    // Initialize the modal
     useEffect(() => {
         const modalElement = document.getElementById("teamModal");
         if (modalElement) {
@@ -65,63 +58,55 @@ const TeamManagement = () => {
         }
     }, []);
 
-    // Handle form input changes
     const handleChange = (e) => {
         setTeamForm({ ...teamForm, [e.target.name]: e.target.value });
     };
 
-    // Handle file input changes
     const handleFileChange = (e) => {
         setTeamForm({ ...teamForm, logo: e.target.files[0] });
     };
 
-    // Generate a random team code
     const generateTeamCode = () => {
         const randomDigits = Math.floor(1000 + Math.random() * 9000);
         const namePrefix = teamForm.name ? teamForm.name.substring(0, 3).toUpperCase() : "TMT";
         setTeamForm({ ...teamForm, pin: `${namePrefix}${randomDigits}` });
     };
 
-    // Handle form submission (create or update)
     const handleSubmit = async (e) => {
         e.preventDefault();
-
         const formData = new FormData();
-        formData.append("name", teamForm.name);
-        formData.append("address", teamForm.address);
-        formData.append("city", teamForm.city);
-        formData.append("pin", teamForm.pin);
+        formData.append('name', teamForm.name);
+        formData.append('address', teamForm.address);
+        formData.append('city', teamForm.city);
+        formData.append('pin', teamForm.pin);
+        formData.append('created_by', loggedInUserId); // Include created_by
         if (teamForm.logo) {
-            formData.append("logo", teamForm.logo);
+            formData.append('logo', teamForm.logo);
         }
 
         try {
             const token = localStorage.getItem("authToken");
-            const url = isEditMode
-                ? `http://127.0.0.1:8000/api/teams/${selectedTeam.id}`
-                : "http://127.0.0.1:8000/api/teams";
+            const url = isEditMode && selectedTeam ? `http://127.0.0.1:8000/api/teams/${selectedTeam.id}` : "http://127.0.0.1:8000/api/teams";
+            const method = isEditMode && selectedTeam ? "put" : "post";
 
-            const method = isEditMode ? "post" : "post";
-            await axios[method](url, formData, {
+            const response = await axios[method](url, formData, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                     "Content-Type": "multipart/form-data",
                 },
             });
 
-            alert(`Team ${isEditMode ? "updated" : "added"} successfully!`);
-            fetchTeams(); // Refresh the teams list
-            resetForm();
-            closeModal();
+            console.log('Response:', response.data);
+            fetchTeams(); // Refresh the list of teams
+            closeModal(); // Close the modal
         } catch (error) {
-            console.error("Error:", error);
-            alert(`Failed to ${isEditMode ? "update" : "add"} team.`);
+            console.error('Error:', error.response ? error.response.data : error.message);
         }
     };
 
-    // Handle team deletion
     const handleDelete = async (teamId) => {
         if (!window.confirm("Are you sure you want to delete this team?")) return;
+        setLoading(true);
         try {
             const token = localStorage.getItem("authToken");
             await axios.delete(`http://127.0.0.1:8000/api/teams/${teamId}`, {
@@ -131,10 +116,11 @@ const TeamManagement = () => {
         } catch (error) {
             console.error("Error deleting team:", error);
             alert("Failed to delete team.");
+        } finally {
+            setLoading(false);
         }
     };
 
-    // Open modal for editing a team
     const openEditModal = (team) => {
         setSelectedTeam(team);
         setIsEditMode(true);
@@ -142,19 +128,16 @@ const TeamManagement = () => {
         openModal();
     };
 
-    // Open modal for creating a new team
     const openCreateModal = () => {
         setIsEditMode(false);
         setTeamForm({ name: "", address: "", city: "", pin: "", logo: null });
         openModal();
     };
 
-    // Reset form fields
     const resetForm = () => {
         setTeamForm({ name: "", address: "", city: "", pin: "", logo: null });
     };
 
-    // Open the modal
     const openModal = () => {
         const modalElement = document.getElementById("teamModal");
         if (modalElement) {
@@ -163,7 +146,6 @@ const TeamManagement = () => {
         }
     };
 
-    // Close the modal
     const closeModal = () => {
         const modalElement = document.getElementById("teamModal");
         if (modalElement) {
@@ -189,54 +171,62 @@ const TeamManagement = () => {
                             </div>
                         </div>
                     </div>
-                    <table className="table table-striped table-hover table-bordered">
-                        <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>Logo</th>
-                                <th>Name</th>
-                                <th>Address</th>
-                                <th>City</th>
-                                <th>Join Code</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {filteredTeams.length > 0 ? (
-                                filteredTeams.map((team, index) => (
-                                    <tr key={team.id}>
-                                        <td>{index + 1}</td>
-                                        <td>
-                                            <img
-                                                src={team.logo ? `http://127.0.0.1:8000/storage/${team.logo}` : "https://via.placeholder.com/50"}
-                                                alt="Team Logo"
-                                                style={{ width: "50px", height: "50px", borderRadius: "50%" }}
-                                            />
-                                        </td>
-                                        <td>{team.name}</td>
-                                        <td>{team.address}</td>
-                                        <td>{team.city}</td>
-                                        <td>{team.pin}</td>
-                                        <td>
-                                            <Link to={`/team-members/${team.user_id}`} className="view users" title="team-members">
-                                                <i className="fas fa-users me-2"></i>
-                                            </Link>
-                                            <a href="#" className="edit" title="Edit" onClick={() => openEditModal(team)}><i className="fas fa-edit"></i></a>
-                                            <a href="#" className="delete" title="Delete" onClick={() => handleDelete(team.id)}><i className="fas fa-trash"></i></a>
-                                        </td>
-                                    </tr>
-                                ))
-                            ) : (
+                    {loading ? (
+                        <div className="text-center">
+                            <div className="spinner-border text-warning" role="status">
+                                <span className="visually-hidden">Loading...</span>
+                            </div>
+                        </div>
+                    ) : (
+                        <table className="table table-striped table-hover table-bordered">
+                            <thead>
                                 <tr>
-                                    <td colSpan="7" className="text-center">No teams available</td>
+                                    <th>#</th>
+                                    <th>Logo</th>
+                                    <th>Name</th>
+                                    <th>Address</th>
+                                    <th>City</th>
+                                    <th>Join Code</th>
+                                    <th>Actions</th>
                                 </tr>
-                            )}
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                {filteredTeams.length > 0 ? (
+                                    filteredTeams.map((team, index) => (
+                                        <tr key={team.id}>
+                                            <td>{index + 1}</td>
+                                            <td>
+                                                <img
+                                                    src={team.logo ? `http://127.0.0.1:8000/storage/${team.logo}` : "https://via.placeholder.com/50"}
+                                                    alt="Team Logo"
+                                                    style={{ width: "50px", height: "50px", borderRadius: "50%" }}
+                                                />
+                                            </td>
+                                            <td>{team.name}</td>
+                                            <td>{team.address}</td>
+                                            <td>{team.city}</td>
+                                            <td>{team.pin}</td>
+                                            <td>
+                                                <Link to={`/team-members/${team.id}`} className="view users" title="team-members">
+                                                    <i className="fas fa-users me-2"></i>
+                                                </Link>
+                                                <a href="#" className="edit" title="Edit" onClick={() => openEditModal(team)}><i className="fas fa-edit"></i></a>
+                                                <a href="#" className="delete" title="Delete" onClick={() => handleDelete(team.id)}><i className="fas fa-trash"></i></a>
+                                            </td>
+                                        </tr>
+                                    ))
+                                ) : (
+                                    <tr>
+                                        <td colSpan="7" className="text-center">No teams available</td>
+                                    </tr>
+                                )}
+                            </tbody>
+                        </table>
+                    )}
                 </div>
             </div>
 
-            {/* Single Modal for Create and Edit */}
+            {/* Modal for Create and Edit */}
             <div className="modal fade" id="teamModal" tabIndex="-1" aria-labelledby="teamModalLabel" aria-hidden="true">
                 <div className="modal-dialog">
                     <div className="modal-content">

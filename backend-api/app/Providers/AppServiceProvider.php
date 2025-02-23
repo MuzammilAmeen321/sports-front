@@ -21,4 +21,7 @@ class AppServiceProvider extends ServiceProvider
     {
         Schema::defaultStringLength(191);
     }
+    protected $policies = [
+        Team::class => TeamPolicy::class,
+    ];
 }

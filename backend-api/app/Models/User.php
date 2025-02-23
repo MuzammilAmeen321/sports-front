@@ -22,6 +22,7 @@ class User extends Authenticatable
         'email',
         'phone',
         'password',
+        'player_code',
         'profile_picture',
         'club_name',
         'sponsor_name',
@@ -30,7 +31,11 @@ class User extends Authenticatable
         'matches_loss',
     ];
     
-
+    public function teams()
+    {
+        return $this->belongsToMany(Team::class, 'players', 'user_id', 'team_id');
+    }
+    
     /**
      * The attributes that should be hidden for serialization.
      *

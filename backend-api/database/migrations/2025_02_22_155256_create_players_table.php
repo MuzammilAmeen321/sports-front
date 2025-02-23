@@ -13,15 +13,17 @@ return new class extends Migration
     {
         Schema::create('players', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('role');
-            $table->integer('total_matches')->default(0);
-            $table->integer('matches_won')->default(0);
-            $table->integer('matches_loss')->default(0);
-            $table->string('image_url')->nullable();
             $table->unsignedBigInteger('team_id');
-            $table->foreign('team_id')->references('id')->on('teams')->onDelete('cascade');
+            $table->unsignedBigInteger('user_id');
+            $table->string('role')->default('player'); // Default role is 'player'
             $table->timestamps();
+    
+            // Foreign key constraints
+            $table->foreign('team_id')->references('id')->on('teams')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+    
+            // Unique constraint to ensure a user can only be added once to a team
+            $table->unique(['team_id', 'user_id']);
         });
     }
 

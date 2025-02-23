@@ -1,10 +1,6 @@
-
-
-
-
 import React, { useState, useEffect } from 'react';
 import AuthContainer from './Auth/AuthContainer';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Home from './pages/Home';
 import './App.css';
 import MyTeamMembers from './pages/MyTeamMembers';
@@ -12,19 +8,48 @@ import ProfileUpdateModal from './components/Edit_profile';
 import MatchesManagement from './pages/Matches';
 import Scoreboard from './components/scoreboard/ScoreBoard';
 import Live from './components/Header/navbarComponent/Live';
-import Upcoming from './components/Header/navbarComponent/Upcoming';
 import Result from './components/Header/navbarComponent/Result';
 import TeamManagement from './components/TeamManagement/TeamCrud';
 
-
 function App() {
   const [theme, setTheme] = useState(localStorage.getItem('theme') || 'dark');
+  const [lastActivity, setLastActivity] = useState(localStorage.getItem('lastActivity') || Date.now());
 
   // Set the theme on body and store in localStorage
   useEffect(() => {
     document.body.className = theme === 'light' ? 'light-theme' : 'dark-theme';
     localStorage.setItem('theme', theme);
   }, [theme]);
+
+  // Check for inactivity and log out after 24 hours
+  useEffect(() => {
+    const checkInactivity = () => {
+      const currentTime = Date.now();
+      const timeSinceLastActivity = currentTime - lastActivity;
+
+      if (timeSinceLastActivity > 24 * 60 * 60 * 1000) {
+        localStorage.removeItem('authToken');
+        localStorage.removeItem('lastActivity');
+        window.location.href = '/login';
+      }
+    };
+
+    const activityListener = () => {
+      localStorage.setItem('lastActivity', Date.now());
+      setLastActivity(Date.now());
+    };
+
+    window.addEventListener('mousemove', activityListener);
+    window.addEventListener('keypress', activityListener);
+
+    const inactivityInterval = setInterval(checkInactivity, 1000 * 60 * 60); // Check every hour
+
+    return () => {
+      window.removeEventListener('mousemove', activityListener);
+      window.removeEventListener('keypress', activityListener);
+      clearInterval(inactivityInterval);
+    };
+  }, [lastActivity]);
 
   const toggleTheme = () => {
     setTheme((prevTheme) => (prevTheme === 'light' ? 'dark' : 'light'));
@@ -39,24 +64,34 @@ function App() {
         </button>
 
         <Routes>
-        <Route path="/login" element={<AuthContainer />} /> 
-          <Route path="/" element={<ProtectedRoute><Home /></ProtectedRoute>}  />
-          <Route path="/edit-profile" element={<ProfileUpdateModal />} />
-          <Route path="/matches" element={<MatchesManagement />} />
-          <Route path="/scoreboard" element={<Scoreboard />} />
-          <Route path="/live" element={<Live />} />
-          <Route path="/upcoming" element={<Upcoming />} />
-          <Route path="/result" element={<Result />} />
-          <Route path="/team-members/:id" element={<MyTeamMembers />} />
-          <Route path="/my-teams" element={<TeamManagement />} />
+          <Route path="/login" element={<AuthContainer />} />
+          <Route path="/" element={<ProtectedRoute><Home /></ProtectedRoute>} />
+          <Route path="/edit-profile" element={<ProtectedRoute><ProfileUpdateModal /></ProtectedRoute>} />
+          <Route path="/matches" element={<ProtectedRoute><MatchesManagement /></ProtectedRoute>} />
+          <Route path="/scoreboard" element={<ProtectedRoute><Scoreboard /></ProtectedRoute>} />
+          <Route path="/live" element={<ProtectedRoute><Live /></ProtectedRoute>} />
+          <Route path="/result" element={<ProtectedRoute><Result /></ProtectedRoute>} />
+          <Route path="/team-members/:id" element={<ProtectedRoute><MyTeamMembers /></ProtectedRoute>} />
+          <Route path="/my-teams" element={<ProtectedRoute><TeamManagement /></ProtectedRoute>} />
         </Routes>
-        
       </div>
     </Router>
   );
 }
+
 const ProtectedRoute = ({ children }) => {
-  const token = localStorage.getItem("authToken");
-  return token ? children : <Navigate to="/login" />;
+  const token = localStorage.getItem('authToken');
+  const lastActivity = localStorage.getItem('lastActivity');
+  const currentTime = Date.now();
+  const timeSinceLastActivity = currentTime - lastActivity;
+
+  if (!token || timeSinceLastActivity > 24 * 60 * 60 * 1000) {
+    localStorage.removeItem('authToken');
+    localStorage.removeItem('lastActivity');
+    return <Navigate to="/login" />;
+  }
+
+  return children;
 };
+
 export default App;

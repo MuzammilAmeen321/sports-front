@@ -101,20 +101,32 @@ public function updatePassword(Request $request)
     return response()->json(['message' => 'Password updated successfully']);
 }
 
-public function getCaptain($user_id)
-{
-    $captain = User::find($user_id);
 
-    if (!$captain) {
-        return response()->json(['error' => 'Captain not found'], 404);
+public function fetchPlayerToAddInTeam(Request $request)
+    {
+        try {
+            $search = $request->query('search');
+
+            $users = User::when($search, function ($query, $search) {
+                return $query->where('username', 'like', "%$search%")
+                             ->orWhere('email', 'like', "%$search%")
+                             ->orWhere('player_code', 'like', "%$search%");
+            })->get();
+
+            return response()->json($users);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Failed to fetch users: ' . $e->getMessage()], 500);
+        }
     }
 
-    return response()->json([
-        'name' => $captain->username,
-        'totalMatches' => $captain->total_matches,
-        'won' => $captain->matches_won,
-        'loss' => $captain->matches_loss,
-        'imageUrl' => $captain->profile_picture,
-    ]);
+public function fetchMorePlayersToAdd(Request $request)
+{
+    $offset = $request->query('offset', 0);
+
+    $users = User::offset($offset)
+                ->limit(10)
+                ->get();
+
+    return response()->json($users);
 }
 }

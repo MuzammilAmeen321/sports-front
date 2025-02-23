@@ -8,9 +8,16 @@ use Illuminate\Database\Eloquent\Model;
 class Team extends Model
 {
     use HasFactory;
-    protected $fillable = [ 'user_id','name', 'address', 'city', 'pin', 'logo'];
+
+    protected $fillable = ['user_id', 'name', 'address', 'city', 'pin', 'logo', 'created_by' , 'captain_id'];
+
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function players()
+    {
+        return $this->hasMany(Player::class);
     }
 }
