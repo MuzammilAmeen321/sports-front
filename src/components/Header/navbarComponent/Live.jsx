@@ -4,7 +4,7 @@ import axios from "axios";
 import VerticleNav from "../../verticleNav";
 import Navbar from "../header";
 
-export default function UpCommingMatches() {
+export default function Live() {
   const [matchesData, setMatches] = useState([]);
   const navigate = useNavigate();
 
@@ -21,16 +21,14 @@ export default function UpCommingMatches() {
           headers: { Authorization: `Bearer ${token}` },
         });
 
-        // Get today's date
-        const today = new Date();
-console.log(response.data);
-        // Filter only upcoming matches (future matches)
-        const upcomingMatches = response.data.filter((match) => {
-          const matchDate = new Date(match.date);
-          return matchDate > today; // Only future matches
-        });
+        const today = new Date().toISOString().split("T")[0]; // Get today's date in "YYYY-MM-DD" format
 
-        setMatches(upcomingMatches);
+        // Filter matches happening today
+        const liveMatches = response.data.filter(
+          (match) => match.date === today
+        );
+
+        setMatches(liveMatches);
       } catch (error) {
         console.error("Error fetching matches:", error);
       }
@@ -39,38 +37,46 @@ console.log(response.data);
     fetchMatches();
   }, []);
 
-/*   const handleMatchClick = (matchId) => {
-    navigate(`/match/${matchId}`);
-  }; */
+  // Function to handle match click
+  const handleMatchClick = (matchId) => {
+    navigate(`/scoreboard/${matchId}`);
+  };
 
   return (
     <div className="container py-4">
       <Navbar />
-      <h2 className="text-center mb-4">All Upcoming Matches</h2>
+      <h2 className="text-center mb-4">
+        Live Matches ({new Date().toISOString().split("T")[0]})
+      </h2>
+
       <div className="row justify-content-center">
         {matchesData.length > 0 ? (
           matchesData.map((match, index) => (
             <div key={index} className="col-12 col-md-6 col-lg-5 mb-4">
+              {/* Clickable Match Card */}
               <div
                 className="card shadow-lg rounded-3 border-0 match-card p-3"
-               
-                style={{ cursor: "pointer", transition: "transform 0.3s ease-in-out" }}
+                onClick={() => handleMatchClick(match.id)}
+                style={{
+                  cursor: "pointer",
+                  transition: "transform 0.3s ease-in-out",
+                }}
               >
+                {/* Card Header */}
                 <div className="card-header d-flex align-items-center justify-content-between bg-light">
-                  <div className="d-flex align-items-center gap-2">
-                    {/* Sport Icon based on sport category */}
-                   
-                    <h5 className="m-0 fw-bold">{match.home_team} vs {match.away_team}</h5>
-                  </div>
+                  <h5 className="m-0 fw-bold">
+                    {match.home_team} vs {match.away_team}
+                  </h5>
                   <span className="badge bg-dark">{match.sport}</span>
                 </div>
 
+                {/* Card Body */}
                 <div className="card-body d-flex flex-column align-items-center">
                   <div className="mb-2 d-flex justify-content-evenly align-items-center w-100">
                     <div><span className="fw-semibold text-muted">Venue:</span> {match.venue}</div>
-                    <button className="btn btn-warning btn-sm position-relative px-3 py-1">
-                      Upcoming
-                    </button>
+                    <button className="btn btn-danger btn-sm px-3 py-1">
+ Live
+</button>
                   </div>
 
                   <div className="d-flex justify-content-between align-items-center w-100 px-3">
@@ -95,11 +101,15 @@ console.log(response.data);
             </div>
           ))
         ) : (
-          <p className="text-center text-muted">No upcoming matches available.</p>
+          <p className="text-center text-muted">
+            No live matches available today.
+          </p>
         )}
       </div>
+
       <VerticleNav />
 
+      {/* Hover Effect CSS */}
       <style>{`
         .match-card:hover {
           transform: scale(1.05);

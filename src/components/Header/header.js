@@ -53,7 +53,6 @@ const Navbar=()=> {
               <li className="nav-item"><a className="nav-link text-warning" href="/">Home</a></li>
               <li className="nav-item"><a className="nav-link text-warning" href="/live">Live</a></li>
               <li className="nav-item"><a className="nav-link text-warning" href="/upcoming">Upcoming</a></li>
-              <li className="nav-item"><a className="nav-link text-warning" href="/result">Result</a></li>
             </ul>
           </div>
 

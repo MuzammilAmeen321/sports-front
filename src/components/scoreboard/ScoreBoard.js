@@ -1,20 +1,47 @@
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 
 const Scoreboard = () => {
+  const [scoreboardData, setScoreboardData] = useState(null);
   const [activeTab, setActiveTab] = useState("batting");
+
+  useEffect(() => {
+    const token = localStorage.getItem("authToken");
+    if (!token) {
+      console.error("No token found");
+      return;
+    }
+
+    // Fetch data from Laravel backend with token
+    axios.get("http://localhost:8000/api/scoreboard", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((response) => {
+        setScoreboardData(response.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching scoreboard data:", error);
+      });
+  }, []);
+
+  if (!scoreboardData) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className="container">
       <div className="scoreboard p-4 rounded shadow-lg text-center" style={{ background: "#111", color: "#fff" }}>
         <h2 className="mb-4" style={{ color: "rgb(255, 187, 0)" }}>🏏 Match Scoreboard 🏏</h2>
-        <div className="">Date: 10th Feb 2025 | Location: National Stadium</div>
+        <div className="">Date: {scoreboardData.date} | Location: {scoreboardData.location}</div>
         <div className="text-light">
-          <strong>Toss:</strong> Team A won the toss and elected to bat
+          <strong>Toss:</strong> {scoreboardData.toss}
         </div>
-        <h1 className="mt-4 text-white">Team A VS Team B</h1>
+        <h1 className="mt-4 text-white">{scoreboardData.teamA} VS {scoreboardData.teamB}</h1>
         <div className="row align-items-center mt-3">
-          <div className="col-5 fs-4 fw-bold">Team A</div>
-          <div className="col-2 fs-2 fw-bold text-light">145/6</div>
+          <div className="col-5 fs-4 fw-bold">{scoreboardData.teamA}</div>
+          <div className="col-2 fs-2 fw-bold text-light">{scoreboardData.score}</div>
         </div>
         <ul className="nav nav-tabs mt-4">
           <li className="nav-item">
@@ -22,7 +49,7 @@ const Scoreboard = () => {
               className={`nav-link ${activeTab === "batting" ? "active" : ""}`}
               onClick={() => setActiveTab("batting")}
             >
-              Team A (Batting)
+              {scoreboardData.teamA} (Batting)
             </button>
           </li>
           <li className="nav-item">
@@ -30,25 +57,23 @@ const Scoreboard = () => {
               className={`nav-link ${activeTab === "bowling" ? "active" : ""}`}
               onClick={() => setActiveTab("bowling")}
             >
-              Team B (Bowling)
+              {scoreboardData.teamB} (Bowling)
             </button>
           </li>
         </ul>
         <div className="tab-content mt-3">
-          {activeTab === "batting" ? <BattingDetails /> : <BowlingDetails />}
+          {activeTab === "batting" ? (
+            <BattingDetails battingData={scoreboardData.batting} />
+          ) : (
+            <BowlingDetails bowlingData={scoreboardData.bowling} />
+          )}
         </div>
       </div>
     </div>
   );
 };
 
-const BattingDetails = () => {
-  const battingData = [
-    { player: "Player 1 (B)", runs: 45, balls: 38, fours: 5, sixes: 2, strikeRate: ((45 / 38) * 100).toFixed(2) },
-    { player: "Player 2 (L)", runs: 30, balls: 25, fours: 3, sixes: 1, strikeRate: ((30 / 25) * 100).toFixed(2) },
-    { player: "Player 3 (R)", runs: 20, balls: 18, fours: 2, sixes: 0, strikeRate: ((20 / 18) * 100).toFixed(2) },
-  ];
-
+const BattingDetails = ({ battingData }) => {
   return (
     <div>
       <h4 className="mt-4 text-white">Batting Details</h4>
@@ -71,7 +96,7 @@ const BattingDetails = () => {
               <td>{player.balls}</td>
               <td>{player.fours}</td>
               <td>{player.sixes}</td>
-              <td>{player.strikeRate}</td>
+              <td>{((player.runs / player.balls) * 100).toFixed(2)}</td>
             </tr>
           ))}
         </tbody>
@@ -80,13 +105,7 @@ const BattingDetails = () => {
   );
 };
 
-const BowlingDetails = () => {
-  const bowlingData = [
-    { bowler: "Bowler 1", overs: 4, runsGiven: 30, wickets: 2, dotBalls: 10, economy: (30 / 4).toFixed(2) },
-    { bowler: "Bowler 2", overs: 5, runsGiven: 28, wickets: 1, dotBalls: 12, economy: (28 / 5).toFixed(2) },
-    { bowler: "Bowler 3", overs: 6, runsGiven: 40, wickets: 3, dotBalls: 14, economy: (40 / 6).toFixed(2) },
-  ];
-
+const BowlingDetails = ({ bowlingData }) => {
   return (
     <div>
       <h4 className="mt-4 text-white">Bowling Details</h4>
@@ -109,7 +128,7 @@ const BowlingDetails = () => {
               <td>{bowler.runsGiven}</td>
               <td>{bowler.wickets}</td>
               <td>{bowler.dotBalls}</td>
-              <td>{bowler.economy}</td>
+              <td>{(bowler.runsGiven / bowler.overs).toFixed(2)}</td>
             </tr>
           ))}
         </tbody>

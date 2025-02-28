@@ -9,7 +9,7 @@ const VerticleNav = () => {
           Home
         </a>
         <a href="/matches" className='d-flex flex-column justify-content-center'>
-          <i className="fas fa-futbol nav_icon"></i>
+          <i className="">🏏</i>
           Matches
         </a>
         <a href="#shop" className='d-flex flex-column justify-content-center'>

@@ -3,14 +3,13 @@ import AuthContainer from './Auth/AuthContainer';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Home from './pages/Home';
 import './App.css';
-import MyTeamMembers from './pages/MyTeamMembers';
+import MyTeamMembers from './components/TeamManagement/MyTeamMembers';
 import ProfileUpdateModal from './components/Edit_profile';
 import MatchesManagement from './pages/Matches';
 import Scoreboard from './components/scoreboard/ScoreBoard';
 import Live from './components/Header/navbarComponent/Live';
-import Result from './components/Header/navbarComponent/Result';
 import TeamManagement from './components/TeamManagement/TeamCrud';
-
+import UpCommingMatches from './components/Header/navbarComponent/Upcoming';
 function App() {
   const [theme, setTheme] = useState(localStorage.getItem('theme') || 'dark');
   const [lastActivity, setLastActivity] = useState(localStorage.getItem('lastActivity') || Date.now());
@@ -68,9 +67,9 @@ function App() {
           <Route path="/" element={<ProtectedRoute><Home /></ProtectedRoute>} />
           <Route path="/edit-profile" element={<ProtectedRoute><ProfileUpdateModal /></ProtectedRoute>} />
           <Route path="/matches" element={<ProtectedRoute><MatchesManagement /></ProtectedRoute>} />
-          <Route path="/scoreboard" element={<ProtectedRoute><Scoreboard /></ProtectedRoute>} />
+          <Route path="/scoreboard/:id" element={<ProtectedRoute><Scoreboard /></ProtectedRoute>} />
           <Route path="/live" element={<ProtectedRoute><Live /></ProtectedRoute>} />
-          <Route path="/result" element={<ProtectedRoute><Result /></ProtectedRoute>} />
+          <Route path="/upcoming" element={<ProtectedRoute><UpCommingMatches /></ProtectedRoute>} />
           <Route path="/team-members/:id" element={<ProtectedRoute><MyTeamMembers /></ProtectedRoute>} />
           <Route path="/my-teams" element={<ProtectedRoute><TeamManagement /></ProtectedRoute>} />
         </Routes>
