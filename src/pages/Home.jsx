@@ -3,6 +3,7 @@ import Navbar from '../components/Header/header';
 import VerticleNav from '../components/verticleNav';
 import MatchSlider from '../components/Header/headerSlider';
 import SlideShow from '../components/match-series-slider/SeriesSlider';
+import CommonComponent from './Matches';
 import '../style/main.css';
 const Home = () => {
     
@@ -17,6 +18,8 @@ const Home = () => {
                         <MatchSlider />
                         <h2>Top Match Leagues</h2>
                         <SlideShow />
+
+                        <CommonComponent />
                   </div>
               </div>
             </div>

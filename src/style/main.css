@@ -1,7 +1,8 @@
 
 .home-page{
-    width: 90%; background: var(--dark-bg);
-    color: var(--neon-yellow);
+    width: 90%; 
+    background: var(--light-bg);
+    color: var(--dark-bg);
     transition: var(--transition);
     padding: 0;
     overflow:auto;

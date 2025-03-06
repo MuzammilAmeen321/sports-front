@@ -2,10 +2,11 @@
   display: flex;
   align-items: center;
   justify-content: space-around;
-  background: #ffcb05;
+  background: var(--neon-yellow);
   padding: 20px;
   border-radius: 5px;
   color: black;
+  background-image: radial-gradient( circle 851px at 79.7% -27.8%,  rgba(153,230,77,1) 6.9%, rgba(204,255,153,1) 44.7%, rgba(102,178,51,1) 75.4%, rgba(51,102,26,1) 95.3% );
 }
 
 .team-info {

@@ -1,9 +1,11 @@
 :root {
     --dark-bg: #0a0a0a;
-    --light-bg: #fffbfb;
-    --neon-yellow: #FFE600;
-    --neon-shadow: 0 0 15px var(--neon-yellow);
+    --light-bg: white;
+    --neon-yellow: #249f0c;
+    --neon-shadow: 0 0 15px #45ad06;
+    --text-color:var(--neon-yellow);
     --transition: all 0.3s ease;
+    --small-bg: linear-gradient( 135deg, #70F570 10%, #49C628 100%);
   }
   * {
     margin: 0;
@@ -15,42 +17,11 @@
     color: var(--neon-yellow);
 }
   body {
-    background: var(--dark-bg);
     color: var(--neon-yellow);
     overflow: auto;
     transition: var(--transition);
   }
-  
-  body.light-theme {
-    background: var(--light-bg) var(--dark-bg-image) no-repeat fixed;
-    color: #2a2a2a;
-  }
-  
-  .theme-toggle {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    background: none;
+  .nav-link{
     color: var(--neon-yellow);
-    padding: 10px 15px;
-    border-radius: 25px;
-    cursor: pointer;
-    transition: var(--transition);
-    z-index: 1;
-  }
-  
-  .theme-toggle:hover {
-    transform: scale(1.1);
-    box-shadow: var(--neon-shadow);
-  }
-
- 
-  .theme-toggle {
-    font-size: 24px;
-    color: var(--neon-yellow);
-    cursor: pointer;
-  }
-  .theme-toggle:hover {
-    color: var(--neon-shadow);
   }
   

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import AuthContainer from './Auth/AuthContainer';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Home from './pages/Home';
+import ContactUs from './pages/Contact';
 import './App.css';
 import MyTeamMembers from './components/TeamManagement/MyTeamMembers';
 import ProfileUpdateModal from './components/Edit_profile';
@@ -11,14 +12,8 @@ import Live from './components/Header/navbarComponent/Live';
 import TeamManagement from './components/TeamManagement/TeamCrud';
 import UpCommingMatches from './components/Header/navbarComponent/Upcoming';
 function App() {
-  const [theme, setTheme] = useState(localStorage.getItem('theme') || 'dark');
   const [lastActivity, setLastActivity] = useState(localStorage.getItem('lastActivity') || Date.now());
 
-  // Set the theme on body and store in localStorage
-  useEffect(() => {
-    document.body.className = theme === 'light' ? 'light-theme' : 'dark-theme';
-    localStorage.setItem('theme', theme);
-  }, [theme]);
 
   // Check for inactivity and log out after 24 hours
   useEffect(() => {
@@ -50,21 +45,15 @@ function App() {
     };
   }, [lastActivity]);
 
-  const toggleTheme = () => {
-    setTheme((prevTheme) => (prevTheme === 'light' ? 'dark' : 'light'));
-  };
+
 
   return (
     <Router>
       <div className="App">
-        {/* Theme Toggle Button */}
-        <button className="theme-toggle" onClick={toggleTheme}>
-          <i className="fas fa-adjust"></i>
-        </button>
-
         <Routes>
           <Route path="/login" element={<AuthContainer />} />
           <Route path="/" element={<ProtectedRoute><Home /></ProtectedRoute>} />
+          <Route path="/contact-us" element={<ProtectedRoute><ContactUs /></ProtectedRoute>} />
           <Route path="/edit-profile" element={<ProtectedRoute><ProfileUpdateModal /></ProtectedRoute>} />
           <Route path="/matches" element={<ProtectedRoute><MatchesManagement /></ProtectedRoute>} />
           <Route path="/scoreboard/:id" element={<ProtectedRoute><Scoreboard /></ProtectedRoute>} />

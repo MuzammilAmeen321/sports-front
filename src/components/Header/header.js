@@ -50,9 +50,9 @@ const Navbar=()=> {
 
           <div className="mx-auto">
             <ul className="navbar-nav d-flex flex-row gap-3">
-              <li className="nav-item"><a className="nav-link text-warning" href="/">Home</a></li>
-              <li className="nav-item"><a className="nav-link text-warning" href="/live">Live</a></li>
-              <li className="nav-item"><a className="nav-link text-warning" href="/upcoming">Upcoming</a></li>
+              <li className="nav-item"><a className="nav-link " href="/">Home</a></li>
+              <li className="nav-item"><a className="nav-link " href="/live">Live</a></li>
+              <li className="nav-item"><a className="nav-link " href="/upcoming">Upcoming</a></li>
             </ul>
           </div>
 
