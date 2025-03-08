@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import AuthContainer from './Auth/AuthContainer';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Home from './pages/Home';
-import ContactUs from './pages/Contact';
 import './App.css';
 import MyTeamMembers from './components/TeamManagement/MyTeamMembers';
 import ProfileUpdateModal from './components/Edit_profile';
@@ -46,28 +45,36 @@ function App() {
   }, [lastActivity]);
 
 
-
   return (
     <Router>
       <div className="App">
+  
         <Routes>
           <Route path="/login" element={<AuthContainer />} />
-          <Route path="/" element={<ProtectedRoute><Home /></ProtectedRoute>} />
-          <Route path="/contact-us" element={<ProtectedRoute><ContactUs /></ProtectedRoute>} />
-          <Route path="/edit-profile" element={<ProtectedRoute><ProfileUpdateModal /></ProtectedRoute>} />
+          {/* <Route path="/" element={<ProtectedRoute><Home /></ProtectedRoute>} /> */}
+          <Route path="/" element={<Home />} />
+          {/* <Route path="/edit-profile" element={<ProtectedRoute><ProfileUpdateModal /></ProtectedRoute>} />
           <Route path="/matches" element={<ProtectedRoute><MatchesManagement /></ProtectedRoute>} />
           <Route path="/scoreboard/:id" element={<ProtectedRoute><Scoreboard /></ProtectedRoute>} />
           <Route path="/live" element={<ProtectedRoute><Live /></ProtectedRoute>} />
           <Route path="/upcoming" element={<ProtectedRoute><UpCommingMatches /></ProtectedRoute>} />
           <Route path="/team-members/:id" element={<ProtectedRoute><MyTeamMembers /></ProtectedRoute>} />
-          <Route path="/my-teams" element={<ProtectedRoute><TeamManagement /></ProtectedRoute>} />
+          <Route path="/my-teams" element={<ProtectedRoute><TeamManagement /></ProtectedRoute>} /> */}
+
+          <Route path="/edit-profile" element={<ProfileUpdateModal />} />
+          <Route path="/matches" element={<MatchesManagement />} />
+          <Route path="/scoreboard/:id" element={<Scoreboard />} />
+          <Route path="/live" element={<Live />} />
+          <Route path="/upcoming" element={<UpCommingMatches />} />
+          <Route path="/team-members/:id" element={<MyTeamMembers />} />
+          <Route path="/my-teams" element={<TeamManagement />} />
         </Routes>
       </div>
     </Router>
   );
 }
 
-const ProtectedRoute = ({ children }) => {
+/* const ProtectedRoute = ({ children }) => {
   const token = localStorage.getItem('authToken');
   const lastActivity = localStorage.getItem('lastActivity');
   const currentTime = Date.now();
@@ -80,6 +87,6 @@ const ProtectedRoute = ({ children }) => {
   }
 
   return children;
-};
+}; */
 
 export default App;
