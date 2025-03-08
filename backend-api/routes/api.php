@@ -8,6 +8,7 @@ use App\Http\Controllers\TeamController;
 use App\Http\Controllers\PlayerController;
 use App\Http\Controllers\Api\MatchController;
 use App\Http\Controllers\ScoreboardController;
+use App\Http\Controllers\ContactController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -55,4 +56,5 @@ Route::get('/more-users', [UserController::class, 'fetchMorePlayersToAdd']);
     Route::get('/matches', [MatchController::class, 'index']);
 
     Route::get('/scoreboard', [ScoreboardController::class, 'getScoreboardData']);
+    Route::post('/contact', [ContactController::class, 'store']);
 });
