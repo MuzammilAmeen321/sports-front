@@ -64,6 +64,7 @@
         height: 50px;
         width: 100%;
         position: fixed;
+        margin-top: 50px;
         bottom: 50px;
         top: auto;
         flex-direction: row;

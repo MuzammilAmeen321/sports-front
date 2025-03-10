@@ -141,7 +141,7 @@ const AllMatches = (props) => {
                 <div className="col-12">
                   <div className="row p-2">
                     {filteredMatches.map((match) => (
-                      <div key={match.id} className={`col-lg-4 col-md-6 col-12 mb-3 matches`} data-status={match.status}>
+                      <div key={match.id} className={`col-lg-6 col-md-6 col-12 mb-3 matches`} data-status={match.status}>
                         <div className="card bg-white text-black p-2 text-center shadow-sm">
                           <div className="d-flex justify-content-between align-items-center mb-1">
                             <div className="d-flex align-items-center">

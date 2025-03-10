@@ -13,9 +13,16 @@
     box-sizing: border-box;
     font-family: 'El Messiri', sans-serif;
   }
-  .navbar-brand{
-    color: var(--neon-yellow);
-}
+  .logo img{
+    width: 100px;
+    height: 100px;
+    position: absolute;
+    bottom: 0;
+  }
+  .navbar{
+    background-color: #F1F1F1;
+    border-radius: 26px;
+  }
   body {
     color: var(--neon-yellow);
     overflow: auto;
