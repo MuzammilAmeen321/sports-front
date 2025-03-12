@@ -13,21 +13,15 @@ return new class extends Migration
     {
         Schema::create('matches', function (Blueprint $table) {
             $table->id();
-            $table->string('match_code')->unique();
-            $table->string('home_team');
-            $table->string('away_team');
-            $table->string('score')->nullable();
-            $table->string('overs')->nullable();
-            $table->enum('sport', ['cricket', 'football', 'hockey', 'kabaddi', 'badminton']);
-            $table->enum('ball_type', ['tennis', 'tape', 'hard'])->nullable();
-            $table->string('status');
-            $table->string('league');
-            $table->date('date');
-            $table->string('start_time')->nullable();
+            $table->string('category');
+            $table->boolean('security')->default(false);
+            $table->integer('security_amount')->nullable();
+            $table->string('match_bid')->nullable();
+            $table->dateTime('match_datetime');
+            $table->string('ball_type');
             $table->string('venue');
-            $table->string('security')->nullable();
-            $table->string('bid');
-            $table->string('image_url')->nullable();
+            $table->integer('overs');
+            $table->string('join_code')->unique();
             $table->timestamps();
         });
     }
