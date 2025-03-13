@@ -6,7 +6,7 @@ import axios from "axios";
 
 
 const AllMatches = () => {
-  const [security, setSecurity] = useState("no");
+  const [security, setSecurity] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState({
     name: "Select Category",
     icon: "fa-bars",
@@ -22,49 +22,45 @@ const AllMatches = () => {
   const [venue, setVenue] = useState("");
   const [overs, setOvers] = useState("");
 
- 
   const handleCreateMatch = async () => {
     const data = {
-        category: selectedCategory?.name || "",
-        security: security === "yes", // Convert "yes"/"no" to boolean
-        security_amount: security === "yes" ? selectedAmount : null,
-        match_bid: matchBid || null,
-        match_datetime: matchDateTime,
-        ball_type: ballType,
-        venue: venue,
-        overs: overs,
-        join_code: generatedCode,
+      category: selectedCategory?.name || "",
+      security: security, // Now it is already a boolean (true/false)
+      security_amount: security ? selectedAmount : null, // Ensure null when security is false
+      match_bid: matchBid || null,
+      match_datetime: matchDateTime,
+      ball_type: ballType,
+      venue: venue,
+      overs: overs,
+      join_code: generatedCode,
     };
-
+  
+    console.log("Security value being sent:", data.security); // Debugging
+  
     const token = localStorage.getItem("authToken");
-
+  
     if (!token) {
-        console.error("No auth token found.");
-        return;
+      console.error("No auth token found.");
+      return;
     }
-
+  
     try {
-        const response = await fetch("http://127.0.0.1:8000/api/matches", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${token}`,
-            },
-            body: JSON.stringify(data),
-        });
-
-        if (!response.ok) {
-            const errorData = await response.json();
-            console.error("API Error:", errorData);
-            return;
+      const response = await axios.post(
+        "http://127.0.0.1:8000/api/matches",
+        data,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
         }
-
-        const result = await response.json();
-        console.log("Match created successfully!", result);
+      );
+      console.log("Match created successfully:", response.data);
     } catch (error) {
-        console.error("Request failed:", error);
+      console.error("Error creating match:", error.response?.data || error.message);
     }
-};
+  };
+  
 
   const provinceCities = {
     Sindh: ["Karachi", "Hyderabad", "Sukkur"],
@@ -297,12 +293,19 @@ const AllMatches = () => {
 
 
               <div>
-                <label className="form-label">Security</label>
-                <select className="form-select" id="securitySelect" onChange={(e) => setSecurity(e.target.value)} style={{ width: "100px" }}>
-                  <option value="no">No</option>
-                  <option value="yes">Yes</option>
-                </select>
-              </div>
+  <label className="form-label">Security</label>
+  <select
+    className="form-select"
+    id="securitySelect"
+    name="security"
+    onChange={(e) => setSecurity(e.target.value === "yes")} // Convert to boolean
+    style={{ width: "100px" }}
+  >
+    <option value="no">No</option>
+    <option value="yes">Yes</option>
+  </select>
+</div>
+
           {/* Match Bid Selector */}
           <div>
                 <label className="form-label">Match Bid</label>
@@ -316,7 +319,7 @@ const AllMatches = () => {
             </div>
 
         {/* Show Amount Selector if Security is Yes */}
-        {security === "yes" && (
+        {security === true && (
           <div className="mb-3">
           <label className="form-label">Select Security Amount</label>
           <select className="form-select" style={{ width: "465px" }} value={selectedAmount} onChange={(e) => setSelectedAmount(e.target.value)}>

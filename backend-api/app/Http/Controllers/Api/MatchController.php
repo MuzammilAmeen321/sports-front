@@ -17,16 +17,18 @@ class MatchController extends Controller
         // Validate Input
         $validated = $request->validate([
             'category' => 'required|string',
-            'security' => 'required|in:yes,no',
-            'security_amount' => 'required_if:security,yes|nullable|integer',
-
+            'security' => 'required|boolean', // Now directly expects a boolean
+            'security_amount' => 'required_if:security,true|nullable|integer',
             'match_bid' => 'nullable|string',
             'match_datetime' => 'required|date',
             'ball_type' => 'required|string',
             'venue' => 'required|string',
             'overs' => 'required|integer',
-            'join_code' => 'required|string|unique:matches,join_code'
+            'join_code' => 'required|string|unique:matches,join_code',
         ]);
+        
+        
+        
 
         // Save to database
         $match = Matches::create($validated);

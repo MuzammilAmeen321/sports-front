@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('category');
             $table->boolean('security')->default(false);
+
             $table->integer('security_amount')->nullable();
             $table->string('match_bid')->nullable();
             $table->dateTime('match_datetime');
