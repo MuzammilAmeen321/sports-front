@@ -105,7 +105,7 @@ const ContactUs = () => {
                           onChange={handleChange}
                         ></textarea>
 
-                        <button onClick={handleContact}>Send</button>
+                        <button className="btn mt-2" onClick={handleContact}>Send</button>
                       </div>
                     </div>
                   </div>

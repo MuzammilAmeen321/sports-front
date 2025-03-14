@@ -142,4 +142,13 @@ h2:after {
 .match-table tr td,.match-table th{
     background-color: #FFE600;
 }
+.btn{
+   background-color: #003400; 
+   color: white;
+}
+.btn-request{
+    margin-left: 115px;
+
+}
+
   

@@ -108,4 +108,10 @@ table.table td i {
     float: left;
     margin-top: 6px;
     font-size: 95%;
-}    
+}   
+.btn{
+    background-color: #003400; 
+   color: white;
+   border: 1px solid #003400;
+
+} 

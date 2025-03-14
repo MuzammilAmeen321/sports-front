@@ -131,20 +131,18 @@ const AllMatches = () => {
           <header className="header d-flex justify-content-center align-items-center p-4">
   {/* Left Side - Search Box */}
   <div className="d-flex align-items-center">
-    <div className={`search-box d-flex align-items-center me-1 ${searchExpanded ? "expanded" : ""}`}>
-      <input
-        type="search"
-        className="form-control"
-        placeholder="Search..."
-        style={{
-          display: searchExpanded ? "block" : "none",
-          width: searchExpanded ? (window.innerWidth < 768 ? "160px" : "auto") : "auto",
-        }}
-      />
-      <button className="btn btn-outline-dark bg-light mx-1" onClick={toggleSearch}>
-        <i className="fas fa-search"></i>
-      </button>
-    </div>
+  <div className="search-box d-flex w-100 flex-grow-1 align-items-center mx-1">
+  <input
+    type="search"
+    className="form-control"
+    placeholder="Search..."
+    style={{ width: window.innerWidth < 768 ? "160px" : "200px" }}
+  />
+  
+    <i className="fas fa-search"></i>
+  
+</div>
+
 
     {/* Category Selector */}
     <div className="dropdown">
@@ -183,8 +181,8 @@ const AllMatches = () => {
     </select>
    
     {/* Create New Match Button */}
-    <button className="text-dark bg-warning p-2 rounded-md min-w-[140px]"  data-bs-toggle="modal" data-bs-target="#createMatchModal">
-  Create New Match </button>
+    <button className="btn   min-w-[140px] mx-2"  data-bs-toggle="modal" data-bs-target="#createMatchModal">
+   Matches </button>
   </div>
 
   {/* Location Modal */}
@@ -246,7 +244,7 @@ const AllMatches = () => {
           <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">
             Close
           </button>
-          <button type="button" className="btn btn-primary">Save Location</button>
+          <button type="button" className="btn ">Save Location</button>
         </div>
       </div>
     </div>
@@ -366,10 +364,10 @@ const AllMatches = () => {
           </div>
 
           <div className="modal-footer">
-            <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">
+            <button type="button" className="btn " data-bs-dismiss="modal">
               Close
             </button>
-            <button type="button" className="btn btn-success" onClick={handleCreateMatch}>
+            <button type="button" className="btn " onClick={handleCreateMatch}>
               Create Match
             </button>
           </div>
@@ -423,15 +421,15 @@ const AllMatches = () => {
 
                           {match.status === "available" && (
                             <div className="card-footer bg-light mt-1">
-                              <button className="btn btn-warning w-50" onClick={() => alert("Request Sent!")}>Send Request</button>
+                              <button className="btn btn-request " onClick={() => alert("Request Sent!")}>Request</button>
                             </div>
                           )}
 
                           {match.status === "live" && (
                             <div className="mt-2 text-end">
-                              <button className="btn px-4 btn-warning">
-                                <a href="/scoreboard" className="text-dark text-decoration-none">Score</a>
-                              </button>
+                              
+                                <a href="/scoreboard" className="  btn   text-decoration-none">Score</a>
+                              
                             </div>
                           )}
                         </div>

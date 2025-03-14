@@ -70,7 +70,7 @@ const TeamManagement = () => {
                                 <h2>My <b>Teams</b></h2>
                             </div>
                             <div className="col-sm-4">
-                                <button className="text-dark bg-warning p-2 rounded-md min-w-[140px]">
+                                <button className="btn p-2 rounded-md min-w-[140px]">
                                     Add New Team
                                 </button>
                             </div>
