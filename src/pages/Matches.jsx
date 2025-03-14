@@ -125,50 +125,81 @@ const AllMatches = () => {
 
   return (
     <>
+    <Navbar />
+    <VerticleNav />
       <div className="container">
         <div className="row">
           <div className="col-10">
           <header className="header d-flex justify-content-center align-items-center p-4">
   {/* Left Side - Search Box */}
   <div className="d-flex align-items-center">
-    <div className={`search-box d-flex align-items-center me-1 ${searchExpanded ? "expanded" : ""}`}>
-      <input
-        type="search"
-        className="form-control"
-        placeholder="Search..."
-        style={{
-          display: searchExpanded ? "block" : "none",
-          width: searchExpanded ? (window.innerWidth < 768 ? "160px" : "auto") : "auto",
-        }}
-      />
-      <button className="btn btn-outline-dark bg-light mx-1" onClick={toggleSearch}>
-        <i className="fas fa-search"></i>
-      </button>
-    </div>
+  <div className={`search-box d-flex align-items-center me-1 ${searchExpanded ? "expanded" : ""}`} style={{ position: "relative" }}>
+  {/* Search Input (Will appear on the left side when expanded) */}
+  {searchExpanded && (
+    <input
+      type="search"
+      className="form-control"
+      placeholder="Search..."
+      style={{
+        width: "160px",
+        height: "40px",
+        borderRadius: "5px",
+        border: "1px solid #ccc",
+        paddingLeft: "10px",
+        position: "absolute",
+        right: "50px", // 🔹 Input اب Left Side پر Open ہوگا
+        top: "0",
+        transition: "width 0.3s ease-in-out",
+      }}
+    />
+  )}
 
-    {/* Category Selector */}
-    <div className="dropdown">
-      <button className="btn btn-light" type="button" data-bs-toggle="dropdown">
-        <i className={`fas ${selectedCategory.icon}`}></i>
-        {selectedCategory.name === "" ? selectedCategory.name : ""}
-      </button>
-      <ul className="dropdown-menu shadow">
-        {categories.map((category) => (
-          <li key={category.name}>
-            <a className="dropdown-item" href="#" onClick={() => handleCategorySelect(category)}>
-              <i className={`fas ${category.icon} me-2`}></i> {category.name}
-            </a>
-          </li>
-        ))}
-      </ul>
-    </div>
+  {/* Search Button (Icon will always stay here) */}
+  <button 
+    className="btn btn-outline-light bg-light m-0"
+    style={{
+      width: "40px",
+      height: "40px",
+      position: "relative",
+      zIndex: 2,
+    }}
+    onClick={toggleSearch}
+  >
+    <i className="fas fa-search"></i>
+  </button>
+</div>
+
+
+   
+
+    {/* location model button */}
+    
+    <button id="cust_btn" className="btn btn-light ms-2 " data-bs-toggle="modal" data-bs-target="#locationModal">
+      <i className="fas fa-map-marker-alt p-1"></i>
+    </button>
+
+
   </div>
 
   {/* Right Side - Location Button, Match Type Selector, and Create Match Button */}
+
   <div className="d-flex align-items-center">
-    <button id="cust_btn" className="btn btn-light ms-2" data-bs-toggle="modal" data-bs-target="#locationModal">
-      <i className="fas fa-map-marker-alt p-1"></i>
-    </button>
+  {/* Category Selector */}
+    <div className="dropdown">
+  <button className="btn btn-light d-flex align-items-center p-2" type="button" data-bs-toggle="dropdown">
+    <i className={`fas ${selectedCategory.icon || "fa-bars"} m-1 `}></i> 
+    {selectedCategory.name ? ` ${selectedCategory.name}` : ""}
+  </button>
+  <ul className="dropdown-menu shadow">
+    {categories.map((category) => (
+      <li key={category.name}>
+        <a className="dropdown-item d-flex align-items-center" href="#" onClick={() => handleCategorySelect(category)}>
+          <i className={`fas ${category.icon} me-2`}></i> {category.name}
+        </a>
+      </li>
+    ))}
+  </ul>
+</div>
 
     <select
       className="form-select ms-2"
@@ -183,8 +214,8 @@ const AllMatches = () => {
     </select>
    
     {/* Create New Match Button */}
-    <button className="text-dark bg-warning p-2 rounded-md min-w-[140px]"  data-bs-toggle="modal" data-bs-target="#createMatchModal">
-  Create New Match </button>
+    <button className="text-dark bg-warning p-1 m-2 rounded min-w-[140px]"  data-bs-toggle="modal" data-bs-target="#createMatchModal">
+   New Match </button>
   </div>
 
   {/* Location Modal */}
@@ -256,14 +287,13 @@ const AllMatches = () => {
       <div className="modal-dialog">
         <div className="modal-content">
           <div className="modal-header">
-            <h5 className="modal-title">Create New Match</h5>
+            <h5 className="modal-title"> New Match</h5>
             <button type="button" className="btn-close text-danger" data-bs-dismiss="modal">
               <i className="fas fa-times"></i>
             </button>
           </div>
       
           <div className="modal-body">
-            {/* Dropdown, Security & Match Bid Selector in One Row */}
             <div className="d-flex justify-content-between mb-3">
               {/* Category Dropdown */}
               <div>
@@ -376,14 +406,7 @@ const AllMatches = () => {
         </div>
       </div>
     </div>
-
-
-
-
-
 </header>
-
-
             <div className="container">
               <div className="row">
                 <div className="col-12">
@@ -422,14 +445,14 @@ const AllMatches = () => {
                           </div>
 
                           {match.status === "available" && (
-                            <div className="card-footer bg-light mt-1">
-                              <button className="btn btn-warning w-50" onClick={() => alert("Request Sent!")}>Send Request</button>
+                            <div className="mt-3 mt-1 text-end">
+                              <button className="btn btn-warning w-50" onClick={() => alert("Request Sent!")}> Request</button>
                             </div>
                           )}
 
                           {match.status === "live" && (
-                            <div className="mt-2 text-end">
-                              <button className="btn px-4 btn-warning">
+                            <div className=" mt-3 text-end">
+                              <button className="btn btn-warning w-50">
                                 <a href="/scoreboard" className="text-dark text-decoration-none">Score</a>
                               </button>
                             </div>
