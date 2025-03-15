@@ -1,22 +1,58 @@
+
+
+/* ✅ Mobile Responsive Styles */
 @media (max-width: 768px) {
-    .s-box {
-        margin-top: 0;
-        margin-right: 0px;
-        justify-content: space-between;
-      }
-      .form-control{
-        width: 100%;
-      }
-      .L-model{
-        width: 30%;
-        flex-direction: row;
-        justify-content: space-between;
-        margin-top: 200px;
-        margin-left: 0;
-        padding: 0;
-      }
-      .header{
-        width: 0;
-        margin-left: 80px;
-      }
+  .s-box {
+    flex-direction: column; /* موبائل پر نیچے لے کر آنے کے لیے */
+    align-items: center;
+  }
+
+  /* ✅ تمام بٹنز کو ایک لائن میں رکھیں */
+  .s-box > *:not(.search-box) {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: center;
+    gap: 8px; /* بٹن کے درمیان اسپیس */
+    width: 100%;
+  }
+
+  .search-box {
+    order: 2; /* سرچ بار کو نیچے رکھنے کے لیے */
+    max-width: 100%; /* فل چوڑائی */
+  }
+
+  .search-input {
+    font-size: 14px;
+  }
+  .s-box {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px; /* بٹن کے درمیان اسپیس */
+  }
+  
+  /* Default styles */
+  .search-box {
+    position: relative;
+    max-width: 300px;
+    width: 100%;
+  }
+  
+  .search-input {
+    width: 100%;
+    padding-right: 40px; /* آئیکن کے لیے اسپیس */
+  }
+  
+  .search-icon {
+    position: absolute;
+    right: 10px;
+    color: #777;
+    font-size: 18px;
+    cursor: pointer;
+  }
+  .all-button{
+    width: 50%;
+    margin-left: 32px;
+  }
 }
