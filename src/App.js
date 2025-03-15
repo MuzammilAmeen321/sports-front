@@ -51,8 +51,8 @@ function App() {
     <Router>
       <div className="App">
         <Routes>
-          {/* <Route path="/login" element={<AuthContainer />} /> */}
-          {/* <Route path="/" element={<ProtectedRoute><Home /></ProtectedRoute>} />
+           <Route path="/login" element={<AuthContainer />} /> 
+          <Route path="/" element={<ProtectedRoute><Home /></ProtectedRoute>} />
           <Route path="/contact-us" element={<ProtectedRoute><ContactUs /></ProtectedRoute>} />
           <Route path="/edit-profile" element={<ProtectedRoute><ProfileUpdateModal /></ProtectedRoute>} />
           <Route path="/matches" element={<ProtectedRoute><MatchesManagement /></ProtectedRoute>} />
@@ -60,16 +60,8 @@ function App() {
           <Route path="/live" element={<ProtectedRoute><Live /></ProtectedRoute>} />
           <Route path="/upcoming" element={<ProtectedRoute><UpCommingMatches /></ProtectedRoute>} />
           <Route path="/team-members/:id" element={<ProtectedRoute><MyTeamMembers /></ProtectedRoute>} />
-          <Route path="/my-teams" element={<ProtectedRoute><TeamManagement /></ProtectedRoute>} /> */}
-          <Route path="/" element={<Home />} />
-          <Route path="/contact-us" element={<ContactUs />} />
-          <Route path="/edit-profile" element={<ProfileUpdateModal />} />
-          <Route path="/matches" element={<MatchesManagement />} />
-          <Route path="/scoreboard/:id" element={<Scoreboard />} />
-          <Route path="/live" element={<Live />} />
-          <Route path="/upcoming" element={<UpCommingMatches />} />
-          <Route path="/team-members/:id" element={<MyTeamMembers />} />
-          <Route path="/my-teams" element={<TeamManagement />} />
+          <Route path="/my-teams" element={<ProtectedRoute><TeamManagement /></ProtectedRoute>} /> 
+          
         </Routes>
       </div>
     </Router>

@@ -11,7 +11,7 @@ const Signup = ({ toggleForms }) => {
     confirmPassword: "",
     playerCode: "",
   });
-
+  const API_URL = "https://matc.matchdada.com/public/api"; // Correct API URL
   const [toast, setToast] = useState({ show: false, message: "", type: "" });
   const navigate = useNavigate();
 
@@ -29,7 +29,7 @@ const Signup = ({ toggleForms }) => {
 
   const isPlayerCodeUnique = async (code) => {
     try {
-      const response = await axios.get(`http://localhost:8000/api/check-player-code?code=${code}`);
+      const response = await axios.get(`${API_URL}/check-player-code?code=${code}`);
       return !response.data.exists;
     } catch (error) {
       console.error("Error checking player code uniqueness:", error);
@@ -76,7 +76,8 @@ const Signup = ({ toggleForms }) => {
     }
 
     try {
-      const response = await axios.post("http://localhost:8000/api/register", {
+      // Use template literals correctly for the API URL
+      const response = await axios.post(`${API_URL}/register`, {
         username: formData.username,
         email: formData.email,
         phone: formData.phone,
