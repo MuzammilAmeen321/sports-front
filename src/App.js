@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import AuthContainer from './Auth/AuthContainer';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Home from './pages/Home';
+import ContactUs from './pages/Contact';
 import './App.css';
 import MyTeamMembers from './components/TeamManagement/MyTeamMembers';
 import ProfileUpdateModal from './components/Edit_profile';
@@ -10,7 +11,6 @@ import Scoreboard from './components/scoreboard/ScoreBoard';
 import Live from './components/Header/navbarComponent/Live';
 import TeamManagement from './components/TeamManagement/TeamCrud';
 import UpCommingMatches from './components/Header/navbarComponent/Upcoming';
-import ContactUs from './pages/Contact';
 function App() {
   const [lastActivity, setLastActivity] = useState(localStorage.getItem('lastActivity') || Date.now());
 
@@ -46,23 +46,22 @@ function App() {
   }, [lastActivity]);
 
 
+
   return (
     <Router>
       <div className="App">
-  
         <Routes>
-          <Route path="/login" element={<AuthContainer />} />
+           <Route path="/login" element={<AuthContainer />} /> 
           <Route path="/" element={<ProtectedRoute><Home /></ProtectedRoute>} />
+          <Route path="/contact-us" element={<ProtectedRoute><ContactUs /></ProtectedRoute>} />
           <Route path="/edit-profile" element={<ProtectedRoute><ProfileUpdateModal /></ProtectedRoute>} />
           <Route path="/matches" element={<ProtectedRoute><MatchesManagement /></ProtectedRoute>} />
           <Route path="/scoreboard/:id" element={<ProtectedRoute><Scoreboard /></ProtectedRoute>} />
           <Route path="/live" element={<ProtectedRoute><Live /></ProtectedRoute>} />
           <Route path="/upcoming" element={<ProtectedRoute><UpCommingMatches /></ProtectedRoute>} />
           <Route path="/team-members/:id" element={<ProtectedRoute><MyTeamMembers /></ProtectedRoute>} />
-          <Route path="/my-teams" element={<ProtectedRoute><TeamManagement /></ProtectedRoute>} />
-          <Route path="/contact-us" element={<ProtectedRoute><ContactUs /></ProtectedRoute>} />
-
-  
+          <Route path="/my-teams" element={<ProtectedRoute><TeamManagement /></ProtectedRoute>} /> 
+          
         </Routes>
       </div>
     </Router>

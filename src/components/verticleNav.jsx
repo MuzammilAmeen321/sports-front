@@ -17,10 +17,7 @@ const VerticalNav = () => {
         <img src={cricket2} alt="Matches" className="nav-icon" />
         <span className="nav-text">Matches</span>
       </a>
-      {/* <a href="#shop" className="nav-item">
-        <img src={shopping2} alt="Shopping" className="nav-icon" />
-        <span className="nav-text">Shopping</span>
-      </a> */}
+     
       <a href="/contact-us" className="nav-item">
         <img src={contact} alt="Contact" className="nav-icon" />
         <span className="nav-text">Contact</span>

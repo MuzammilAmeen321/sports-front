@@ -1,0 +1,22 @@
+@media (max-width: 768px) {
+    .s-box {
+        margin-top: 0;
+        margin-right: 0px;
+        justify-content: space-between;
+      }
+      .form-control{
+        width: 100%;
+      }
+      .L-model{
+        width: 30%;
+        flex-direction: row;
+        justify-content: space-between;
+        margin-top: 200px;
+        margin-left: 0;
+        padding: 0;
+      }
+      .header{
+        width: 0;
+        margin-left: 80px;
+      }
+}

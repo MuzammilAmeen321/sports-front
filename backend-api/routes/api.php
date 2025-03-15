@@ -58,4 +58,5 @@ Route::get('/more-users', [UserController::class, 'fetchMorePlayersToAdd']);
 
     Route::get('/scoreboard', [ScoreboardController::class, 'getScoreboardData']);
     Route::post('/contact', [ContactController::class, 'store']);
+
 });

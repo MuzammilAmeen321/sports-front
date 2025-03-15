@@ -13,33 +13,34 @@ class MatchController extends Controller
         return response()->json($matches);
     }
 
-    public function store(Request $request)
-    {
+    public function store(Request $request) {
+        // Validate Input
         $validated = $request->validate([
-            'user_id' => 'required|exists:users,id',
             'category' => 'required|string',
-            'security' => 'required|string',
-            'security_amount' => 'nullable|integer',
-            'match_bid' => 'required|string',
+            'security' => 'required|boolean', // Now directly expects a boolean
+            'security_amount' => 'required_if:security,true|nullable|integer',
+            'match_bid' => 'nullable|string',
             'match_datetime' => 'required|date',
             'ball_type' => 'required|string',
             'venue' => 'required|string',
             'overs' => 'required|integer',
-            'join_code' => 'required|string',
-            'city' => 'required|string',
-            'province' => 'required|string'
+            'join_code' => 'required|string|unique:matches,join_code',
         ]);
+        
+        
+        
 
-        Matches::create($validated);
+        // Save to database
+        $match = Matches::create($validated);
 
-        return response()->json(['message' => 'Match created successfully!'], 201);
+        return response()->json([
+            'message' => 'Match created successfully',
+            'match' => $validated
+        ], 201);
     }
 
-    public function show($id)
-    {
-        $match = Matches::findOrFail($id);
-        return response()->json($match);
-    }
+    
+
 
     public function update(Request $request, $id)
     {

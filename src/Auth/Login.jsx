@@ -6,6 +6,7 @@ const Login = ({ toggleForms }) => {
   const [formData, setFormData] = useState({ username: "", password: "" });
   const [toast, setToast] = useState({ show: false, message: "", type: "" });
   const navigate = useNavigate();
+  const API_URL = "https://matc.matchdada.com/public/api"; // Correct API URL
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -32,7 +33,8 @@ const Login = ({ toggleForms }) => {
     e.preventDefault();
 
     try {
-      const response = await axios.post("http://localhost:8000/api/login", formData);
+      // Corrected API endpoint path
+      const response = await axios.post(`${API_URL}/login`, formData); // Updated path
       const { token, user } = response.data;
 
       localStorage.setItem("authToken", token);
@@ -45,7 +47,15 @@ const Login = ({ toggleForms }) => {
         navigate("/");
       }, 3000);
     } catch (error) {
-      showToast("Invalid credentials. Please try again.", "danger");
+      // Handle API error response
+      const errorMessage =
+        error.response?.data?.error || "Invalid credentials. Please try again.";
+
+      // If the error is an object, convert it to a string
+      const displayMessage =
+        typeof errorMessage === "object" ? JSON.stringify(errorMessage) : errorMessage;
+
+      showToast(displayMessage, "danger");
     }
   };
 
