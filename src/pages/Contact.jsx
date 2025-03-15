@@ -105,7 +105,7 @@ const ContactUs = () => {
                           onChange={handleChange}
                         ></textarea>
 
-                        <button className="btn mt-2" onClick={handleContact}>Send</button>
+                        <button className="btn mt-2 h-button" onClick={handleContact}>Send</button>
                       </div>
                     </div>
                   </div>
@@ -123,17 +123,17 @@ const ContactUs = () => {
 
                 <div className="contact_info_sec">
                   <h4>Contact Info</h4>
-                  <div className="d-flex info_single align-items-center">
+                  <div className="d-flex info_single align-items-center fs-5 ">
                     <i className="fas fa-headset"></i>
-                    <span>+91 8009 054294</span>
+                    <span class=" fs-5" >+91 8009 054294</span>
                   </div>
-                  <div className="d-flex info_single align-items-center">
+                  <div className="d-flex info_single align-items-center fs-5">
                     <i className="fas fa-envelope-open-text"></i>
-                    <span>info@flightmantra.com</span>
+                    <span className="fs-5">info@flightmantra.com</span>
                   </div>
-                  <div className="d-flex info_single align-items-center">
+                  <div className="d-flex info_single align-items-center fs-5">
                     <i className="fas fa-map-marked-alt"></i>
-                    <span>1000+ Travel partners and 65+ Service city across India, USA, Canada & UAE</span>
+                    <span className="fs-5">1000+ Travel partners and 65+ Service city across India, USA, Canada & UAE</span>
                   </div>
                 </div>
 

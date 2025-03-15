@@ -1,8 +1,8 @@
 import { useState } from "react";
 import VerticleNav from "../components/verticleNav";
 import Navbar from "../components/Header/header";
-
 import axios from "axios";
+import "../style/matches.css"
 
 
 const AllMatches = () => {
@@ -125,12 +125,14 @@ const AllMatches = () => {
 
   return (
     <>
+     <Navbar />
+     <VerticleNav />
       <div className="container">
         <div className="row">
           <div className="col-10">
           <header className="header d-flex justify-content-center align-items-center p-4">
   {/* Left Side - Search Box */}
-  <div className="d-flex align-items-center">
+  <div className="d-flex align-items-center s-box">
   <div className="search-box d-flex w-100 flex-grow-1 align-items-center mx-1">
   <input
     type="search"
@@ -160,14 +162,19 @@ const AllMatches = () => {
         ))}
       </ul>
     </div>
-  </div>
-
+    
   {/* Right Side - Location Button, Match Type Selector, and Create Match Button */}
-  <div className="d-flex align-items-center">
     <button id="cust_btn" className="btn btn-light ms-2" data-bs-toggle="modal" data-bs-target="#locationModal">
       <i className="fas fa-map-marker-alt p-1"></i>
     </button>
 
+    {/* Create New Match Button */}
+    <button className="btn   min-w-[140px] mx-2"  data-bs-toggle="modal" data-bs-target="#createMatchModal">
+   Matches </button>
+
+  </div>
+  <div className="d-flex align-items-center L-model">
+   
     <select
       className="form-select ms-2"
       style={{ width: "auto" }}
@@ -180,9 +187,6 @@ const AllMatches = () => {
       <option value="pending">Pending</option>
     </select>
    
-    {/* Create New Match Button */}
-    <button className="btn   min-w-[140px] mx-2"  data-bs-toggle="modal" data-bs-target="#createMatchModal">
-   Matches </button>
   </div>
 
   {/* Location Modal */}
