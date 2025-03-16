@@ -147,6 +147,7 @@ const AllMatches = () => {
 
 
     {/* Category Selector */}
+    <div className="d-flex all-button">
     <div className="dropdown">
       <button className="btn btn-light" type="button" data-bs-toggle="dropdown">
         <i className={`fas ${selectedCategory.icon}`}></i>
@@ -171,24 +172,21 @@ const AllMatches = () => {
     {/* Create New Match Button */}
     <button className="btn   min-w-[140px] mx-2"  data-bs-toggle="modal" data-bs-target="#createMatchModal">
    Matches </button>
-
-  </div>
-  <div className="d-flex align-items-center L-model">
    
-    <select
-      className="form-select ms-2"
-      style={{ width: "auto" }}
-      value={matchType}
-      onChange={(e) => setMatchType(e.target.value)}
-    >
-      <option value="all">All Matches</option>
-      <option value="available">Available</option>
-      <option value="booked">Booked</option>
-      <option value="pending">Pending</option>
-    </select>
-   
-  </div>
-
+   <select
+     className="form-select ms-2"
+     style={{ width: "auto" }}
+     value={matchType}
+     onChange={(e) => setMatchType(e.target.value)}
+   >
+     <option value="all">All Matches</option>
+     <option value="available">Available</option>
+     <option value="booked">Booked</option>
+     <option value="pending">Pending</option>
+   </select>
+   </div>
+  
+ </div>
   {/* Location Modal */}
   <div id="locationModal" className="modal fade" tabIndex="-1">
     <div className="modal-dialog">
@@ -197,7 +195,7 @@ const AllMatches = () => {
           <h5 className="modal-title">
             <i className="fas fa-map-marker-alt me-2"></i> Select Your Location
           </h5>
-          <button type="button" className="btn-close" data-bs-dismiss="modal"></button>
+          <button type="button" className="btn-close btn-danger" data-bs-dismiss="modal"></button>
         </div>
         <div className="modal-body">
           <div className="mb-3">
