@@ -16,7 +16,6 @@ const Signup = ({ toggleForms }) => {
   const navigate = useNavigate();
   const [isGenerating, setIsGenerating] = useState(false);
 
-  
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({ ...prevData, [name]: value }));
@@ -29,54 +28,14 @@ const Signup = ({ toggleForms }) => {
     return `${prefix}${randomDigits}`;
   };
 
-  const isPlayerCodeUnique = async (code) => {
-    try {
-      const response = await axios.get(`${API_URL}/check-player-code?code=${code}`);
-      return !response.data.exists;
-    } catch (error) {
-      console.error("Error checking player code uniqueness:", error);
-      return false;
-    }
-  };
-
-  const generateUniquePlayerCode = async (username) => {
-    const maxRetries = 5; // Limit retries
-    let attempts = 0;
-    let playerCode = "";
-    let isUnique = false;
-  
-    while (!isUnique && attempts < maxRetries) {
-      playerCode = generatePlayerCode(username);
-  
-      try {
-        isUnique = await isPlayerCodeUnique(playerCode);
-        if (!isUnique) {
-          attempts++;
-          await new Promise((resolve) => setTimeout(resolve, 500)); // Add a small delay
-        }
-      } catch (error) {
-        console.error("Error checking player code:", error);
-        break; // Stop retries on API error
-      }
-    }
-  
-    if (!isUnique) {
-      console.warn("Failed to generate a unique player code after multiple attempts.");
-      playerCode = "ERR" + Math.floor(1000 + Math.random() * 9000); // Fallback code
-    }
-  
-    return playerCode;
-  };
-  
-
   const handleUsernameChange = async (e) => {
     const { value } = e.target;
     setFormData((prevData) => ({ ...prevData, username: value }));
-  
+
     if (value) {
       setIsGenerating(true);
-      const uniquePlayerCode = await generateUniquePlayerCode(value);
-      setFormData((prevData) => ({ ...prevData, playerCode: uniquePlayerCode }));
+      const playerCode = generatePlayerCode(value);
+      setFormData((prevData) => ({ ...prevData, playerCode }));
       setIsGenerating(false);
     }
   };
@@ -98,7 +57,6 @@ const Signup = ({ toggleForms }) => {
     }
 
     try {
-      // Use template literals correctly for the API URL
       const response = await axios.post(`${API_URL}/register`, {
         username: formData.username,
         email: formData.email,
@@ -204,17 +162,16 @@ const Signup = ({ toggleForms }) => {
         </div>
 
         <div className="input-group">
-  <i className="fas fa-id-card"></i>
-  <input
-    type="text"
-    name="playerCode"
-    placeholder="Player Code"
-    value={formData.playerCode}
-    readOnly
-  />
-  {isGenerating && <span className="loading-spinner">Generating...</span>}
-</div>
-
+          <i className="fas fa-id-card"></i>
+          <input
+            type="text"
+            name="playerCode"
+            placeholder="Player Code"
+            value={formData.playerCode}
+            readOnly
+          />
+          {isGenerating && <span className="loading-spinner">Generating...</span>}
+        </div>
 
         <div className="input-group">
           <i className="fas fa-lock"></i>
