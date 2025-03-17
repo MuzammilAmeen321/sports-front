@@ -11,7 +11,7 @@ export default function ProfileUpdateModal({ onClose, view }) {
     sponsorName: "",
     avatar: null, // Set to null initially
   });
-
+  const API_URL = "https://matc.matchdada.com/public/api";
   const [passwords, setPasswords] = useState({
     oldPassword: "",
     newPassword: "",
@@ -26,7 +26,7 @@ export default function ProfileUpdateModal({ onClose, view }) {
     const fetchUserProfile = async () => {
       try {
         const token = localStorage.getItem("authToken");
-        const response = await axios.get("http://127.0.0.1:8000/api/user-profile", {
+        const response = await axios.get(`${API_URL}/user-profile`, {
           headers: { Authorization: `Bearer ${token}` },
         });
   
@@ -39,7 +39,7 @@ export default function ProfileUpdateModal({ onClose, view }) {
           clubName: response.data.club_name || "",
           sponsorName: response.data.sponsor_name || "",
           avatar: response.data.profile_picture 
-            ? `http://127.0.0.1:8000/storage/${response.data.profile_picture}` 
+            ? `https://matc.matchdada.com/public/storage/${response.data.profile_picture}` 
             : null, // Ensure correct path
         });
       } catch (error) {
@@ -72,7 +72,7 @@ export default function ProfileUpdateModal({ onClose, view }) {
     try {
         const token = localStorage.getItem("authToken");
         const response = await axios.post(
-            "http://127.0.0.1:8000/api/update-profile",
+            `${API_URL}/update-profile`,
             {
                 username: user.name,
                 email: user.email,

@@ -14,7 +14,9 @@ const Signup = ({ toggleForms }) => {
   const API_URL = "https://matc.matchdada.com/public/api"; // Correct API URL
   const [toast, setToast] = useState({ show: false, message: "", type: "" });
   const navigate = useNavigate();
+  const [isGenerating, setIsGenerating] = useState(false);
 
+  
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({ ...prevData, [name]: value }));
@@ -38,24 +40,44 @@ const Signup = ({ toggleForms }) => {
   };
 
   const generateUniquePlayerCode = async (username) => {
-    let isUnique = false;
+    const maxRetries = 5; // Limit retries
+    let attempts = 0;
     let playerCode = "";
-
-    while (!isUnique) {
+    let isUnique = false;
+  
+    while (!isUnique && attempts < maxRetries) {
       playerCode = generatePlayerCode(username);
-      isUnique = await isPlayerCodeUnique(playerCode);
+  
+      try {
+        isUnique = await isPlayerCodeUnique(playerCode);
+        if (!isUnique) {
+          attempts++;
+          await new Promise((resolve) => setTimeout(resolve, 500)); // Add a small delay
+        }
+      } catch (error) {
+        console.error("Error checking player code:", error);
+        break; // Stop retries on API error
+      }
     }
-
+  
+    if (!isUnique) {
+      console.warn("Failed to generate a unique player code after multiple attempts.");
+      playerCode = "ERR" + Math.floor(1000 + Math.random() * 9000); // Fallback code
+    }
+  
     return playerCode;
   };
+  
 
   const handleUsernameChange = async (e) => {
     const { value } = e.target;
     setFormData((prevData) => ({ ...prevData, username: value }));
-
+  
     if (value) {
+      setIsGenerating(true);
       const uniquePlayerCode = await generateUniquePlayerCode(value);
       setFormData((prevData) => ({ ...prevData, playerCode: uniquePlayerCode }));
+      setIsGenerating(false);
     }
   };
 
@@ -182,15 +204,17 @@ const Signup = ({ toggleForms }) => {
         </div>
 
         <div className="input-group">
-          <i className="fas fa-id-card"></i>
-          <input
-            type="text"
-            name="playerCode"
-            placeholder="Player Code"
-            value={formData.playerCode}
-            readOnly
-          />
-        </div>
+  <i className="fas fa-id-card"></i>
+  <input
+    type="text"
+    name="playerCode"
+    placeholder="Player Code"
+    value={formData.playerCode}
+    readOnly
+  />
+  {isGenerating && <span className="loading-spinner">Generating...</span>}
+</div>
+
 
         <div className="input-group">
           <i className="fas fa-lock"></i>

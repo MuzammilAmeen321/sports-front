@@ -21,7 +21,7 @@ const AllMatches = () => {
   const [ballType, setBallType] = useState("tape");
   const [venue, setVenue] = useState("");
   const [overs, setOvers] = useState("");
-
+  const API_URL = "https://matc.matchdada.com/public/api";
   const handleCreateMatch = async () => {
     const data = {
       category: selectedCategory?.name || "",
@@ -46,7 +46,7 @@ const AllMatches = () => {
   
     try {
       const response = await axios.post(
-        "http://127.0.0.1:8000/api/matches",
+        `${API_URL}/matches`,
         data,
         {
           headers: {
@@ -94,11 +94,6 @@ const AllMatches = () => {
   const handleCategorySelect = (category) => {
     setSelectedCategory(category);
   };
-
-  const toggleSearch = () => {
-    setSearchExpanded(!searchExpanded);
-  };
-
   const getCurrentLocation = () => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(

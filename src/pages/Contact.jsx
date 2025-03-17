@@ -3,7 +3,7 @@ import "../style/contactUs.css"; // Import the CSS file
 import VerticalNav from "../components/verticleNav";
 import axios from "axios";
 import Navbar from "../components/Header/header";
-
+const API_URL = "https://matc.matchdada.com/public/api";
 const ContactUs = () => {
   const [formData, setFormData] = useState({
     name: "",
@@ -30,7 +30,7 @@ const ContactUs = () => {
       }
 
       const response = await axios.post(
-        "http://127.0.0.1:8000/api/contact",
+        `${API_URL}/contact`,
         formData, // Sending form data
         {
           headers: {
