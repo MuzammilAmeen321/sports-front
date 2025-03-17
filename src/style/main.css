@@ -16,11 +16,7 @@ background-color: var(--light-bg);
 body.light-theme {
    
     /* modal theme */
-  .modal-content {
-    background-color: var(--dark-bg);
-    color: var(--neon-yellow);
-    border: 1px solid var(--neon-yellow);
-  }
+
 
     .navbar{
         box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1);
@@ -54,88 +50,9 @@ body.light-theme {
     }
    
 }
-/* header */
-.header{
-    width: 50%;
-    margin: auto;
-}
-
-/* Shopping cards  */
-h2 {
-    position: relative;
-    vertical-align: middle;
-    padding: 10px 25px;
-    color: #ccc;
-    margin: 0;
-}
-h2 strong {
-    vertical-align: middle;
-    position: relative;
-    z-index: 2;
-    background: #24282f;
-    padding: 4px 8px;
-}
-h2 span {
-    vertical-align: middle;
-    font-size: .7em;
-    color: #aaa;
-    margin-left: 10px;
-}
-h2:after {
-    content: '';
-    position: absolute;
-    z-index: 1;
-    bottom: 50%;
-    height: 2px;
-    left: 0;
-    right: 0;
-    background: #343a40;
-}
-.shoppingCards {
-    display: flex;
-    flex-wrap: wrap;
-    
-}
-.shoppingCard {
-    width: 180px;
-    height: 270px;
-    position: relative;
-    margin: 10px;
-    overflow: hidden;
-    transition: .3s;
-    border-radius: 10%;
-    
-}
-
-.shoppingCard img{
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-.shoppingCard figcaption {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    padding: 20px 10px;
-    font-size: 20px;
-    color: #fff;
-    background: rgba(0, 0, 0, .5);
-    transform: translateY(100%);
-    transition: .3s;
-}
-.shoppingCard:hover figcaption {
-    transform: translateY(0);
-}
-@media (max-width: 759px){
-.shoppingCard{
-    width: 100%;
-}
-}
 
  /* modal theme */
  .modal-content {
-    background-color: var(--dark-bg);
     color: var(--neon-yellow);
     border: 1px solid var(--neon-yellow);
   }
