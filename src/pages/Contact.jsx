@@ -11,6 +11,7 @@ const ContactUs = () => {
     phone: "",
     message: "",
   });
+  
 
   // Handle input change
   const handleChange = (e) => {
