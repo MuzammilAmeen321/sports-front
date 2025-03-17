@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('matches', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->constrained()->onDelete('cascade'); // Add user_id as foreign key
             $table->string('category');
             $table->boolean('security')->default(false);
-
             $table->integer('security_amount')->nullable();
             $table->string('match_bid')->nullable();
             $table->dateTime('match_datetime');
@@ -23,6 +23,8 @@ return new class extends Migration
             $table->string('venue');
             $table->integer('overs');
             $table->string('join_code')->unique();
+            $table->string('city')->nullable(); // Add city
+            $table->string('province')->nullable(); // Add province
             $table->timestamps();
         });
     }

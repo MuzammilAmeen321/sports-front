@@ -3,7 +3,8 @@ import VerticleNav from "../components/verticleNav";
 import Navbar from "../components/Header/header";
 import axios from "axios";
 import "../style/matches.css"
-
+import LocationModal from "../components/models/LocationModel";
+import CreateMatchModal from "../components/models/createNewMatch";
 
 const AllMatches = () => {
   const [security, setSecurity] = useState(false);
@@ -15,53 +16,7 @@ const AllMatches = () => {
   const [cities, setCities] = useState([]);
   const [selectedProvince, setSelectedProvince] = useState("");
   const [matchType, setMatchType] = useState("all");
-  const [selectedAmount, setSelectedAmount] = useState("");
-  const [matchBid, setMatchBid] = useState("");
-  const [matchDateTime, setMatchDateTime] = useState("");
-  const [ballType, setBallType] = useState("tape");
-  const [venue, setVenue] = useState("");
-  const [overs, setOvers] = useState("");
-  const API_URL = "https://matc.matchdada.com/public/api";
-  const handleCreateMatch = async () => {
-    const data = {
-      category: selectedCategory?.name || "",
-      security: security, // Now it is already a boolean (true/false)
-      security_amount: security ? selectedAmount : null, // Ensure null when security is false
-      match_bid: matchBid || null,
-      match_datetime: matchDateTime,
-      ball_type: ballType,
-      venue: venue,
-      overs: overs,
-      join_code: generatedCode,
-    };
   
-    console.log("Security value being sent:", data.security); // Debugging
-  
-    const token = localStorage.getItem("authToken");
-  
-    if (!token) {
-      console.error("No auth token found.");
-      return;
-    }
-  
-    try {
-      const response = await axios.post(
-        `${API_URL}/matches`,
-        data,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      console.log("Match created successfully:", response.data);
-    } catch (error) {
-      console.error("Error creating match:", error.response?.data || error.message);
-    }
-  };
-  
-
   const provinceCities = {
     Sindh: ["Karachi", "Hyderabad", "Sukkur"],
     Punjab: ["Lahore", "Rawalpindi", "Faisalabad"],
@@ -121,7 +76,7 @@ const AllMatches = () => {
   return (
     <>
      <Navbar />
-     <VerticleNav />
+     
       <div className="container">
         <div className="row">
           <div className="col-10">
@@ -182,196 +137,11 @@ const AllMatches = () => {
    </div>
   
  </div>
-  {/* Location Modal */}
-  <div id="locationModal" className="modal fade" tabIndex="-1">
-    <div className="modal-dialog">
-      <div className="modal-content">
-        <div className="modal-header">
-          <h5 className="modal-title">
-            <i className="fas fa-map-marker-alt me-2"></i> Select Your Location
-          </h5>
-          <button type="button" className="btn-close btn-danger" data-bs-dismiss="modal"></button>
-        </div>
-        <div className="modal-body">
-          <div className="mb-3">
-            <label className="form-label">Enter Your Location</label>
-            <div className="input-group">
-              <input type="text" className="form-control" placeholder="Enter Your Location" />
-              <span className="input-group-text" onClick={getCurrentLocation} style={{ cursor: "pointer" }}>
-                <i className="fas fa-location-crosshairs"></i>
-              </span>
-            </div>
-          </div>
-
-          <div className="mb-3">
-            <label className="form-label">Select Province</label>
-            <select className="form-select" onChange={handleProvinceChange}>
-              <option value="" disabled selected>
-                Choose a province
-              </option>
-              {Object.keys(provinceCities).map((province) => (
-                <option key={province} value={province}>
-                  {province}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          {selectedProvince && (
-            <div className="mb-3">
-              <label className="form-label">Select City</label>
-              <select className="form-select">
-                <option value="" disabled selected>
-                  Choose a city
-                </option>
-                {cities.map((city) => (
-                  <option key={city} value={city}>
-                    {city}
-                  </option>
-                ))}
-              </select>
-            </div>
-          )}
-
-          <div className="mt-3 p-3 text-center text-muted bg-light" style={{ borderRadius: "5px" }}>
-            <p>Map will be displayed here.</p>
-          </div>
-        </div>
-        <div className="modal-footer">
-          <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">
-            Close
-          </button>
-          <button type="button" className="btn ">Save Location</button>
-        </div>
-      </div>
-    </div>
-  </div>
-  
-  <div id="createMatchModal" className="modal fade" tabIndex="-1">
-      <div className="modal-dialog">
-        <div className="modal-content">
-          <div className="modal-header">
-            <h5 className="modal-title">Create New Match</h5>
-            <button type="button" className="btn-close text-danger" data-bs-dismiss="modal">
-              <i className="fas fa-times"></i>
-            </button>
-          </div>
-      
-          <div className="modal-body">
-            {/* Dropdown, Security & Match Bid Selector in One Row */}
-            <div className="d-flex justify-content-between mb-3">
-              {/* Category Dropdown */}
-              <div>
-                <label className="form-label">Category</label>
-                <div className="dropdown">
-                  <button className="btn btn-light" type="button" data-bs-toggle="dropdown" style={{ width: "180px" }}>
-                    {selectedCategory.name ? (
-                      <>
-                        <i className={`fas ${selectedCategory.icon} me-3`}></i>
-                        {selectedCategory.name}
-                      </>
-                    ) : (
-                      "Select Category"
-                    )}
-                  </button>
-                  <ul className="dropdown-menu shadow">
-                    {categories.map((category) => (
-                      <li key={category.name}>
-                        <a className="dropdown-item" href="#" onClick={() => handleCategorySelect(category)}>
-                          <i className={`fas ${category.icon} me-2`}></i> {category.name}
-                        </a>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
-
-
-              <div>
-  <label className="form-label">Security</label>
-  <select
-    className="form-select"
-    id="securitySelect"
-    name="security"
-    onChange={(e) => setSecurity(e.target.value === "yes")} // Convert to boolean
-    style={{ width: "100px" }}
-  >
-    <option value="no">No</option>
-    <option value="yes">Yes</option>
-  </select>
-</div>
-
-          {/* Match Bid Selector */}
-          <div>
-                <label className="form-label">Match Bid</label>
-                <select className="form-select" style={{ width: "100px" }} onChange={(e) => setMatchBid(e.target.value)}>
-                  <option value="no">No</option>
-                  <option value="yes">Yes</option>
-                  <option value="100">100</option>
-                  <option value="200">200</option>
-                </select>
-              </div>
-            </div>
-
-        {/* Show Amount Selector if Security is Yes */}
-        {security === true && (
-          <div className="mb-3">
-          <label className="form-label">Select Security Amount</label>
-          <select className="form-select" style={{ width: "465px" }} value={selectedAmount} onChange={(e) => setSelectedAmount(e.target.value)}>
-            <option value="100">100</option>
-            <option value="200">200</option>
-            <option value="500">500</option>
-          </select>
-        </div>
-        )}
-
-        {/* Match Date & Time */}
-        <div className="mb-3">
-              <label className="form-label">Match Date & Time</label>
-              <input type="datetime-local" className="form-control" onChange={(e) => setMatchDateTime(e.target.value)} />
-            </div>
-
-            <div className="mb-3">
-              <label className="form-label">Ball Type</label>
-              <select className="form-select" style={{ width: "465px" }} onChange={(e) => setBallType(e.target.value)}>
-                <option value="tape">Tape Ball</option>
-                <option value="hard">Hard Ball</option>
-              </select>
-            </div>
-
-            <div className="mb-3">
-              <label className="form-label">Venue</label>
-              <input type="text" className="form-control" placeholder="Enter venue" onChange={(e) => setVenue(e.target.value)} />
-            </div>
-
-            <div className="mb-3">
-              <label className="form-label">Overs</label>
-              <input type="number" className="form-control" placeholder="Enter number of overs" onChange={(e) => setOvers(e.target.value)} />
-            </div>
-
-            <div className="mb-3">
-              <label className="form-label">Join Code</label>
-              <div className="d-flex justify-content-between">
-                <input type="text" className="form-control me-3" value={generatedCode} readOnly placeholder="Generated Code" style={{ maxWidth: "300px" }} />
-                <button className="btn btn-warning" onClick={generateCode}>
-                  Generate Code
-                </button>
-              </div>
-            </div>
-          </div>
-
-          <div className="modal-footer">
-            <button type="button" className="btn " data-bs-dismiss="modal">
-              Close
-            </button>
-            <button type="button" className="btn " onClick={handleCreateMatch}>
-              Create Match
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-
+ 
+ {/* Location Model */}
+  < LocationModal />
+  {/* Create new match Model */}
+<CreateMatchModal />
 
 
 
@@ -438,6 +208,7 @@ const AllMatches = () => {
             </div>
           </div>
         </div>
+        <VerticleNav />
       </div>
     </>
   );
