@@ -125,7 +125,8 @@ const AllMatches = () => {
 
   return (
     <>
-     <Navbar />
+    
+    {location.pathname !== "/" && <Navbar />}
      <VerticleNav />
       <div className="container">
         <div className="row">
@@ -142,6 +143,18 @@ const AllMatches = () => {
   />
   
     <i className="fas fa-search"></i>
+
+    <select
+     className="form-select ms-2"
+     style={{ width: "auto" }}
+     value={matchType}
+     onChange={(e) => setMatchType(e.target.value)}
+   >
+     <option value="all">All Matches</option>
+     <option value="available">Available</option>
+     <option value="booked">Booked</option>
+     <option value="pending">Pending</option>
+   </select>
   
 </div>
 
@@ -173,17 +186,6 @@ const AllMatches = () => {
     <button className="btn   min-w-[140px] mx-2"  data-bs-toggle="modal" data-bs-target="#createMatchModal">
    Matches </button>
    
-   <select
-     className="form-select ms-2"
-     style={{ width: "auto" }}
-     value={matchType}
-     onChange={(e) => setMatchType(e.target.value)}
-   >
-     <option value="all">All Matches</option>
-     <option value="available">Available</option>
-     <option value="booked">Booked</option>
-     <option value="pending">Pending</option>
-   </select>
    </div>
   
  </div>
@@ -387,57 +389,65 @@ const AllMatches = () => {
             <div className="container">
               <div className="row">
                 <div className="col-12">
-                  <div className="row p-2">
-                    {filteredMatches.map((match) => (
-                      <div key={match.id} className={`col-lg-4 col-md-6 col-12 mb-3`} data-status={match.status}>
-                        <div className="card bg-white text-black p-2 text-center shadow-sm">
-                          <div className="d-flex justify-content-between align-items-center mb-1">
-                            <div className="d-flex align-items-center">
-                              <i className="fas fa-baseball-bat-ball fa-1x text-warning me-1"></i>
-                              <p className="mb-0 fw-bold">{match.sport}</p>
-                            </div>
-                            <p className="text-muted small mb-0">Starts: {match.startDate} - {match.startTime}</p>
-                          </div>
+                <div className="row p-2">
+  {filteredMatches.map((match) => (
+    <div key={match.id} className="col-lg-4 col-md-6 col-12 mb-3" data-status={match.status}>
+      <div className="card bg-white text-black p-2 text-center shadow-sm h-card d-flex flex-column">
+        
+        {/* Top Section */}
+        <div>
+          <div className="d-flex justify-content-between align-items-center mb-1">
+            <div className="d-flex align-items-center">
+              <i className="fas fa-baseball-bat-ball fa-1x text-warning me-1"></i>
+              <p className="mb-0 fw-bold">{match.sport}</p>
+            </div>
+            <p className="text-muted small mb-0">Starts: {match.startDate} - {match.startTime}</p>
+          </div>
+        </div>
 
-                          <div className="row align-items-center">
-                            <div className="col-4 text-center">
-                              <img src={match.imageUrl} alt="League Logo" className="img-fluid" style={{ maxWidth: "70px" }} />
-                            </div>
-                            <div className="col-4 text-center">
-                              <p className="fw-bold mb-1">{match.teams}</p>
-                              <span className={`badge ${
-                                match.status === "available" ? "bg-success text-black" :
-                                match.status === "booked" ? "bg-danger text-black" :
-                                match.status === "live" ? "bg-danger text-black" :
-                                "bg-warning text-black"}`}>
-                                {match.status === "available" ? "Available" :
-                                match.status === "booked" ? "Booked" :
-                                match.status === "live" ? "Live" :
-                                "Pending"}
-                              </span>
-                            </div>
-                            <div className="col-4 text-center">
-                              <p className="mb-0 text-danger fw-bold">Bid <br /><span className="text-black">${match.bidAmount}</span></p>
-                            </div>
-                          </div>
+        {/* Main Content (Centers Everything) */}
+        <div className="flex-grow-1 d-flex flex-column justify-content-center">
+          <div className="row align-items-center">
+            <div className="col-4 text-center">
+              <img src={match.imageUrl} alt="League Logo" className="img-fluid" style={{ maxWidth: "70px" }} />
+            </div>
+            <div className="col-4 text-center">
+              <p className="fw-bold mb-1">{match.teams}</p>
+              <span className={`badge ${
+                match.status === "available" ? "bg-success text-black" :
+                match.status === "booked" ? "bg-danger text-black" :
+                match.status === "live" ? "bg-danger text-black" :
+                "bg-warning text-black"}`}>
+                {match.status === "available" ? "Available" :
+                match.status === "booked" ? "Booked" :
+                match.status === "live" ? "Live" :
+                "Pending"}
+              </span>
+            </div>
+            <div className="col-4 text-center">
+              <p className="mb-0 text-danger fw-bold">Bid <br /><span className="text-black">${match.bidAmount}</span></p>
+            </div>
+          </div>
+        </div>
 
-                          {match.status === "available" && (
-                            <div className="card-footer bg-light mt-1">
-                              <button className="btn btn-request " onClick={() => alert("Request Sent!")}>Request</button>
-                            </div>
-                          )}
+        {/* Footer Section (Bottom Alignment) */}
+        {match.status === "available" && (
+          <div className=" mt-1">
+            <button className="btn btn-request R-button " onClick={() => alert("Request Sent!")}>Request</button>
+          </div>
+        )}
 
-                          {match.status === "live" && (
-                            <div className="mt-2 text-end">
-                              
-                                <a href="/scoreboard" className="  btn   text-decoration-none">Score</a>
-                              
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
+        {match.status === "live" && (
+          <div className="mt-2 text-end">
+            <a href="/scoreboard" className="btn text-decoration-none">Score</a>
+          </div>
+        )}
+
+      </div>
+    </div>
+  ))}
+</div>
+
                 </div>
               </div>
             </div>

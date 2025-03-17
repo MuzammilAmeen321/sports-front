@@ -59,20 +59,21 @@ const Navbar=()=> {
           <div className="ms-auto">
             {user ? (
               <div className="dropdown">
-                <button className="btn" id="navbarDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                  <img
-                    src={profile}
-                    className="rounded-circle border border-secondary"
-                    alt="User Avatar"
-                    width="40"
-                    height="40"
-                    style={{ objectFit: "cover", cursor: "pointer" }}
-                    onError={(e) => {
-                      e.target.src = defaultImage; // Reset to default if broken
-                      setProfile(defaultImage);
-                    }}
-                  />
-                </button>
+              <button className="btn p-0 border-0 shadow-none bg-transparent" id="navbarDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+  <img
+    src={profile}
+    className="rounded-circle border border-secondary"
+    alt="User Avatar"
+    width="40"
+    height="40"
+    style={{ objectFit: "cover", cursor: "pointer" }}
+    onError={(e) => {
+      e.target.src = defaultImage; // Reset to default if broken
+      setProfile(defaultImage);
+    }}
+  />
+</button>
+
                 <ul className="dropdown-menu dropdown-menu-end bg-dark border border-warning">
                   <li>
                     <a className="dropdown-item text-warning d-flex align-items-center" href="#" onClick={() => setModalView("profile")}>
