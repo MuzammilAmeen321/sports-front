@@ -29,28 +29,27 @@ export default function ProfileUpdateModal({ onClose, view }) {
         const response = await axios.get(`${API_URL}/user-profile`, {
           headers: { Authorization: `Bearer ${token}` },
         });
-  
+
         console.log("User Profile Response:", response.data); // Debugging
-  
+
+        // Map API response to user state
         setUser({
           name: response.data.username || "",
           email: response.data.email || "",
           phone: response.data.phone || "",
           clubName: response.data.club_name || "",
           sponsorName: response.data.sponsor_name || "",
-          avatar: response.data.profile_picture 
-            ? `https://matc.matchdada.com/public/storage/${response.data.profile_picture}` 
-            : null, // Ensure correct path
+          avatar: response.data.profile_picture
+            ? `https://matc.matchdada.com/storage/app/public/${response.data.profile_picture}`
+            : null, // Correct path to the image
         });
       } catch (error) {
         console.error("Failed to fetch user profile:", error);
       }
     };
-  
+
     fetchUserProfile();
   }, []);
-  
-  
 
   // Handle file upload
   const handleImageChange = (event) => {
@@ -70,58 +69,56 @@ export default function ProfileUpdateModal({ onClose, view }) {
     setMessage("");
 
     try {
-        const token = localStorage.getItem("authToken");
-        const response = await axios.post(
-            `${API_URL}/update-profile`,
-            {
-                username: user.name,
-                email: user.email,
-                phone: user.phone,
-                club_name: user.clubName,
-                sponsor_name: user.sponsorName,
-                avatar: user.avatar || null, 
-            },
-            {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                    "Content-Type": "application/json",
-                },
-            }
-        );
-
-        setMessage(response.data.message);
-
-        // Update the user object with the new data
-        const updatedUser = {
-            ...user,
-            name: response.data.username,
-            email: response.data.email,
-            phone: response.data.phone,
-            clubName: response.data.club_name,
-            sponsorName: response.data.sponsor_name,
-            avatar: response.data.profile_picture 
-                ? `http://127.0.0.1:8000/storage/${response.data.profile_picture}`
-                : user.avatar,
-        };
-
-        // Update state
-        setUser(updatedUser);
-
-        // Store updated user in localStorage
-        localStorage.setItem("user", JSON.stringify(updatedUser));
-
-        // Trigger parent update if needed
-        if (typeof onProfileUpdate === "function") {
-            onProfileUpdate(updatedUser);
+      const token = localStorage.getItem("authToken");
+      const response = await axios.post(
+        `${API_URL}/update-profile`,
+        {
+          username: user.name,
+          email: user.email,
+          phone: user.phone,
+          club_name: user.clubName,
+          sponsor_name: user.sponsorName,
+          avatar: user.avatar || null,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
         }
+      );
 
+      setMessage(response.data.message);
+
+      // Update the user object with the new data
+      const updatedUser = {
+        ...user,
+        name: response.data.username,
+        email: response.data.email,
+        phone: response.data.phone,
+        clubName: response.data.club_name,
+        sponsorName: response.data.sponsor_name,
+        avatar: response.data.profile_picture
+          ? `https://matc.matchdada.com/storage/app/public/${response.data.profile_picture}`
+          : user.avatar,
+      };
+
+      // Update state
+      setUser(updatedUser);
+
+      // Store updated user in localStorage
+      localStorage.setItem("user", JSON.stringify(updatedUser));
+
+      // Trigger parent update if needed
+      if (typeof onProfileUpdate === "function") {
+        onProfileUpdate(updatedUser);
+      }
     } catch (error) {
-        setMessage(error.response?.data?.message || "Failed to update profile");
+      setMessage(error.response?.data?.message || "Failed to update profile");
     }
 
     setLoading(false);
-};
-
+  };
 
   // Handle password update submission
   const handlePasswordUpdate = async () => {
@@ -131,7 +128,7 @@ export default function ProfileUpdateModal({ onClose, view }) {
     try {
       const token = localStorage.getItem("authToken");
       const response = await axios.post(
-        "http://127.0.0.1:8000/api/update-password",
+        `${API_URL}/update-password`,
         {
           oldPassword: passwords.oldPassword,
           newPassword: passwords.newPassword,
@@ -166,7 +163,7 @@ export default function ProfileUpdateModal({ onClose, view }) {
 
           <div className="modal-body text-center">
             {message && <div className="alert alert-info">{message}</div>}
-            
+
             {modalView === "profile" ? (
               <>
                 <div className="position-relative d-inline-block">

@@ -19,12 +19,12 @@ const MyTeamMembers = () => {
     setPopup({ show: true, message, type });
     setTimeout(() => setPopup({ show: false, message: "", type: "" }), 3000);
   };
-
+  const API_URL = "https://matc.matchdada.com/public/api"; // Correct API URL
   useEffect(() => {
     const fetchPlayers = async () => {
       try {
         const token = localStorage.getItem("authToken");
-        const response = await axios.get(`http://127.0.0.1:8000/api/teams/${id}/players`, { headers: { Authorization: `Bearer ${token}` } });
+        const response = await axios.get(`${API_URL}/teams/${id}/players`, { headers: { Authorization: `Bearer ${token}` } });
         setPlayers(response.data);
       } catch (err) {
         console.error("Failed to fetch players:", err);
@@ -42,7 +42,7 @@ const MyTeamMembers = () => {
         setModalLoading(true);
         try {
           const token = localStorage.getItem("authToken");
-          const response = await axios.get(`http://127.0.0.1:8000/api/all-users`, { headers: { Authorization: `Bearer ${token}` }, params: { search: searchQuery } });
+          const response = await axios.get(`${API_URL}/all-users`, { headers: { Authorization: `Bearer ${token}` }, params: { search: searchQuery } });
           setTopUsers(response.data);
         } catch (err) {
           console.error("Failed to fetch All players:", err);
@@ -65,7 +65,7 @@ const MyTeamMembers = () => {
     try {
       const token = localStorage.getItem("authToken");
       const response = await axios.post(
-        `http://127.0.0.1:8000/api/add-user-to-team`,
+        `${API_URL}/add-user-to-team`,
         { userId: user.id, teamId: id }, // Ensure the payload matches the API expectation
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -73,7 +73,7 @@ const MyTeamMembers = () => {
       setIsModalOpen(false);
       
       // Refresh the players list
-      const updatedPlayers = await axios.get(`http://127.0.0.1:8000/api/teams/${id}/players`, {
+      const updatedPlayers = await axios.get(`${API_URL}/teams/${id}/players`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setPlayers(updatedPlayers.data);
@@ -88,7 +88,7 @@ const MyTeamMembers = () => {
   const handleDeletePlayer = async (playerId) => {
     try {
       const token = localStorage.getItem("authToken");
-      const response = await axios.delete(`http://127.0.0.1:8000/api/teams/${id}/players/${playerId}`, { headers: { Authorization: `Bearer ${token}` } });
+      const response = await axios.delete(`${API_URL}/teams/${id}/players/${playerId}`, { headers: { Authorization: `Bearer ${token}` } });
       showPopup(response.data.message, "success");
       setPlayers(players.filter(player => player.id !== playerId)); // Remove player from the list
     } catch (err) {
@@ -123,7 +123,7 @@ const MyTeamMembers = () => {
             <tbody>
               {players.map((player, index) => (
                 <tr key={index}>
-                  <td><ProfileImage src={player.profile_picture ? `http://127.0.0.1:8000/storage/${player.profile_picture}` : "https://via.placeholder.com/150"} alt={player.username} /></td>
+                  <td><ProfileImage src={player.profile_picture ? `https://matc.matchdada.com/storage/app/public/${player.profile_picture}` : "https://via.placeholder.com/150"} alt={player.username} /></td>
                   <td>{player.username}</td>
                   <td>{player.role}</td>
                   <td>{player.player_code}</td>
@@ -154,7 +154,7 @@ const MyTeamMembers = () => {
               <UserList>
                 {filteredUsers.map((user) => (
                   <UserItem key={user.id} onClick={() => handleAddUser(user)}>
-                    <img src={`http://127.0.0.1:8000/storage/${user.profile_picture}`} alt={user.username} />
+                    <img src={`https://matc.matchdada.com/storage/app/public/${user.profile_picture}`} alt={user.username} />
                     <div>
                       <h4>{user.username}</h4>
                       <p><strong>Player Code:</strong> {user.player_code}</p>

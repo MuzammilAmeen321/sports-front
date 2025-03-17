@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import ProfileUpdateModal from "../Edit_profile";
 import logo from '../../assets/images/logo512.png';
+const API_URL = "https://matc.matchdada.com/public/api"; // Correct API URL
 const Navbar=()=> {
   const navigate = useNavigate();
   const [modalView, setModalView] = useState(null);
@@ -19,8 +20,8 @@ const Navbar=()=> {
         setUser(parsedUser);
 
         if (parsedUser.profile_picture) {
-          console.log(`http://127.0.0.1:8000/storage/${parsedUser.profile_picture}`);
-          setProfile(`http://127.0.0.1:8000/storage/${parsedUser.profile_picture}`);
+          console.log(`https://matc.matchdada.com/storage/${parsedUser.profile_picture}`);
+          setProfile(`https://matc.matchdada.com/storage/${parsedUser.profile_picture}`);
         } else {
           setProfile(defaultImage);
         }
