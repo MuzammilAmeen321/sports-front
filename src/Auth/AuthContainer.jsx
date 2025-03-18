@@ -13,7 +13,7 @@ const AuthContainer = () => {
   return (
     <div className="login-box d-flex justify-content-center align-items-center">
       <div className="auth-container">
-        <h1 className="auth-title">GAME PORTAL</h1>
+        <h1 className="auth-title">MATCH DADA</h1>
         {isLoginFormVisible ? (
           <Login toggleForms={toggleForms} />
         ) : (

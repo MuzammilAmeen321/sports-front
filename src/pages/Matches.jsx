@@ -12,6 +12,7 @@ const AllMatches = () => {
     icon: "fa-bars",
   });
 
+
   const [matchType, setMatchType] = useState("all");
   const categories = [
     { name: "Football", icon: "fa-futbol" },
@@ -36,7 +37,7 @@ const AllMatches = () => {
 
   return (
     <>
-     <Navbar />
+     {location.pathname !== "/" && <Navbar />}
      
       <div className="container m-auto">
         <div className="row">
@@ -54,6 +55,17 @@ const AllMatches = () => {
   
     <i className="fas fa-search"></i>
   
+    <select
+     className="form-select ms-2"
+     style={{ width: "auto" }}
+     value={matchType}
+     onChange={(e) => setMatchType(e.target.value)}
+   >
+     <option value="all">All Matches</option>
+     <option value="available">Available</option>
+     <option value="booked">Booked</option>
+     <option value="pending">Pending</option>
+   </select>
 </div>
 
 
@@ -84,17 +96,6 @@ const AllMatches = () => {
     <button className="btn   min-w-[140px] mx-2"  data-bs-toggle="modal" data-bs-target="#createMatchModal">
    Matches </button>
    
-   <select
-     className="form-select ms-2"
-     style={{ width: "auto" }}
-     value={matchType}
-     onChange={(e) => setMatchType(e.target.value)}
-   >
-     <option value="all">All Matches</option>
-     <option value="available">Available</option>
-     <option value="booked">Booked</option>
-     <option value="pending">Pending</option>
-   </select>
    </div>
   
  </div>
@@ -110,10 +111,10 @@ const AllMatches = () => {
 </header>
 
 
-<div className="container m-auto">
+<div className="container m-auto ">
   <div className="row">
     <div className="col-12">
-      <div className="row p-2">
+      <div className="row p-2 cards-container">
         {filteredMatches.map((match) => (
           <div key={match.id} className="col-lg-4 col-md-6 col-12 mb-3">
             <div className="card bg-white text-black p-2 text-center shadow-sm h-100">

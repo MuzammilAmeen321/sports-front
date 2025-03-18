@@ -22,9 +22,9 @@ const VerticalNav = () => {
         <img src={contact} alt="Contact" className="nav-icon" />
         <span className="nav-text">Contact</span>
       </a>
-      <a href="/my-teams" className="nav-item">
+      <a href="/all-teams" className="nav-item">
         <img src={team} alt="Team" className="nav-icon" />
-        <span className="nav-text">Team</span>
+        <span className="nav-text">All Teams</span>
       </a>
     </nav>
   );

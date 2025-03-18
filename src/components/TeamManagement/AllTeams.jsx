@@ -3,7 +3,10 @@ import axios from "axios";
 import Navbar from "../Header/header";
 import "./teamManagement.css";
 import { Link } from "react-router-dom";
-const TeamManagement = () => {
+import VerticleNav from "../verticleNav"; 
+
+
+const AllTeams = () => {
     const [search, setSearch] = useState("");
     const [teams, setTeams] = useState([]);
     const [selectedTeam, setSelectedTeam] = useState(null);
@@ -166,8 +169,9 @@ const closeModal = () => {
     return (
         <div className="container-xl">
             <Navbar />
+            <VerticleNav />
             <div className="table-responsive">
-                <div className="table-wrapper">
+                <div className="table-wrapper ">
                     <div className="table-title">
                         <div className="row">
                             <div className="col-sm-8">
@@ -181,7 +185,7 @@ const closeModal = () => {
                             </div>
                         </div>
                     </div>
-                    <table className="table table-striped table-hover table-bordered">
+                    <table className="table table-striped table-hover table-bordered ">
                         <thead>
                             <tr>
                                 <th>#</th>
@@ -210,11 +214,9 @@ const closeModal = () => {
                                         <td>{team.city}</td>
                                         <td>{team.pin}</td>
                                         <td>
-                                            <Link to={`/team-members/${team.user_id}`} className="view users" title="team-members">
+                                            <Link to={`/team-members/${team.user_id}`} className="view users d-flex text-align-center justify-content-center" title="team-members">
                                                 <i className="fas fa-users me-2"></i>
                                             </Link>
-                                            <a href="#" className="edit" title="Edit" onClick={() => openEditModal(team)}><i className="fas fa-edit"></i></a>
-                                            <a href="#" className="delete" title="Delete" onClick={() => handleDelete(team.id)}><i className="fas fa-trash"></i></a>
                                         </td>
                                     </tr>
                                 ))
@@ -288,4 +290,4 @@ const closeModal = () => {
     );
 };
 
-export default TeamManagement;
+export default AllTeams;

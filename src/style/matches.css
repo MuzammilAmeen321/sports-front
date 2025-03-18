@@ -6,6 +6,9 @@
     flex-direction: column; /* موبائل پر نیچے لے کر آنے کے لیے */
     align-items: center;
   }
+  .cards-container{
+    margin-bottom: 100px;
+  }
 
   /* ✅ تمام بٹنز کو ایک لائن میں رکھیں */
   .s-box > *:not(.search-box) {
@@ -53,6 +56,6 @@
   }
   .all-button{
     width: 50%;
-    margin-left: 32px;
+    margin-left: 8px;
   }
 }

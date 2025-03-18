@@ -50,6 +50,11 @@ body.light-theme {
     }
    
 }
+@media (max-width: 768px) { 
+  .nav-ul {
+    margin-left: 60px; /* Mobile view ke liye */
+  }
+}
 
  /* modal theme */
  .modal-content {

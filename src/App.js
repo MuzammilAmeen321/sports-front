@@ -9,8 +9,9 @@ import ProfileUpdateModal from './components/Edit_profile';
 import MatchesManagement from './pages/Matches';
 import Scoreboard from './components/scoreboard/ScoreBoard';
 import Live from './components/Header/navbarComponent/Live';
-import TeamManagement from './components/TeamManagement/TeamCrud';
+import TeamManagement from './components/TeamManagement/AllTeams';
 import UpCommingMatches from './components/Header/navbarComponent/Upcoming';
+import AllTeams from './components/TeamManagement/AllTeams';
 function App() {
   const [lastActivity, setLastActivity] = useState(localStorage.getItem('lastActivity') || Date.now());
 
@@ -61,7 +62,7 @@ function App() {
           <Route path="/upcoming" element={<ProtectedRoute><UpCommingMatches /></ProtectedRoute>} />
           <Route path="/team-members/:id" element={<ProtectedRoute><MyTeamMembers /></ProtectedRoute>} />
           <Route path="/my-teams" element={<ProtectedRoute><TeamManagement /></ProtectedRoute>} /> 
-          
+          <Route path="/all-teams" element={<ProtectedRoute><AllTeams /></ProtectedRoute>} /> 
         </Routes>
       </div>
     </Router>
