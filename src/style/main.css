@@ -33,15 +33,15 @@ body.light-theme {
 
 /* horizental nav */
 .navbar{
-    border-bottom: 1px groove var(--neon-yellow);
+    border-bottom: 3px groove var(--neon-yellow);
     margin-bottom: 20px;
     color: var(--neon-yellow);
 }
 /* Default styles */
 .icon-link i {
   transition: text-shadow 0.4s ease-in-out;
+  color: #003400;
 }
-
 /* Glow effect on hover */
 .icon-link:hover i {
   text-shadow: 0 0 15px rgba(0, 255, 0, 0.8); /* Green glow effect */
@@ -64,13 +64,11 @@ body.light-theme {
     margin-left: 60px; /* Mobile view ke liye */
   }
   .icon-container {
-    gap: 0.5rem !important; /* Reduce gap between icons */
-    margin-left: 25px !important; 
+    gap: 5 !important; /* Reduce gap between icons */
+   
   }
 
-  .icon-link i {
-    font-size: 1.4rem !important; /* Decrease icon size for mobile */
-  }
+  
 }
 
  /* modal theme */
@@ -89,5 +87,8 @@ body.light-theme {
     margin-left: 115px;
 
 }
-
+.logo{
+  position: relative;
+  top: 40px;
+}
   

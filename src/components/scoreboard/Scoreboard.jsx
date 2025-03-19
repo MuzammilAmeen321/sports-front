@@ -1,17 +1,15 @@
 import React from "react";
 import "./Scoreboard.css";
 import Navbar from "../Header/header";
-import CricketScoreboard from "./CricketScoreboard";
 
 
 const Scoreboard = () => {
   return (
     <>
     <Navbar />
-    <div className="col-8">
-    <div className="container">
+    <div className="score-wrapper">
       <header>
-        <div className="match-info">
+        <div className="match-info text-center">
           <p>Agra District Women's League / League Matches</p>
           <p>Kachibagh, Shriankota, Limited Overs, 20 Ov, 18-Mar-25 11:53 AM</p>
           <p>Toss: Agra Royals opt to bat</p>
@@ -30,7 +28,6 @@ const Scoreboard = () => {
       <div className="tabs">
         <button className="tab active">LIVE</button>
         <button className="tab">SCORECARD</button>
-        <button className="tab">COMMENTARY</button>
         <button className="tab">TEAMS</button>
       </div>
 
@@ -213,8 +210,6 @@ const Scoreboard = () => {
         </div>
       </div>
     </div>
-    </div>
-    <CricketScoreboard />
     </>
   );
 };

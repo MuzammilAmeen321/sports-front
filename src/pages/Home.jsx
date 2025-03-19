@@ -1,12 +1,8 @@
 import React from 'react';
 import Navbar from '../components/Header/header';
-import VerticleNav from '../components/verticleNav';
-import MatchSlider from '../components/Header/headerSlider';
-import SlideShow from '../components/match-series-slider/SeriesSlider';
 import AllMatches from './Matches';
 import '../style/main.css';
-import CricketScoreboard from '../components/scoreboard/CricketScoreboard';
-import Scoreboard from '../components/scoreboard/Scoreboard';
+import FilterButtonWithModal from '../components/models/FilterModel';
 const Home = () => {
     
   return (
@@ -29,7 +25,7 @@ const Home = () => {
             <AllMatches home="home" />
       
     </div>
-    
+    <FilterButtonWithModal />
     </>
     
 

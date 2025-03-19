@@ -3,11 +3,9 @@ import axios from "axios";
 import Navbar from "../Header/header";
 import "./teamManagement.css";
 import { Link } from "react-router-dom";
-import VerticleNav from "../verticleNav"; 
 
 
 const AllTeams = () => {
-    const [search, setSearch] = useState("");
     const [teams, setTeams] = useState([]);
     const [selectedTeam, setSelectedTeam] = useState(null);
     const [isEditMode, setIsEditMode] = useState(false);
@@ -174,7 +172,7 @@ const closeModal = () => {
                     <div className="table-title">
                         <div className="row">
                             <div className="col-sm-8">
-                                <h2>My <b>Teams</b></h2>
+                                <h2>All <b>Teams</b></h2>
                             </div>
                             <div className="col-sm-4">
                                 <button className="text-dark bg-warning p-2 rounded-md min-w-[140px]" onClick={openCreateModal}>

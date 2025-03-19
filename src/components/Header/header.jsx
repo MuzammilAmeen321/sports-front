@@ -57,22 +57,26 @@ const Navbar=()=> {
           <div className="d-flex justify-content-center gap-5 m-auto text-white icon-container">
   {/* Home */}
   <Link to="/" className="text-center text-decoration-none text-white icon-link">
-    <i className="fa fa-home fs-1 text-success"></i>
+    <i className="fa fa-home fs-1 "></i>
   </Link>
 
   {/* Contact */}
   <Link to="/contact-us" className="text-center text-decoration-none text-white icon-link">
-    <i className="fa fa-phone fs-1 text-success"></i>
+    <i className="fa fa-phone fs-1 "></i>
   </Link>
 
-  {/* Matches */}
-  <Link to="/matches" className="text-center text-decoration-none text-white icon-link">
-    <i className="fa fa-futbol fs-1 text-success"></i>
-  </Link>
+  <Link to="/notifications" className="text-center text-decoration-none text-white icon-link position-relative">
+  <i className="fa fa-bell fs-1 "></i>
+  <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+    3 {/* Replace with dynamic count */}
+    <span className="visually-hidden">unread notifications</span>
+  </span>
+</Link>
+
 
   {/* All Teams */}
   <Link to="/all-teams" className="text-center text-decoration-none text-white icon-link">
-    <i className="fa fa-users fs-1 text-success"></i>
+    <i className="fa fa-users fs-1 "></i>
   </Link>
 </div>
           </div>

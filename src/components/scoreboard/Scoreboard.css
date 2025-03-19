@@ -1,3 +1,7 @@
+.score-wrapper{
+    width: 80%;
+    margin: auto;
+}
 .match-info p {
     margin: 5px 0;
     font-size: 14px;
