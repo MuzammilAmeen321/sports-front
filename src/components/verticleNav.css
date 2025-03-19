@@ -80,4 +80,8 @@
         flex-grow: 1;
         flex-direction: column;
     }
+    .nav-icon{
+      gap: 2;
+      font-size: small;
+    }
   }

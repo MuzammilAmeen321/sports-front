@@ -175,7 +175,6 @@ const AllMatches = () => {
 </div>
           </div>
         </div>
-        <VerticleNav />
       </div>
     </>
   );

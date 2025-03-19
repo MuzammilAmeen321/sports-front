@@ -169,7 +169,6 @@ const closeModal = () => {
     return (
         <div className="container-xl">
             <Navbar />
-            <VerticleNav />
             <div className="table-responsive">
                 <div className="table-wrapper ">
                     <div className="table-title">

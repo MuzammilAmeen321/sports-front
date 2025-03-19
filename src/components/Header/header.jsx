@@ -2,7 +2,10 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import ProfileUpdateModal from "../Edit_profile";
 import logo from '../../assets/images/logo512.png';
+import { Link } from "react-router-dom"; // ✅ Add this line
+
 const API_URL = "https://matc.matchdada.com/public/api"; // Correct API URL
+
 const Navbar=()=> {
   const navigate = useNavigate();
   const [modalView, setModalView] = useState(null);
@@ -51,10 +54,27 @@ const Navbar=()=> {
           <a className="navbar-brand logo " href="/"><img src={logo} alt="logo"/></a>
 
           <div className="mx-auto header-menu">
-            <ul className="navbar-nav d-flex flex-row gap-3 nav-ul ">
-              <li className="nav-item"><a className="nav-link " href="/live">Live</a></li>
-              <li className="nav-item"><a className="nav-link " href="/upcoming">Upcoming</a></li>
-            </ul>
+          <div className="d-flex justify-content-center gap-5 m-auto text-white icon-container">
+  {/* Home */}
+  <Link to="/" className="text-center text-decoration-none text-white icon-link">
+    <i className="fa fa-home fs-1 text-success"></i>
+  </Link>
+
+  {/* Contact */}
+  <Link to="/contact-us" className="text-center text-decoration-none text-white icon-link">
+    <i className="fa fa-phone fs-1 text-success"></i>
+  </Link>
+
+  {/* Matches */}
+  <Link to="/matches" className="text-center text-decoration-none text-white icon-link">
+    <i className="fa fa-futbol fs-1 text-success"></i>
+  </Link>
+
+  {/* All Teams */}
+  <Link to="/all-teams" className="text-center text-decoration-none text-white icon-link">
+    <i className="fa fa-users fs-1 text-success"></i>
+  </Link>
+</div>
           </div>
 
           <div className="ms-auto">

@@ -1,0 +1,45 @@
+
+.scoreboard p {
+    font-size: 20px;
+    margin: 8px 0;
+    color: #333;
+}
+
+#controls {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+}
+
+#controls button, 
+#controls select {
+    padding: 10px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #6a994e;
+    color: #fff;
+    transition: background-color 0.2s ease-in-out;
+    text-align: center;
+}
+
+#no_ball {
+    background-color: #ff0000;
+}
+
+#no_ball:hover {
+    background-color: #cc0000;
+}
+
+#controls button:hover, 
+#controls select:hover {
+    background-color: #386641;
+}
+
+/* 🟢 Mobile Friendly Design */
+@media (max-width: 480px) {
+    #controls {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}

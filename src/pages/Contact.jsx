@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import "../style/contactUs.css"; // Import the CSS file
-import VerticalNav from "../components/verticleNav";
 import axios from "axios";
 import Navbar from "../components/Header/header";
 const API_URL = "https://matc.matchdada.com/public/api";
@@ -142,7 +141,6 @@ const ContactUs = () => {
           </div>
         </div>
       </section>
-      <VerticalNav />
     </div>
   );
 };

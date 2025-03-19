@@ -37,6 +37,15 @@ body.light-theme {
     margin-bottom: 20px;
     color: var(--neon-yellow);
 }
+/* Default styles */
+.icon-link i {
+  transition: text-shadow 0.4s ease-in-out;
+}
+
+/* Glow effect on hover */
+.icon-link:hover i {
+  text-shadow: 0 0 15px rgba(0, 255, 0, 0.8); /* Green glow effect */
+}
 
   
 @media (max-width: 950px) {
@@ -53,6 +62,14 @@ body.light-theme {
 @media (max-width: 768px) { 
   .nav-ul {
     margin-left: 60px; /* Mobile view ke liye */
+  }
+  .icon-container {
+    gap: 0.5rem !important; /* Reduce gap between icons */
+    margin-left: 25px !important; 
+  }
+
+  .icon-link i {
+    font-size: 1.4rem !important; /* Decrease icon size for mobile */
   }
 }
 

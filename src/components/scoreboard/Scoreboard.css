@@ -1,0 +1,94 @@
+.match-info p {
+    margin: 5px 0;
+    font-size: 14px;
+    color: #33691e;
+}
+
+.live-indicator {
+    background-color: #4caf50;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+.score-section {
+    text-align: center;
+    padding: 20px 0;
+}
+
+.score-section h1 {
+    font-size: 24px;
+    margin: 0;
+    color: #2e7d32;
+}
+
+.score-section h2 {
+    font-size: 36px;
+    margin: 5px 0;
+    color: #388e3c;
+}
+
+.score-section p {
+    font-size: 16px;
+    color: #33691e;
+}
+
+.tabs {
+    display: flex;
+    justify-content: space-around;
+    border-bottom: 2px solid #4caf50;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+.tab {
+    background: none;
+    border: none;
+    padding: 10px;
+    font-size: 16px;
+    cursor: pointer;
+    color: #33691e;
+}
+
+.tab.active {
+    color: #2e7d32;
+    border-bottom: 2px solid #2e7d32;
+}
+
+.stats h3 {
+    font-size: 18px;
+    margin: 20px 0 10px;
+    color: #2e7d32;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+table th, table td {
+    padding: 10px;
+    text-align: center;
+    border-bottom: 1px solid #a5d6a7;
+    color: #1b5e20;
+}
+
+table th {
+    background-color: #c8e6c9;
+    font-weight: bold;
+}
+
+.balls {
+    display: flex;
+    gap: 5px;
+}
+
+.balls span {
+    background-color: #a5d6a7;
+    padding: 5px 10px;
+    border-radius: 50%;
+    font-size: 14px;
+    color: #1b5e20;
+}

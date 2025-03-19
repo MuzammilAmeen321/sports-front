@@ -100,8 +100,9 @@ const MyTeamMembers = () => {
   if (error) return <div>Error: {error}</div>;
 
   return (
+    <>
+    <Navbar />
     <StyledWrapper>
-      <Navbar />
       <div className="container m-auto p-3">
         <div className="d-flex justify-content-end mb-3">
           <button className="btn btn-warning me-2" onClick={() => setIsModalOpen(true)}>Add New Member</button>
@@ -175,6 +176,7 @@ const MyTeamMembers = () => {
         </Popup>
       )}
     </StyledWrapper>
+    </>
   );
 };
 
