@@ -10,6 +10,7 @@ import MatchesManagement from './pages/Matches';
 import Scoreboard from './components/scoreboard/Scoreboard';
 import MyTeams from './components/TeamManagement/MyTeams'; 
 import AllTeams from './components/TeamManagement/AllTeams'; 
+
 function App() {
   const [lastActivity, setLastActivity] = useState(localStorage.getItem('lastActivity') || Date.now());
 
@@ -59,6 +60,7 @@ function App() {
           <Route path="/my-teams" element={<ProtectedRoute><MyTeams /></ProtectedRoute>} /> 
           <Route path="/all-teams" element={<ProtectedRoute><AllTeams /></ProtectedRoute>} /> 
           <Route path="/scoreboard" element={<Scoreboard />} />
+         
         </Routes>
       </div>
     </Router>

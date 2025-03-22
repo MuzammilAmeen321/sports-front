@@ -9,6 +9,7 @@ const CreateMatchModal = () => {
   const [matchDatetime, setMatchDatetime] = useState('');
   const [ballType, setBallType] = useState('tape');
   const [venue, setVenue] = useState('');
+  const [match_status, setMatch_status] = useState('available');
   const [overs, setOvers] = useState('');
   const [city, setCity] = useState('');
   const [province, setProvince] = useState('');
@@ -66,6 +67,7 @@ const CreateMatchModal = () => {
       match_datetime: matchDatetime,
       ball_type: ballType,
       venue,
+      match_status:match_status,
       overs,
       join_code: joinCode, // Include join code in the match data
       city,

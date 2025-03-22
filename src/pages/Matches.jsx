@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import VerticleNav from "../components/verticleNav";
 import Navbar from "../components/Header/header";
 import axios from "axios";
@@ -6,15 +6,37 @@ import "../style/matches.css";
 import LocationModal from "../components/models/LocationModel";
 import CreateMatchModal from "../components/models/createNewMatch";
 
+const API_URL = "https://matc.matchdada.com/public/api"; // Correct API URL
+
 const AllMatches = () => {
   const [matchType, setMatchType] = useState("all");
+  const [matches, setMatches] = useState([]);
+  const [toast, setToast] = useState({ show: false, message: "", type: "" });
+  /* const [security , setSecurity] = useState(0); */
 
-  const matches = [
-    { id: 1, sport: "Cricket", startDate: "07 Jun 2025", startTime: "05:00 PM", imageUrl: "https://seeklogo.com/images/P/pakistan-super-league-psl-logo-7CA605C19A-seeklogo.com.png", league: "PSL", bidAmount: 5000, security: true, status: "available" },
-    { id: 2, sport: "Cricket", startDate: "10 Jun 2025", startTime: "07:00 PM", imageUrl: "https://seeklogo.com/images/P/pakistan-super-league-psl-logo-7CA605C19A-seeklogo.com.png", teams: "Pak vs Ind", league: "PSL", bidAmount: 5000, security: true, status: "booked" },
-    { id: 3, sport: "Cricket", startDate: "15 Jun 2025", startTime: "06:30 PM", imageUrl: "https://seeklogo.com/images/P/pakistan-super-league-psl-logo-7CA605C19A-seeklogo.com.png", league: "IPL", bidAmount: 6000, security: false, status: "pending" },
-    { id: 4, sport: "Cricket", startDate: "07 Jun 2025", startTime: "05:00 PM", imageUrl: "https://seeklogo.com/images/P/pakistan-super-league-psl-logo-7CA605C19A-seeklogo.com.png", teams: "Pak vs Ind", league: "PSL", bidAmount: 5000, security: true, status: "live" },
-  ];
+ 
+  useEffect(() => {
+    const fetchMatches = async () => {
+      const token = localStorage.getItem("authToken");
+      if (!token) {
+        console.error("No auth token found.");
+        setToast({ show: true, message: "No authentication token found. Please log in.", type: "error" });
+        return;
+      }
+
+      try {
+        const response = await axios.get(`${API_URL}/matches`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setMatches(response.data);
+        console.log(response.data);
+      } catch (error) {
+        console.error("Error fetching matches:", error);
+      }
+    };
+
+    fetchMatches();
+  }, []);
 
   const filteredMatches = matchType === "all" ? matches : matches.filter(match => match.status === matchType);
 
@@ -24,16 +46,13 @@ const AllMatches = () => {
       <div className="container m-auto">
         <div className="row">
           <div className="col-12">
-            {/* Simplified Header */}
             <header className="header d-flex justify-content-center align-items-center p-4">
-              {/* Create New Match Button */}
               <button className="btn min-w-[140px] mx-2" data-bs-toggle="modal" data-bs-target="#createMatchModal">
                 Matches
               </button>
             </header>
-            
+            <CreateMatchModal />
 
-            {/* Matches List */}
             <div className="container m-auto">
               <div className="row">
                 <div className="col-12">
@@ -44,14 +63,17 @@ const AllMatches = () => {
                           <div className="d-flex justify-content-between align-items-center mb-1">
                             <div className="d-flex align-items-center">
                               <i className="fas fa-baseball-bat-ball fa-1x text-warning me-1"></i>
-                              <p className="mb-0 fw-bold">{match.sport}</p>
+                              <p className="mb-0 fw-bold">{match.category}</p>
                             </div>
-                            <p className="text-muted small mb-0">Starts: {match.startDate} - {match.startTime}</p>
+                            <p className="text-muted small mb-0">Starts: {match.match_datetime}</p>
                           </div>
 
                           <div className="row align-items-center">
                             <div className="col-4 text-center">
-                              <img src={match.imageUrl} alt="League Logo" className="img-fluid" style={{ maxWidth: "70px" }} />
+                            <p className="mb-0 text-danger fw-bold">
+    Overs <br />
+    <span className="text-black">{match.overs}</span>
+  </p>
                             </div>
                             <div className="col-4 text-center">
                               <p className="fw-bold mb-1">{match.teams}</p>
@@ -66,12 +88,26 @@ const AllMatches = () => {
                                 "Pending"}
                               </span>
                             </div>
-                            <div className="col-4 text-center">
-                              <p className="mb-0 text-danger fw-bold">Bid <br /><span className="text-black">${match.bidAmount}</span></p>
-                            </div>
+                            <div className="col-4 text-center d-flex align-items-center justify-content-around">
+  <p className="mb-0 text-danger fw-bold">
+    Bid <br />
+    <span className="text-black">${match.match_bid}</span>
+  </p>
+  <p className="mb-0 text-danger fw-bold">
+    Security <br />
+    <span className="text-black">{match.security === "1" ? `$${match.security_amount ?? "0"}` : "No"}</span>
+  </p>
+</div>
+
+<div className="col-12 text-center">
+  <p className="mb-0  text-danger fw-bold d-flex justify-content-center">
+    Venue:
+    <span className="text-black mx-1">${match.venue}</span>
+  </p>
+ 
+</div>      
                           </div>
 
-                          {/* Buttons based on match status */}
                           <div className="card-footer bg-light mt-1">
                             {match.status === "available" && (
                               <a href="/scoreboard" className="btn btn-score w-100 text-decoration-none">Request</a>
@@ -88,6 +124,7 @@ const AllMatches = () => {
                             {match.status === "live" && (
                               <a href="/scoreboard" className="btn btn-score w-100 text-decoration-none">Score</a>
                             )}
+                            <a href="/scoreboard" className="btn btn-score w-100 text-decoration-none">Request</a>
                           </div>
                         </div>
                       </div>
