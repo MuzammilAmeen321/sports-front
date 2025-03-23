@@ -55,7 +55,7 @@ Route::get('/more-users', [UserController::class, 'fetchMorePlayersToAdd']);
     Route::post('/add-user-to-team', [PlayerController::class, 'addUserToTeam']);
     Route::get('/matches', [MatchController::class, 'index']);
     Route::post('/matches', [MatchController::class, 'store']);
-
+    Route::post('/push-notification', [MatchController::class, 'PushNotification'])->middleware('auth:api');
     Route::get('/scoreboard', [ScoreboardController::class, 'getScoreboardData']);
     Route::post('/contact', [ContactController::class, 'store']);
 
