@@ -101,3 +101,87 @@ background-color: transparent;
   top: 40px;
 }
   
+
+/*  notification designs  */
+/* Toast Styles */
+.toast {
+  padding: 10px 20px;
+  border-radius: 8px;
+  color: white;
+  font-size: 16px;
+  background-color: #f44336; /* Default error color */
+  opacity: 0.9;
+  transition: opacity 0.5s ease;
+}
+
+.toast-success {
+  background-color: #4CAF50;
+}
+
+.toast-error {
+  background-color: #f44336;
+}
+
+.toast-info {
+  background-color: #2196F3;
+}
+
+/* Popup Styling */
+.popup-container {
+  max-width: 600px;
+  width: 100%;
+  height: auto;
+  overflow-y: auto;
+  z-index: 1050;
+}
+
+.popup-header {
+  font-size: 1.25rem;
+  font-weight: bold;
+}
+
+.notification-card {
+  display: flex;
+  align-items: center;
+  padding: 15px;
+  margin-bottom: 10px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  transition: background-color 0.3s ease;
+}
+
+.notification-card:hover {
+  background-color: #f1f1f1;
+}
+
+.notification-logo {
+  border-radius: 50%;
+}
+
+.notification-body h6 {
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.notification-body p {
+  font-size: 0.875rem;
+  color: #555;
+}
+
+.notification-actions .btn {
+  font-size: 0.875rem;
+  width: 100%; /* Buttons take full width */
+  padding: 10px;
+}
+
+.notification-actions .btn-success {
+  background-color: #28a745;
+}
+
+.notification-actions .btn-danger {
+  background-color: #dc3545;
+}
+
+.notification-actions .btn:hover {
+  opacity: 0.9;
+}

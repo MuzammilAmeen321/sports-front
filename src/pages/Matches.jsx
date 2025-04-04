@@ -11,7 +11,6 @@ import CreateMatchModal from "../components/models/createNewMatch";
 const AllMatches = () => {
   const [matchType, setMatchType] = useState("all");
   const [matches, setMatches] = useState([]);
-  const [visibleMatches, setVisibleMatches] = useState(9);
   const [toast, setToast] = useState({ show: false, message: "", type: "" });
   const [currentUser, setCurrentUser] = useState(null);
 
@@ -49,14 +48,12 @@ const AllMatches = () => {
     fetchMatches();
   }, []);
 
-  const loadMoreMatches = () => {
-    setVisibleMatches((prevVisible) => prevVisible + 9);
-  };
 
   const filteredMatches = matchType === "all" ? matches : matches.filter(match => match.status === matchType);
 /* Notificarion update for request sent */
 const handleClick = (status, matchId, userId) => {
   const token = localStorage.getItem("authToken");
+  const storedUser = localStorage.getItem("user");
 
   if (!token) {
     console.error("No auth token found.");
@@ -68,18 +65,33 @@ const handleClick = (status, matchId, userId) => {
     return;
   }
 
+  if (!storedUser) {
+    console.error("No user data found in localStorage.");
+    setToast({
+      show: true,
+      message: "No user data found. Please log in.",
+      type: "error",
+    });
+    return;
+  }
+
+  // Parse user data from localStorage to get sender_id
+  const parsedUser = JSON.parse(storedUser);
+  const senderId = parsedUser.id; // Assuming 'id' is the unique identifier of the current user
+
+  // Prepare data to be sent to the backend
+  const notificationData = {
+    user_id: userId,
+    match_id: matchId,
+    notification: status,
+    sender_id: senderId, // Include sender_id here (from the current authenticated user)
+  };
+  console.log(notificationData);
+  // Send the notification update request
   axios
-    .post(
-      `${API_URL}/push-notification`,
-      {
-        user_id: userId,
-        match_id: matchId,
-        notification: status,
-      },
-      {
-        headers: { Authorization: `Bearer ${token}` },
-      }
-    )
+    .post(`${API_URL}/push-notification`, notificationData, {
+      headers: { Authorization: `Bearer ${token}` },
+    })
     .then((response) => {
       console.log("Notification updated:", response.data);
       setToast({
@@ -98,24 +110,20 @@ const handleClick = (status, matchId, userId) => {
     });
 };
 
+
   return (
     <>
       {location.pathname !== "/" && <Navbar />}
       <div className="container m-auto">
         <div className="row">
           <div className="col-12">
-            <header className="header d-flex justify-content-center align-items-center p-4">
-              <button className="btn min-w-[140px] mx-2" data-bs-toggle="modal" data-bs-target="#createMatchModal">
-                Matches
-              </button>
-            </header>
-            <CreateMatchModal />
+           
 
             <div className="container m-auto">
               <div className="row">
                 <div className="col-12">
                   <div className="row p-2 cards-container">
-                    {filteredMatches.slice(0, visibleMatches).map((match) => (
+                  {filteredMatches.map((match) => (
                       <div key={match.id} className="col-lg-4 col-md-6 col-12 mb-3">
                         <div className="card bg-white text-black p-2 text-center shadow-sm h-100">
                           <div className="d-flex justify-content-between align-items-center mb-1">
@@ -189,16 +197,16 @@ const handleClick = (status, matchId, userId) => {
     ) : (
       <a
         href="#"
-        className="btn btn-score w-100 text-decoration-none"
-        onClick={() => handleClick(true, match.id, match.user_id)}
+        className="btn btn-warning w-100 text-decoration-none"
+        onClick={() => handleClick(false, match.id, match.user_id)}
       >
-        Request
+        Cancel
       </a>
     ))}
 
   {/* For "booked" matches — show "Request" button */}
   {match.match_status === "booked" && (
-    <a href="#" className="btn btn-request w-100 text-decoration-none">
+    <a href="#" className="btn btn-danger w-100 text-decoration-none">
       Details
     </a>
   )}
@@ -215,11 +223,6 @@ const handleClick = (status, matchId, userId) => {
                       </div>
                     ))}
                   </div>
-                  {visibleMatches < filteredMatches.length && (
-                    <div className="text-center mt-3">
-                      <button className=" btn-load-more" onClick={loadMoreMatches}><img src={DownArrow} alt="Arrow" /></button>
-                    </div>
-                  )}
                 </div>
               </div>
             </div>
