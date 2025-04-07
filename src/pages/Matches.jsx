@@ -7,7 +7,6 @@ import "../style/matches.css";
 const AllMatches = ({ searchTerm }) => {
   const [matchType, setMatchType] = useState("all");
   const [matches, setMatches] = useState([]);
-  const [toast, setToast] = useState({ show: false, message: "", type: "" });
   const [currentUser, setCurrentUser] = useState(null);
 
   const API_URL = "https://matc.matchdada.com/public/api"; // Correct API URL
