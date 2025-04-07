@@ -12,7 +12,13 @@ class MatchController extends Controller
         $matches = Matches::all();
         return response()->json($matches);
     }
-
+    public function Index()
+    {
+        $publicMatches = Matches::all();
+        return response()->json([
+            'data' => $publicMatches
+        ]);
+    }
     public function store(Request $request) {
         // Validate Input
         $validated = $request->validate([

@@ -3,8 +3,6 @@ import VerticleNav from "../components/verticleNav";
 import Navbar from "../components/Header/header";
 import axios from "axios";
 import "../style/matches.css";
-import DownArrow from '../assets/icons/downarrow.png';
-import CreateMatchModal from "../components/models/createNewMatch";
 
 
 
@@ -28,23 +26,24 @@ const AllMatches = () => {
   }, []);
   useEffect(() => {
     const fetchMatches = async () => {
-      const token = localStorage.getItem("authToken");
-      if (!token) {
-        console.error("No auth token found.");
-        setToast({ show: true, message: "No authentication token found. Please log in.", type: "error" });
-        return;
-      }
-
       try {
-        const response = await axios.get(`${API_URL}/matches`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        setMatches(response.data);
+        const response = await axios.get(`${API_URL}/matches`);
+        
+        if (response.data.success) {
+          setMatches(response.data.data); // Set matches data
+        } else {
+          throw new Error("Failed to fetch matches");
+        }
       } catch (error) {
         console.error("Error fetching matches:", error);
+        setToast({
+          show: true,
+          message: "Failed to load matches. Please try again later.",
+          type: "error",
+        });
       }
     };
-
+  
     fetchMatches();
   }, []);
 

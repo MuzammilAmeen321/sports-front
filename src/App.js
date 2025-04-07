@@ -52,10 +52,10 @@ function App() {
       <div className="App">
         <Routes>
            <Route path="/login" element={<AuthContainer />} /> 
-          <Route path="/" element={<ProtectedRoute><Home /></ProtectedRoute>} />
+          <Route path="/" element={<Home />} />
           <Route path="/contact-us" element={<ProtectedRoute><ContactUs /></ProtectedRoute>} />
           <Route path="/edit-profile" element={<ProtectedRoute><ProfileUpdateModal /></ProtectedRoute>} />
-          <Route path="/matches" element={<ProtectedRoute><MatchesManagement /></ProtectedRoute>} />
+          <Route path="/matches" element={<MatchesManagement />} />
           <Route path="/team-members/:id" element={<ProtectedRoute><MyTeamMembers /></ProtectedRoute>} />
           <Route path="/my-teams" element={<ProtectedRoute><MyTeams /></ProtectedRoute>} /> 
           <Route path="/all-teams" element={<ProtectedRoute><AllTeams /></ProtectedRoute>} /> 
@@ -76,7 +76,7 @@ const ProtectedRoute = ({ children }) => {
   if (!token || timeSinceLastActivity > 24 * 60 * 60 * 1000) {
     localStorage.removeItem('authToken');
     localStorage.removeItem('lastActivity');
-    return <Navigate to="/login" />;
+    return <Navigate to="/" />;
   }
 
   return children;

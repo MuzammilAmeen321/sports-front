@@ -71,13 +71,15 @@ const Navbar = () => {
                 <Link to="/" className="nav-link text-dark">Home</Link>
               </li>
               <li className="nav-item mx-2">
-                <Link to="/contact-us" className="nav-link text-dark">Contact Us</Link>
-              </li>
-              <li className="nav-item mx-2">
                 <Link to="/all-teams" className="nav-link text-dark">All Teams</Link>
               </li>
+              
               <li className="nav-item mx-2">
                 <Link to="" className="nav-link text-dark" data-bs-toggle="modal" data-bs-target="#createMatchModal">Create Match</Link>
+              </li>
+              
+              <li className="nav-item mx-2">
+                <Link to="/contact-us" className="nav-link text-dark">Contact Us</Link>
               </li>
             </ul>
           </div>
