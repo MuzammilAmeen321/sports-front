@@ -37,11 +37,15 @@ body.light-theme {
     margin-bottom: 20px;
     color: var(--neon-yellow);
 }
+.navbar-nav {
+  margin-right: 190px; /* increase as needed */
+}
 /* Default styles */
 .icon-link i {
   transition: text-shadow 0.4s ease-in-out;
   color: #003400;
 }
+
 /* Glow effect on hover */
 .icon-link:hover i {
   text-shadow: 0 0 15px rgba(0, 255, 0, 0.8); /* Green glow effect */

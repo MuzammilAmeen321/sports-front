@@ -66,23 +66,22 @@ const Navbar = () => {
 
           {/* Navbar Links */}
           <div className="collapse navbar-collapse" id="navbarNav">
-            <ul className="navbar-nav ms-auto">
-              <li className="nav-item mx-2">
-                <Link to="/" className="nav-link text-dark">Home</Link>
-              </li>
-              <li className="nav-item mx-2">
-                <Link to="/all-teams" className="nav-link text-dark">All Teams</Link>
-              </li>
-              
-              <li className="nav-item mx-2">
-                <Link to="" className="nav-link text-dark" data-bs-toggle="modal" data-bs-target="#createMatchModal">Create Match</Link>
-              </li>
-              
-              <li className="nav-item mx-2">
-                <Link to="/contact-us" className="nav-link text-dark">Contact Us</Link>
-              </li>
-            </ul>
-          </div>
+  <ul className="navbar-nav ms-auto me-"> {/* Add me-5 here */}
+    <li className="nav-item mx-2">
+      <Link to="/" className="nav-link text-dark">Home</Link>
+    </li>
+    <li className="nav-item mx-2">
+      <Link to="/all-teams" className="nav-link text-dark">All Teams</Link>
+    </li>
+    <li className="nav-item mx-2">
+      <Link to="" className="nav-link text-dark" data-bs-toggle="modal" data-bs-target="#createMatchModal">Create Match</Link>
+    </li>
+    <li className="nav-item mx-2">
+      <Link to="/contact-us" className="nav-link text-dark">Contact Us</Link>
+    </li>
+  </ul>
+</div>
+
 
           {/* Profile & Notifications */}
           <div className="d-flex align-items-center">
@@ -95,20 +94,21 @@ const Navbar = () => {
 
                 {/* Profile Dropdown */}
                 <div className="dropdown">
-                  <button
-                    className="btn text-dark fw-bold dropdown-toggle p-0"
-                    id="userDropdown"
-                    data-bs-toggle="dropdown"
-                  >
-                    <img
-                      src={profile}
-                      className="rounded-circle border border-secondary me-2"
-                      alt="User Avatar"
-                      width="35"
-                      height="35"
-                      style={{ objectFit: "cover" }}
-                    />
-                  </button>
+                <button
+  className="text-dark fw-bold dropdown-toggle p-0 border-0 bg-transparent"
+  id="userDropdown"
+  data-bs-toggle="dropdown"
+>
+  <img
+    src={profile}
+    className="rounded-circle border border-secondary me-2"
+    alt="User Avatar"
+    width="35"
+    height="35"
+    style={{ objectFit: "cover" }}
+  />
+</button>
+
                   <ul className="dropdown-menu dropdown-menu-end bg-light border border-secondary">
                     <li>
                       <button className="dropdown-item text-dark fw-bold" onClick={() => setModalView("profile")}>
@@ -121,7 +121,7 @@ const Navbar = () => {
                       </button>
                     </li>
                     <li>
-                      <Link to="/my-teams" className="dropdown-item text-dark fw-bold">Manage Team</Link>
+                      <Link to="/my-teams" className="dropdown-item text-dark fw-bold">My Team</Link>
                     </li>
                     <li>
                       <button className="dropdown-item text-danger fw-bold" onClick={handleLogout}>

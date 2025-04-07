@@ -61,18 +61,18 @@ const Notifications = () => {
   return (
     <div>
       {/* Bell Icon with Notification Count */}
-      <button
+      <span
         className="text-center text-decoration-none text-white icon-link position-relative"
         onClick={togglePopup}
       >
-        <i className="fa fa-bell fs-1"></i>
+        <i className="fa fa-bell fs-4 mt-1"></i>
         {notificationCount > 0 && (
           <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
             {notificationCount}
             <span className="visually-hidden">unread notifications</span>
           </span>
         )}
-      </button>
+      </span>
 
       {/* Toast Notification */}
       {toast.show && (
